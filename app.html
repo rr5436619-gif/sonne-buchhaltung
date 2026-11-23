@@ -112,6 +112,12 @@ tr.sec td{background:#faf8f3;font-weight:600}
   .modal .box{box-shadow:none;padding:0}
 }
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1f2a44">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sonne Buchhaltung">
 </head>
 <body>
 <div class="app">
@@ -319,7 +325,7 @@ const T = {
  iban:['IBAN','IBAN'], bic:['BIC','BIC'], bankName:['اسم البنك','Bank'], email:['البريد الإلكتروني','E-Mail'], phone:['الهاتف','Telefon'],
  skr:['دليل الحسابات','Kontenrahmen'], klein:['مشروع صغير معفى (§19 UStG)','Kleinunternehmer (§ 19 UStG)'],
  prefix:['بادئة رقم الفاتورة','Rechnungsnummer-Präfix'], terms:['مهلة الدفع (أيام)','Zahlungsziel (Tage)'],
- license:['مفتاح الترخيص','Lizenzschlüssel'], licOk:['النسخة مرخّصة ✓','Lizenz aktiv ✓'], licTrial:['نسخة تجريبية: حتى 50 قيداً','Testversion: bis 50 Buchungen'],
+ license:['مفتاح الترخيص','Lizenzschlüssel'], licOk:['النسخة مرخّصة ✓','Lizenz aktiv ✓'], licTrial:["تجربة مجانية: باقٍ {n} يوم", "Testphase: noch {n} Tage"],
  lockTitle:['الإقفال (Festschreibung) حسب GoBD','Festschreibung (GoBD)'],
  lockInfo:['القيود حتى هذا التاريخ لا يمكن تعديلها أو حذفها، فقط عكسها بقيد Storno. القانون يطلب الإقفال بانتظام (عادةً عند تقديم إقرار الضريبة الشهري/الفصلي).','Buchungen bis zu diesem Datum können nicht mehr geändert oder gelöscht, nur storniert werden.'],
  lockUntil:['إقفال حتى تاريخ','Festschreiben bis'], lockBtn:['إقفال نهائي','Festschreiben'], lockedUntil:['مقفل حتى','Festgeschrieben bis'],
@@ -332,7 +338,7 @@ const T = {
  payVia:['الدفع عبر','Zahlung über'], close:['إغلاق','Schließen'], copy:['نسخ','Kopieren'], copied:['تم النسخ','Kopiert'],
  saved:['تم الحفظ','Gespeichert'], deleted:['تم الحذف','Gelöscht'],
  errBal:['اختر حساب المدين والدائن ومبلغاً صحيحاً','Soll, Haben und gültigen Betrag angeben'], errSame:['المدين والدائن لا يمكن أن يكونا نفس الحساب','Soll und Haben dürfen nicht gleich sein'],
- errLocked:['هذا التاريخ ضمن فترة مقفلة','Datum liegt im festgeschriebenen Zeitraum'], errTrial:['انتهى حد النسخة التجريبية (50 قيداً). أدخل مفتاح الترخيص في الإعدادات.','Testgrenze erreicht. Bitte Lizenzschlüssel eingeben.'],
+ errLocked:['هذا التاريخ ضمن فترة مقفلة','Datum liegt im festgeschriebenen Zeitraum'], errTrial:["انتهت التجربة المجانية. اشترِ الترخيص وأدخل الكود في الإعدادات.", "Testphase beendet. Bitte Lizenz kaufen und Code in den Einstellungen eingeben."],
  cashNeg:['تحذير: رصيد الصندوق أصبح سالباً — هذا غير ممكن قانونياً (Kassenfehlbetrag) ويُعرّض الدفاتر للرفض عند التدقيق الضريبي.','Warnung: Negativer Kassenbestand ist nicht zulässig.'],
  period:['الفترة','Zeitraum'], q:['ربع','Quartal'],
  kz81:['مبيعات خاضعة 19% (Kz 81)','Steuerpfl. Umsätze 19 % (Kz 81)'], kz86:['مبيعات خاضعة 7% (Kz 86)','Steuerpfl. Umsätze 7 % (Kz 86)'],
@@ -389,6 +395,17 @@ const T = {
  errUnlock:["لا يمكن إلغاء الإقفال", "Festschreibung kann nicht zurückgenommen werden"],
  errKey:["مفتاح غير صحيح", "Ungültiger Schlüssel"],
  demoLoaded:["تم تحميل البيانات التجريبية", "Demodaten geladen"],
+ trialOver:["انتهت التجربة المجانية (7 أيام). بياناتك محفوظة، ويمكنك عرضها وتصديرها. لمتابعة الإدخال اشترِ الترخيص وأدخل الكود.", "Die 7-tägige Testphase ist beendet. Ihre Daten bleiben erhalten und können angesehen und exportiert werden. Zum Weiterbuchen Lizenz kaufen und Code eingeben."],
+ buyNow:["اشترِ الترخيص الآن", "Lizenz jetzt kaufen"],
+ enterCode:["أدخل كود التفعيل", "Aktivierungscode eingeben"],
+ codeInfo:["بعد الدفع يصلك كود التفعيل على بريدك الإلكتروني فوراً. الكود صالح لتفعيل جهاز واحد مرة واحدة فقط.", "Nach der Zahlung erhalten Sie den Aktivierungscode sofort per E-Mail. Der Code kann nur einmal für ein Gerät aktiviert werden."],
+ activate:["تفعيل", "Aktivieren"],
+ actOk:["تم التفعيل بنجاح ✓ شكراً لك!", "Erfolgreich aktiviert ✓ Vielen Dank!"],
+ actUsed:["هذا الكود مستعمل من قبل على جهاز آخر.", "Dieser Code wurde bereits auf einem anderen Gerät verwendet."],
+ actBad:["الكود غير صحيح. تأكد منه وحاول مرة أخرى.", "Ungültiger Code. Bitte prüfen und erneut versuchen."],
+ actNet:["التفعيل يحتاج اتصالاً بالإنترنت. اتصل وحاول مرة أخرى.", "Für die Aktivierung ist eine Internetverbindung nötig."],
+ actOff:["التفعيل التلقائي غير متاح بعد. راسلنا على واتساب لنرسل لك الكود.", "Automatische Aktivierung noch nicht verfügbar. Bitte per WhatsApp melden."],
+ licRevoked:["تم إيقاف هذا الترخيص. راسلنا على واتساب.", "Diese Lizenz wurde deaktiviert. Bitte per WhatsApp melden."],
 };
 let LANG = 'ar';
 const TR = {};
@@ -403,13 +420,13 @@ export:'Export',csvSb:'CSV for tax advisor',backup:'Backup',restore:'Restore',
 typeA:'Assets',typeL:'Liabilities',typeE:'Equity',typeP:'Private',typeR:'Income',typeX:'Expense',addAcc:'Add account',number:'Number',
 firm:'Company name',owner:'Owner',address:'Address',stnr:'Tax number',ustid:'VAT ID',iban:'IBAN',bic:'BIC',bankName:'Bank',email:'Email',phone:'Phone',
 skr:'Chart of accounts',klein:'Small business (§19 UStG, no VAT)',prefix:'Invoice number prefix',terms:'Payment term (days)',
-license:'License key',licOk:'Licensed ✓',licTrial:'Trial: up to 50 entries',
+license:'License key',licOk:'Licensed ✓',licTrial:"Free trial: {n} days left",
 lockTitle:'Locking (Festschreibung, GoBD)',lockInfo:'Entries up to this date can no longer be edited or deleted, only reversed. The law requires locking regularly (usually when you file the monthly/quarterly VAT return).',
 lockUntil:'Lock until',lockBtn:'Lock permanently',lockedUntil:'Locked until',audit:'Change log',
 newInv:'New invoice',customer:'Customer',custAddr:'Customer address',custUstid:'Customer VAT ID (optional)',invDate:'Invoice date',lDate:'Delivery/service date',items:'Items',desc:'Description',
 qty:'Qty',price:'Unit price (net)',rate:'VAT rate',addItem:'+ Item',net:'Net',gross:'Gross',status:'Status',open:'open',paid:'paid',cancelled:'cancelled',
 pay:'Record payment',view:'View / Print',print:'Print / PDF',invNo:'Invoice no.',payVia:'Paid via',close:'Close',copy:'Copy',copied:'Copied',saved:'Saved',deleted:'Deleted',
-errBal:'Choose debit, credit and a valid amount',errSame:'Debit and credit cannot be the same account',errLocked:'This date is in a locked period',errTrial:'Trial limit reached (50 entries). Enter a license key in Settings.',
+errBal:'Choose debit, credit and a valid amount',errSame:'Debit and credit cannot be the same account',errLocked:'This date is in a locked period',errTrial:"Free trial ended. Buy a license and enter your code in Settings.",
 cashNeg:'Warning: the cash balance became negative — this is not legally possible (cash shortfall) and can lead to your books being rejected in a tax audit.',
 period:'Period',q:'Quarter',kz81:'Taxable sales 19% (Kz 81)',kz86:'Taxable sales 7% (Kz 86)',kz41:'Tax-free intra-EU supplies (Kz 41)',kz48:'Other tax-free sales (Kz 48)',kz66:'Deductible input VAT (Kz 66)',kz83:'Amount payable / refundable (Kz 83)',
 taxAmt:'Tax',base:'Tax base',ustNote:'These are helper figures for ELSTER. Official filing is done via ELSTER or your tax advisor.',
@@ -436,7 +453,8 @@ ustKlein:'You are registered as a small business (§19): you usually do not need
 tseNote:'Note: an electronic cash register legally needs a TSE security module; this cash book does not replace it.',
 errAccNo:'Enter a 4-digit number and a name',errAccDup:'Number already in use',kleinNo:'No — I charge VAT',kleinYes:'Yes — §19 UStG',
 legalText:'This program is a bookkeeping aid, not officially certified software, and does not send data to ELSTER. The user is responsible for correct entries and GoBD compliance (8–10 year retention, locking, process documentation). Consulting a tax advisor is recommended.',
-errUnlock:'Locking cannot be undone',errKey:'Invalid key',demoLoaded:'Demo data loaded'
+errUnlock:'Locking cannot be undone',errKey:'Invalid key',demoLoaded:'Demo data loaded',
+trialOver:"Your 7-day free trial has ended. Your data is kept and you can still view and export it. To keep entering data, buy a license and enter your code.",buyNow:"Buy license now",enterCode:"Enter activation code",codeInfo:"After payment you receive your activation code by e-mail right away. The code can be activated only once, on one device.",activate:"Activate",actOk:"Activated successfully ✓ Thank you!",actUsed:"This code has already been used on another device.",actBad:"Invalid code. Please check it and try again.",actNet:"Activation needs an internet connection. Please try again.",actOff:"Automatic activation is not available yet. Please contact us on WhatsApp.",licRevoked:"This license has been deactivated. Please contact us on WhatsApp."
 };
 TR.es = {
 tagline:'Contabilidad alemana para comerciantes',dash:'Panel',journal:'Asientos',invoices:'Facturas',accounts:'Plan de cuentas',reports:'Informes',settings:'Ajustes',
@@ -449,13 +467,13 @@ export:'Exportar',csvSb:'CSV para el asesor fiscal',backup:'Copia de seguridad',
 typeA:'Activo',typeL:'Pasivo',typeE:'Patrimonio',typeP:'Privado',typeR:'Ingreso',typeX:'Gasto',addAcc:'Añadir cuenta',number:'Número',
 firm:'Nombre de la empresa',owner:'Titular',address:'Dirección',stnr:'Número fiscal',ustid:'NIF-IVA',iban:'IBAN',bic:'BIC',bankName:'Banco',email:'Correo',phone:'Teléfono',
 skr:'Plan de cuentas',klein:'Pequeña empresa (§19 UStG, sin IVA)',prefix:'Prefijo del n.º de factura',terms:'Plazo de pago (días)',
-license:'Clave de licencia',licOk:'Licencia activa ✓',licTrial:'Prueba: hasta 50 asientos',
+license:'Clave de licencia',licOk:'Licencia activa ✓',licTrial:"Prueba gratis: quedan {n} días",
 lockTitle:'Cierre (Festschreibung, GoBD)',lockInfo:'Los asientos hasta esta fecha ya no se pueden editar ni borrar, solo anular. La ley exige cerrar periódicamente (normalmente al presentar la declaración de IVA mensual/trimestral).',
 lockUntil:'Cerrar hasta',lockBtn:'Cerrar definitivamente',lockedUntil:'Cerrado hasta',audit:'Registro de cambios',
 newInv:'Nueva factura',customer:'Cliente',custAddr:'Dirección del cliente',custUstid:'NIF-IVA del cliente (opcional)',invDate:'Fecha de factura',lDate:'Fecha de entrega/servicio',items:'Conceptos',desc:'Descripción',
 qty:'Cant.',price:'Precio unitario (neto)',rate:'Tipo de IVA',addItem:'+ Concepto',net:'Neto',gross:'Bruto',status:'Estado',open:'pendiente',paid:'pagada',cancelled:'anulada',
 pay:'Registrar pago',view:'Ver / Imprimir',print:'Imprimir / PDF',invNo:'N.º de factura',payVia:'Pagado por',close:'Cerrar',copy:'Copiar',copied:'Copiado',saved:'Guardado',deleted:'Eliminado',
-errBal:'Elija debe, haber y un importe válido',errSame:'Debe y haber no pueden ser la misma cuenta',errLocked:'Esta fecha está en un periodo cerrado',errTrial:'Límite de prueba alcanzado (50 asientos). Introduzca una clave de licencia en Ajustes.',
+errBal:'Elija debe, haber y un importe válido',errSame:'Debe y haber no pueden ser la misma cuenta',errLocked:'Esta fecha está en un periodo cerrado',errTrial:"La prueba terminó. Compra la licencia e introduce el código en Ajustes.",
 cashNeg:'Atención: el saldo de caja es negativo — esto no es legalmente posible y puede hacer que se rechace su contabilidad en una inspección fiscal.',
 period:'Periodo',q:'Trimestre',kz81:'Ventas sujetas 19% (Kz 81)',kz86:'Ventas sujetas 7% (Kz 86)',kz41:'Entregas intracomunitarias exentas (Kz 41)',kz48:'Otras ventas exentas (Kz 48)',kz66:'IVA soportado deducible (Kz 66)',kz83:'Importe a pagar / devolver (Kz 83)',
 taxAmt:'Impuesto',base:'Base imponible',ustNote:'Cifras de ayuda para ELSTER. La presentación oficial se hace por ELSTER o por su asesor fiscal.',
@@ -482,7 +500,8 @@ ustKlein:'Está registrado como pequeña empresa (§19): normalmente no necesita
 tseNote:'Nota: una caja registradora electrónica necesita por ley un módulo de seguridad TSE; este libro de caja no lo sustituye.',
 errAccNo:'Introduzca un número de 4 cifras y un nombre',errAccDup:'Número ya utilizado',kleinNo:'No — cobro IVA',kleinYes:'Sí — §19 UStG',
 legalText:'Este programa es una ayuda para la contabilidad, no un software certificado oficialmente, y no envía datos a ELSTER. El usuario es responsable de la exactitud de los asientos y del cumplimiento de GoBD (conservación 8–10 años, cierre, documentación de procedimientos). Se recomienda consultar a un asesor fiscal.',
-errUnlock:'El cierre no se puede deshacer',errKey:'Clave no válida',demoLoaded:'Datos de demostración cargados'
+errUnlock:'El cierre no se puede deshacer',errKey:'Clave no válida',demoLoaded:'Datos de demostración cargados',
+trialOver:"La prueba gratuita de 7 días ha terminado. Tus datos se conservan y puedes verlos y exportarlos. Para seguir registrando, compra la licencia e introduce el código.",buyNow:"Comprar licencia",enterCode:"Introducir código",codeInfo:"Tras el pago recibes el código por correo al instante. El código solo se puede activar una vez, en un dispositivo.",activate:"Activar",actOk:"Activado correctamente ✓ ¡Gracias!",actUsed:"Este código ya se usó en otro dispositivo.",actBad:"Código no válido. Revísalo e inténtalo de nuevo.",actNet:"La activación necesita conexión a internet.",actOff:"La activación automática aún no está disponible. Escríbenos por WhatsApp.",licRevoked:"Esta licencia fue desactivada. Escríbenos por WhatsApp."
 };
 TR.tr = {
 tagline:'Tüccarlar için Alman muhasebesi',dash:'Genel bakış',journal:'Yevmiye kayıtları',invoices:'Faturalar',accounts:'Hesap planı',reports:'Raporlar',settings:'Ayarlar',
@@ -495,13 +514,13 @@ export:'Dışa aktar',csvSb:'Mali müşavir için CSV',backup:'Yedekleme',restor
 typeA:'Varlık',typeL:'Borç',typeE:'Özsermaye',typeP:'Özel',typeR:'Gelir',typeX:'Gider',addAcc:'Hesap ekle',number:'Numara',
 firm:'Firma adı',owner:'Sahibi',address:'Adres',stnr:'Vergi numarası',ustid:'KDV kimlik no.',iban:'IBAN',bic:'BIC',bankName:'Banka',email:'E-posta',phone:'Telefon',
 skr:'Hesap planı',klein:'Küçük işletme (§19 UStG, KDV yok)',prefix:'Fatura numarası öneki',terms:'Ödeme vadesi (gün)',
-license:'Lisans anahtarı',licOk:'Lisans etkin ✓',licTrial:'Deneme: en fazla 50 kayıt',
+license:'Lisans anahtarı',licOk:'Lisans etkin ✓',licTrial:"Ücretsiz deneme: {n} gün kaldı",
 lockTitle:'Kilitleme (Festschreibung, GoBD)',lockInfo:'Bu tarihe kadarki kayıtlar artık düzenlenemez veya silinemez, yalnızca ters kayıtla iptal edilebilir. Yasa düzenli kilitleme ister (genellikle aylık/üç aylık KDV beyannamesi verildiğinde).',
 lockUntil:'Şu tarihe kadar kilitle',lockBtn:'Kalıcı olarak kilitle',lockedUntil:'Kilitli tarih',audit:'Değişiklik kaydı',
 newInv:'Yeni fatura',customer:'Müşteri',custAddr:'Müşteri adresi',custUstid:'Müşteri KDV no. (isteğe bağlı)',invDate:'Fatura tarihi',lDate:'Teslim/hizmet tarihi',items:'Kalemler',desc:'Açıklama',
 qty:'Miktar',price:'Birim fiyat (net)',rate:'KDV oranı',addItem:'+ Kalem',net:'Net',gross:'Brüt',status:'Durum',open:'açık',paid:'ödendi',cancelled:'iptal',
 pay:'Ödemeyi kaydet',view:'Görüntüle / Yazdır',print:'Yazdır / PDF',invNo:'Fatura no.',payVia:'Ödeme yolu',close:'Kapat',copy:'Kopyala',copied:'Kopyalandı',saved:'Kaydedildi',deleted:'Silindi',
-errBal:'Borç, alacak ve geçerli bir tutar seçin',errSame:'Borç ve alacak aynı hesap olamaz',errLocked:'Bu tarih kilitli bir dönemde',errTrial:'Deneme sınırına ulaşıldı (50 kayıt). Ayarlar’dan lisans anahtarı girin.',
+errBal:'Borç, alacak ve geçerli bir tutar seçin',errSame:'Borç ve alacak aynı hesap olamaz',errLocked:'Bu tarih kilitli bir dönemde',errTrial:"Deneme bitti. Lisans alın ve kodu Ayarlar’a girin.",
 cashNeg:'Uyarı: kasa bakiyesi eksiye düştü — bu yasal olarak mümkün değildir ve vergi denetiminde defterlerin reddine yol açabilir.',
 period:'Dönem',q:'Çeyrek',kz81:'%19 vergiye tabi satışlar (Kz 81)',kz86:'%7 vergiye tabi satışlar (Kz 86)',kz41:'AB içi vergisiz teslimler (Kz 41)',kz48:'Diğer vergisiz satışlar (Kz 48)',kz66:'İndirilecek KDV (Kz 66)',kz83:'Ödenecek / iade edilecek tutar (Kz 83)',
 taxAmt:'Vergi',base:'Matrah',ustNote:'Bunlar ELSTER için yardımcı rakamlardır. Resmî beyan ELSTER veya mali müşavir üzerinden yapılır.',
@@ -528,7 +547,8 @@ ustKlein:'Küçük işletme olarak kayıtlısınız (§19): genellikle KDV beyan
 tseNote:'Not: elektronik yazar kasa yasal olarak TSE güvenlik modülü gerektirir; bu kasa defteri onun yerini tutmaz.',
 errAccNo:'4 haneli bir numara ve ad girin',errAccDup:'Numara zaten kullanılıyor',kleinNo:'Hayır — KDV hesaplıyorum',kleinYes:'Evet — §19 UStG',
 legalText:'Bu program bir muhasebe yardımcısıdır; resmî olarak onaylı bir yazılım değildir ve ELSTER’e veri göndermez. Kayıtların doğruluğu ve GoBD kurallarına uyum (8–10 yıl saklama, kilitleme, süreç belgelemesi) kullanıcının sorumluluğundadır. Mali müşavire danışılması önerilir.',
-errUnlock:'Kilitleme geri alınamaz',errKey:'Geçersiz anahtar',demoLoaded:'Örnek veriler yüklendi'
+errUnlock:'Kilitleme geri alınamaz',errKey:'Geçersiz anahtar',demoLoaded:'Örnek veriler yüklendi',
+trialOver:"7 günlük ücretsiz deneme sona erdi. Verileriniz korunur; görüntüleyebilir ve dışa aktarabilirsiniz. Kayda devam etmek için lisans alın ve kodu girin.",buyNow:"Lisansı şimdi satın al",enterCode:"Aktivasyon kodunu gir",codeInfo:"Ödemeden hemen sonra aktivasyon kodu e-postanıza gelir. Kod yalnızca bir kez, tek cihazda etkinleştirilebilir.",activate:"Etkinleştir",actOk:"Başarıyla etkinleştirildi ✓ Teşekkürler!",actUsed:"Bu kod başka bir cihazda zaten kullanıldı.",actBad:"Geçersiz kod. Kontrol edip tekrar deneyin.",actNet:"Etkinleştirme için internet bağlantısı gerekir.",actOff:"Otomatik etkinleştirme henüz yok. Lütfen WhatsApp’tan yazın.",licRevoked:"Bu lisans devre dışı bırakıldı. WhatsApp’tan yazın."
 };
 TR.fa = {
 tagline:'حسابداری آلمانی برای بازرگانان',dash:'داشبورد',journal:'ثبت اسناد',invoices:'فاکتورها',accounts:'سرفصل حساب‌ها',reports:'گزارش‌ها',settings:'تنظیمات',
@@ -541,13 +561,13 @@ export:'خروجی',csvSb:'CSV برای مشاور مالیاتی',backup:'پش�
 typeA:'دارایی',typeL:'بدهی',typeE:'سرمایه',typeP:'شخصی',typeR:'درآمد',typeX:'هزینه',addAcc:'افزودن حساب',number:'شماره',
 firm:'نام شرکت',owner:'مالک',address:'نشانی',stnr:'شماره مالیاتی',ustid:'شناسه مالیات بر ارزش افزوده',iban:'IBAN',bic:'BIC',bankName:'بانک',email:'ایمیل',phone:'تلفن',
 skr:'سرفصل حساب‌ها',klein:'کسب‌وکار کوچک (§19 UStG، بدون مالیات)',prefix:'پیشوند شماره فاکتور',terms:'مهلت پرداخت (روز)',
-license:'کلید مجوز',licOk:'مجوز فعال ✓',licTrial:'نسخه آزمایشی: تا ۵۰ سند',
+license:'کلید مجوز',licOk:'مجوز فعال ✓',licTrial:"آزمایش رایگان: {n} روز مانده",
 lockTitle:'قفل کردن (Festschreibung طبق GoBD)',lockInfo:'اسناد تا این تاریخ دیگر قابل ویرایش یا حذف نیستند و فقط با سند معکوس اصلاح می‌شوند. قانون قفل کردن منظم را الزامی می‌داند (معمولاً هنگام ارسال اظهارنامه ماهانه/فصلی).',
 lockUntil:'قفل تا تاریخ',lockBtn:'قفل نهایی',lockedUntil:'قفل‌شده تا',audit:'گزارش تغییرات',
 newInv:'فاکتور جدید',customer:'مشتری',custAddr:'نشانی مشتری',custUstid:'شناسه مالیاتی مشتری (اختیاری)',invDate:'تاریخ فاکتور',lDate:'تاریخ تحویل/خدمت',items:'اقلام',desc:'شرح',
 qty:'تعداد',price:'قیمت واحد (خالص)',rate:'نرخ مالیات',addItem:'+ قلم',net:'خالص',gross:'ناخالص',status:'وضعیت',open:'باز',paid:'پرداخت‌شده',cancelled:'باطل‌شده',
 pay:'ثبت پرداخت',view:'نمایش / چاپ',print:'چاپ / PDF',invNo:'شماره فاکتور',payVia:'پرداخت از طریق',close:'بستن',copy:'کپی',copied:'کپی شد',saved:'ذخیره شد',deleted:'حذف شد',
-errBal:'حساب بدهکار، بستانکار و مبلغ معتبر را انتخاب کنید',errSame:'بدهکار و بستانکار نمی‌توانند یک حساب باشند',errLocked:'این تاریخ در دوره قفل‌شده است',errTrial:'سقف نسخه آزمایشی (۵۰ سند) پر شد. کلید مجوز را در تنظیمات وارد کنید.',
+errBal:'حساب بدهکار، بستانکار و مبلغ معتبر را انتخاب کنید',errSame:'بدهکار و بستانکار نمی‌توانند یک حساب باشند',errLocked:'این تاریخ در دوره قفل‌شده است',errTrial:"آزمایش تمام شد. مجوز بخرید و کد را در تنظیمات وارد کنید.",
 cashNeg:'هشدار: موجودی صندوق منفی شد — این از نظر قانونی ممکن نیست و می‌تواند باعث رد دفاتر در حسابرسی مالیاتی شود.',
 period:'دوره',q:'فصل',kz81:'فروش مشمول ۱۹٪ (Kz 81)',kz86:'فروش مشمول ۷٪ (Kz 86)',kz41:'تحویل‌های معاف داخل اتحادیه اروپا (Kz 41)',kz48:'سایر فروش‌های معاف (Kz 48)',kz66:'مالیات خرید قابل کسر (Kz 66)',kz83:'مبلغ قابل پرداخت / استرداد (Kz 83)',
 taxAmt:'مالیات',base:'مبنای مالیات',ustNote:'این ارقام کمکی برای ELSTER هستند. ارسال رسمی از طریق ELSTER یا مشاور مالیاتی انجام می‌شود.',
@@ -574,7 +594,8 @@ ustKlein:'شما به‌عنوان کسب‌وکار کوچک (§19) ثبت شد
 tseNote:'توجه: صندوق فروش الکترونیکی طبق قانون به ماژول امنیتی TSE نیاز دارد؛ این دفتر صندوق جایگزین آن نیست.',
 errAccNo:'یک شماره ۴ رقمی و نام وارد کنید',errAccDup:'این شماره قبلاً استفاده شده',kleinNo:'خیر — مالیات حساب می‌کنم',kleinYes:'بله — §19 UStG',
 legalText:'این برنامه ابزار کمکی دفترداری است، نرم‌افزار رسماً تأییدشده نیست و داده‌ای به ELSTER ارسال نمی‌کند. مسئولیت درستی اسناد و رعایت GoBD (نگهداری ۸ تا ۱۰ ساله، قفل کردن، مستندسازی روش‌ها) با کاربر است. مشورت با مشاور مالیاتی توصیه می‌شود.',
-errUnlock:'قفل قابل بازگشت نیست',errKey:'کلید نامعتبر',demoLoaded:'داده نمونه بارگذاری شد'
+errUnlock:'قفل قابل بازگشت نیست',errKey:'کلید نامعتبر',demoLoaded:'داده نمونه بارگذاری شد',
+trialOver:"آزمایش رایگان ۷ روزه تمام شد. داده‌های شما حفظ می‌شود و می‌توانید آن‌ها را ببینید و خروجی بگیرید. برای ادامه ثبت، مجوز بخرید و کد را وارد کنید.",buyNow:"همین حالا مجوز بخرید",enterCode:"وارد کردن کد فعال‌سازی",codeInfo:"پس از پرداخت، کد فعال‌سازی فوراً به ایمیل شما می‌رسد. کد فقط یک بار و برای یک دستگاه فعال می‌شود.",activate:"فعال‌سازی",actOk:"با موفقیت فعال شد ✓ سپاس!",actUsed:"این کد قبلاً روی دستگاه دیگری استفاده شده است.",actBad:"کد نامعتبر است. بررسی کنید و دوباره تلاش کنید.",actNet:"فعال‌سازی به اینترنت نیاز دارد.",actOff:"فعال‌سازی خودکار هنوز فعال نیست. در واتس‌اپ پیام دهید.",licRevoked:"این مجوز غیرفعال شده است. در واتس‌اپ پیام دهید."
 };
 TR.ps = {
 tagline:'د سوداګرو لپاره الماني محاسبه',dash:'ډشبورډ',journal:'ورځني ثبتونه',invoices:'بلونه',accounts:'د حسابونو لړلیک',reports:'راپورونه',settings:'تنظیمات',
@@ -587,13 +608,13 @@ export:'صادرول',csvSb:'د مالیاتي مشاور لپاره CSV',backup
 typeA:'شتمني',typeL:'پورونه',typeE:'پانګه',typeP:'شخصي',typeR:'عاید',typeX:'لګښت',addAcc:'حساب زیاتول',number:'شمېره',
 firm:'د شرکت نوم',owner:'مالک',address:'پته',stnr:'مالیاتي شمېره',ustid:'د ارزښت زیاتوالي مالیې شمېره',iban:'IBAN',bic:'BIC',bankName:'بانک',email:'برېښنالیک',phone:'تلیفون',
 skr:'د حسابونو لړلیک',klein:'کوچنۍ سوداګري (§19 UStG، بې مالیې)',prefix:'د بل شمېرې مخکینی',terms:'د تادیې موده (ورځې)',
-license:'د جواز کیلي',licOk:'جواز فعال دی ✓',licTrial:'آزمایښتي نسخه: تر ۵۰ ثبتونو',
+license:'د جواز کیلي',licOk:'جواز فعال دی ✓',licTrial:"وړیا ازموینه: {n} ورځې پاتې",
 lockTitle:'قفلول (Festschreibung د GoBD له مخې)',lockInfo:'تر دې نېټې پورې ثبتونه نور نه سمېږي او نه ړنګېږي، یوازې په معکوس ثبت سره اصلاح کېږي. قانون منظم قفلول غواړي (معمولاً د میاشتني/درې میاشتني اظهارنامې پر وخت).',
 lockUntil:'تر دې نېټې قفل',lockBtn:'وروستی قفل',lockedUntil:'قفل شوی تر',audit:'د بدلونونو ثبت',
 newInv:'نوی بل',customer:'پېرودونکی',custAddr:'د پېرودونکي پته',custUstid:'د پېرودونکي مالیاتي شمېره (اختیاري)',invDate:'د بل نېټه',lDate:'د تحویلي/خدمت نېټه',items:'توکي',desc:'تشریح',
 qty:'شمېر',price:'د یوه بیه (خالص)',rate:'د مالیې کچه',addItem:'+ توکی',net:'خالص',gross:'ناخالص',status:'حالت',open:'خلاص',paid:'ورکړل شوی',cancelled:'لغوه شوی',
 pay:'تادیه ثبتول',view:'کتل / چاپ',print:'چاپ / PDF',invNo:'د بل شمېره',payVia:'تادیه له لارې',close:'بندول',copy:'کاپي',copied:'کاپي شو',saved:'خوندي شو',deleted:'ړنګ شو',
-errBal:'پور، کرېډیټ او سمه اندازه وټاکئ',errSame:'پور او کرېډیټ یو حساب نشي کېدای',errLocked:'دا نېټه په قفل شوې دوره کې ده',errTrial:'د آزمایښتي نسخې حد (۵۰ ثبتونه) پوره شو. په تنظیماتو کې د جواز کیلي ولیکئ.',
+errBal:'پور، کرېډیټ او سمه اندازه وټاکئ',errSame:'پور او کرېډیټ یو حساب نشي کېدای',errLocked:'دا نېټه په قفل شوې دوره کې ده',errTrial:"ازموینه پای ته ورسېده. جواز واخلئ او کوډ په تنظیماتو کې ولیکئ.",
 cashNeg:'خبرداری: د صندوق بیلانس منفي شو — دا په قانوني ډول ممکن نه دی او کېدای شي په مالیاتي پلټنه کې ستاسو کتابونه رد شي.',
 period:'دوره',q:'درې میاشتنی',kz81:'۱۹٪ مالیې وړ پلور (Kz 81)',kz86:'۷٪ مالیې وړ پلور (Kz 86)',kz41:'د اروپايي اتحادیې دننه معاف تحویلي (Kz 41)',kz48:'نور معاف پلور (Kz 48)',kz66:'د کمولو وړ د پېرود مالیه (Kz 66)',kz83:'د ورکړې / بېرته اخیستو وړ اندازه (Kz 83)',
 taxAmt:'مالیه',base:'د مالیې بنسټ',ustNote:'دا د ELSTER لپاره مرستندوی شمېرې دي. رسمي سپارل د ELSTER یا مالیاتي مشاور له لارې کېږي.',
@@ -620,7 +641,8 @@ ustKlein:'تاسو د کوچنۍ سوداګرۍ (§19) په توګه ثبت یا
 tseNote:'یادونه: برېښنايي کاشیر ماشین په قانوني ډول د TSE امنیتي ماډل ته اړتیا لري؛ دا د صندوق کتاب د هغه ځای نه نیسي.',
 errAccNo:'۴ رقمي شمېره او نوم ولیکئ',errAccDup:'دا شمېره دمخه کارول شوې',kleinNo:'نه — مالیه حسابوم',kleinYes:'هو — §19 UStG',
 legalText:'دا پروګرام د حساب ساتنې مرستندویه وسیله ده، رسمي تایید شوی سافټویر نه دی او ELSTER ته معلومات نه لېږي. د ثبتونو سموالی او د GoBD مقرراتو رعایت (۸–۱۰ کاله ساتنه، قفلول، د کړنلارې اسناد) د کاروونکي مسؤلیت دی. له مالیاتي مشاور سره مشوره سپارښتنه کېږي.',
-errUnlock:'قفل بېرته نشي خلاصېدای',errKey:'ناسمه کیلي',demoLoaded:'آزمایښتي معلومات پورته شول'
+errUnlock:'قفل بېرته نشي خلاصېدای',errKey:'ناسمه کیلي',demoLoaded:'آزمایښتي معلومات پورته شول',
+trialOver:"۷ ورځنۍ وړیا ازموینه پای ته ورسېده. ستاسو معلومات خوندي دي او لیدلی او ایستلی یې شئ. د ثبت د دوام لپاره جواز واخلئ او کوډ ولیکئ.",buyNow:"اوس جواز واخلئ",enterCode:"د فعالولو کوډ ولیکئ",codeInfo:"له تادیې وروسته د فعالولو کوډ سمدستي ستاسو برېښنالیک ته درځي. کوډ یوازې یو ځل او په یوه وسیله فعالېږي.",activate:"فعالول",actOk:"په بریالیتوب فعال شو ✓ مننه!",actUsed:"دا کوډ مخکې په بله وسیله کارول شوی.",actBad:"کوډ ناسم دی. وګورئ او بیا هڅه وکړئ.",actNet:"فعالول انټرنېټ ته اړتیا لري.",actOff:"اتومات فعالول لا نشته. په واټس اپ کې پیغام راکړئ.",licRevoked:"دا جواز غیرفعال شو. په واټس اپ کې پیغام راکړئ."
 };
 TR.hi = {
 tagline:'व्यापारियों के लिए जर्मन लेखांकन',dash:'डैशबोर्ड',journal:'जर्नल प्रविष्टियाँ',invoices:'बिल',accounts:'खातों की सूची',reports:'रिपोर्ट',settings:'सेटिंग्स',
@@ -633,13 +655,13 @@ export:'निर्यात',csvSb:'कर सलाहकार के लि
 typeA:'संपत्ति',typeL:'देनदारी',typeE:'पूँजी',typeP:'निजी',typeR:'आय',typeX:'व्यय',addAcc:'खाता जोड़ें',number:'संख्या',
 firm:'कंपनी का नाम',owner:'मालिक',address:'पता',stnr:'कर संख्या',ustid:'VAT पहचान सं.',iban:'IBAN',bic:'BIC',bankName:'बैंक',email:'ईमेल',phone:'फ़ोन',
 skr:'खातों की सूची',klein:'लघु व्यवसाय (§19 UStG, बिना VAT)',prefix:'बिल संख्या उपसर्ग',terms:'भुगतान अवधि (दिन)',
-license:'लाइसेंस कुंजी',licOk:'लाइसेंस सक्रिय ✓',licTrial:'ट्रायल: 50 प्रविष्टियों तक',
+license:'लाइसेंस कुंजी',licOk:'लाइसेंस सक्रिय ✓',licTrial:"मुफ़्त ट्रायल: {n} दिन बाकी",
 lockTitle:'लॉक करना (Festschreibung, GoBD)',lockInfo:'इस तारीख तक की प्रविष्टियाँ अब बदली या हटाई नहीं जा सकतीं, केवल उलटी जा सकती हैं। कानून नियमित लॉक करना आवश्यक मानता है (आमतौर पर मासिक/तिमाही VAT रिटर्न भरते समय)।',
 lockUntil:'इस तारीख तक लॉक',lockBtn:'स्थायी रूप से लॉक करें',lockedUntil:'लॉक तक',audit:'परिवर्तन लॉग',
 newInv:'नया बिल',customer:'ग्राहक',custAddr:'ग्राहक का पता',custUstid:'ग्राहक VAT सं. (वैकल्पिक)',invDate:'बिल की तारीख',lDate:'डिलीवरी/सेवा की तारीख',items:'मदें',desc:'विवरण',
 qty:'मात्रा',price:'इकाई मूल्य (शुद्ध)',rate:'VAT दर',addItem:'+ मद',net:'शुद्ध',gross:'सकल',status:'स्थिति',open:'बकाया',paid:'भुगतान हुआ',cancelled:'रद्द',
 pay:'भुगतान दर्ज करें',view:'देखें / प्रिंट',print:'प्रिंट / PDF',invNo:'बिल सं.',payVia:'भुगतान माध्यम',close:'बंद करें',copy:'कॉपी',copied:'कॉपी हो गया',saved:'सहेजा गया',deleted:'हटाया गया',
-errBal:'नामे, जमा और सही राशि चुनें',errSame:'नामे और जमा एक ही खाता नहीं हो सकते',errLocked:'यह तारीख लॉक अवधि में है',errTrial:'ट्रायल सीमा (50 प्रविष्टियाँ) पूरी हुई। सेटिंग्स में लाइसेंस कुंजी डालें।',
+errBal:'नामे, जमा और सही राशि चुनें',errSame:'नामे और जमा एक ही खाता नहीं हो सकते',errLocked:'यह तारीख लॉक अवधि में है',errTrial:"ट्रायल खत्म। लाइसेंस खरीदें और सेटिंग्स में कोड डालें।",
 cashNeg:'चेतावनी: नकद शेष ऋणात्मक हो गया — यह कानूनी रूप से संभव नहीं है और कर जाँच में आपकी बहियाँ अस्वीकार हो सकती हैं।',
 period:'अवधि',q:'तिमाही',kz81:'19% कर योग्य बिक्री (Kz 81)',kz86:'7% कर योग्य बिक्री (Kz 86)',kz41:'EU के भीतर कर-मुक्त आपूर्ति (Kz 41)',kz48:'अन्य कर-मुक्त बिक्री (Kz 48)',kz66:'घटाने योग्य इनपुट VAT (Kz 66)',kz83:'देय / वापसी योग्य राशि (Kz 83)',
 taxAmt:'कर',base:'कर आधार',ustNote:'ये ELSTER के लिए सहायक आँकड़े हैं। आधिकारिक जमा ELSTER या कर सलाहकार के माध्यम से होता है।',
@@ -666,7 +688,8 @@ ustKlein:'आप लघु व्यवसाय (§19) के रूप मे�
 tseNote:'ध्यान दें: इलेक्ट्रॉनिक कैश रजिस्टर के लिए कानूनन TSE सुरक्षा मॉड्यूल ज़रूरी है; यह रोकड़ बही उसकी जगह नहीं लेती।',
 errAccNo:'4 अंकों की संख्या और नाम डालें',errAccDup:'संख्या पहले से उपयोग में है',kleinNo:'नहीं — मैं VAT लेता हूँ',kleinYes:'हाँ — §19 UStG',
 legalText:'यह प्रोग्राम बहीखाता सहायक उपकरण है, आधिकारिक रूप से प्रमाणित सॉफ़्टवेयर नहीं है और ELSTER को डेटा नहीं भेजता। प्रविष्टियों की शुद्धता और GoBD नियमों (8–10 वर्ष संग्रह, लॉक करना, प्रक्रिया दस्तावेज़) का पालन उपयोगकर्ता की ज़िम्मेदारी है। कर सलाहकार से परामर्श की सलाह दी जाती है।',
-errUnlock:'लॉक वापस नहीं हटाया जा सकता',errKey:'अमान्य कुंजी',demoLoaded:'डेमो डेटा लोड हुआ'
+errUnlock:'लॉक वापस नहीं हटाया जा सकता',errKey:'अमान्य कुंजी',demoLoaded:'डेमो डेटा लोड हुआ',
+trialOver:"7 दिन का मुफ़्त ट्रायल खत्म हो गया। आपका डेटा सुरक्षित है, आप उसे देख और एक्सपोर्ट कर सकते हैं। आगे प्रविष्टि के लिए लाइसेंस खरीदें और कोड डालें।",buyNow:"अभी लाइसेंस खरीदें",enterCode:"एक्टिवेशन कोड डालें",codeInfo:"भुगतान के तुरंत बाद एक्टिवेशन कोड ई-मेल से मिलता है। कोड केवल एक बार, एक डिवाइस पर सक्रिय होता है।",activate:"सक्रिय करें",actOk:"सफलतापूर्वक सक्रिय ✓ धन्यवाद!",actUsed:"यह कोड पहले ही किसी दूसरे डिवाइस पर इस्तेमाल हो चुका है।",actBad:"कोड गलत है। जाँचें और फिर से कोशिश करें।",actNet:"एक्टिवेशन के लिए इंटरनेट चाहिए।",actOff:"स्वचालित एक्टिवेशन अभी उपलब्ध नहीं। WhatsApp पर संपर्क करें।",licRevoked:"यह लाइसेंस निष्क्रिय कर दिया गया है। WhatsApp पर संपर्क करें।"
 };
 TR.vi = {
 tagline:'Kế toán Đức cho thương nhân',dash:'Tổng quan',journal:'Bút toán',invoices:'Hóa đơn',accounts:'Hệ thống tài khoản',reports:'Báo cáo',settings:'Cài đặt',
@@ -679,13 +702,13 @@ export:'Xuất',csvSb:'CSV cho cố vấn thuế',backup:'Sao lưu',restore:'Kh�
 typeA:'Tài sản',typeL:'Nợ phải trả',typeE:'Vốn chủ sở hữu',typeP:'Cá nhân',typeR:'Thu nhập',typeX:'Chi phí',addAcc:'Thêm tài khoản',number:'Số',
 firm:'Tên công ty',owner:'Chủ sở hữu',address:'Địa chỉ',stnr:'Mã số thuế',ustid:'Mã số thuế GTGT',iban:'IBAN',bic:'BIC',bankName:'Ngân hàng',email:'Email',phone:'Điện thoại',
 skr:'Hệ thống tài khoản',klein:'Doanh nghiệp nhỏ (§19 UStG, không thuế GTGT)',prefix:'Tiền tố số hóa đơn',terms:'Hạn thanh toán (ngày)',
-license:'Mã bản quyền',licOk:'Bản quyền đã kích hoạt ✓',licTrial:'Dùng thử: tối đa 50 bút toán',
+license:'Mã bản quyền',licOk:'Bản quyền đã kích hoạt ✓',licTrial:"Dùng thử miễn phí: còn {n} ngày",
 lockTitle:'Khóa sổ (Festschreibung, GoBD)',lockInfo:'Các bút toán đến ngày này không thể sửa hoặc xóa nữa, chỉ có thể đảo. Luật yêu cầu khóa sổ định kỳ (thường khi nộp tờ khai thuế GTGT hằng tháng/quý).',
 lockUntil:'Khóa đến ngày',lockBtn:'Khóa vĩnh viễn',lockedUntil:'Đã khóa đến',audit:'Nhật ký thay đổi',
 newInv:'Hóa đơn mới',customer:'Khách hàng',custAddr:'Địa chỉ khách hàng',custUstid:'Mã số thuế GTGT khách hàng (tùy chọn)',invDate:'Ngày hóa đơn',lDate:'Ngày giao hàng/dịch vụ',items:'Các mục',desc:'Mô tả',
 qty:'SL',price:'Đơn giá (chưa thuế)',rate:'Thuế suất',addItem:'+ Mục',net:'Chưa thuế',gross:'Gồm thuế',status:'Trạng thái',open:'chưa trả',paid:'đã trả',cancelled:'đã hủy',
 pay:'Ghi nhận thanh toán',view:'Xem / In',print:'In / PDF',invNo:'Số hóa đơn',payVia:'Thanh toán qua',close:'Đóng',copy:'Sao chép',copied:'Đã sao chép',saved:'Đã lưu',deleted:'Đã xóa',
-errBal:'Chọn tài khoản Nợ, Có và số tiền hợp lệ',errSame:'Nợ và Có không thể cùng một tài khoản',errLocked:'Ngày này thuộc kỳ đã khóa',errTrial:'Đã đạt giới hạn dùng thử (50 bút toán). Hãy nhập mã bản quyền trong Cài đặt.',
+errBal:'Chọn tài khoản Nợ, Có và số tiền hợp lệ',errSame:'Nợ và Có không thể cùng một tài khoản',errLocked:'Ngày này thuộc kỳ đã khóa',errTrial:"Hết thời gian dùng thử. Hãy mua bản quyền và nhập mã trong Cài đặt.",
 cashNeg:'Cảnh báo: số dư quỹ tiền mặt bị âm — điều này không hợp lệ về mặt pháp lý và có thể khiến sổ sách bị bác bỏ khi thanh tra thuế.',
 period:'Kỳ',q:'Quý',kz81:'Doanh thu chịu thuế 19% (Kz 81)',kz86:'Doanh thu chịu thuế 7% (Kz 86)',kz41:'Giao hàng nội khối EU miễn thuế (Kz 41)',kz48:'Doanh thu miễn thuế khác (Kz 48)',kz66:'Thuế GTGT đầu vào được khấu trừ (Kz 66)',kz83:'Số phải nộp / được hoàn (Kz 83)',
 taxAmt:'Thuế',base:'Giá tính thuế',ustNote:'Đây là số liệu hỗ trợ cho ELSTER. Việc nộp chính thức qua ELSTER hoặc cố vấn thuế.',
@@ -712,7 +735,8 @@ ustKlein:'Bạn đăng ký là doanh nghiệp nhỏ (§19): thường không c�
 tseNote:'Lưu ý: máy tính tiền điện tử bắt buộc phải có mô-đun bảo mật TSE; sổ quỹ này không thay thế được.',
 errAccNo:'Nhập số gồm 4 chữ số và tên',errAccDup:'Số đã được dùng',kleinNo:'Không — tôi tính thuế GTGT',kleinYes:'Có — §19 UStG',
 legalText:'Chương trình này là công cụ hỗ trợ ghi sổ, không phải phần mềm được chứng nhận chính thức và không gửi dữ liệu tới ELSTER. Người dùng chịu trách nhiệm về tính đúng đắn của bút toán và tuân thủ GoBD (lưu trữ 8–10 năm, khóa sổ, tài liệu quy trình). Nên tham khảo cố vấn thuế.',
-errUnlock:'Không thể mở khóa',errKey:'Mã không hợp lệ',demoLoaded:'Đã tải dữ liệu mẫu'
+errUnlock:'Không thể mở khóa',errKey:'Mã không hợp lệ',demoLoaded:'Đã tải dữ liệu mẫu',
+trialOver:"Thời gian dùng thử 7 ngày đã hết. Dữ liệu của bạn vẫn được giữ, bạn vẫn xem và xuất được. Để tiếp tục ghi sổ, hãy mua bản quyền và nhập mã.",buyNow:"Mua bản quyền ngay",enterCode:"Nhập mã kích hoạt",codeInfo:"Sau khi thanh toán, mã kích hoạt được gửi ngay qua e-mail. Mã chỉ kích hoạt được một lần, trên một thiết bị.",activate:"Kích hoạt",actOk:"Kích hoạt thành công ✓ Cảm ơn bạn!",actUsed:"Mã này đã được dùng trên thiết bị khác.",actBad:"Mã không hợp lệ. Vui lòng kiểm tra và thử lại.",actNet:"Kích hoạt cần kết nối internet.",actOff:"Kích hoạt tự động chưa sẵn sàng. Hãy nhắn WhatsApp cho chúng tôi.",licRevoked:"Bản quyền này đã bị vô hiệu. Hãy nhắn WhatsApp cho chúng tôi."
 };
 
 Object.assign(TR.en,{"devBy": "Developed & © by", "about": "About", "rights": "All rights reserved. Copying or reselling this program without the developer’s permission is prohibited."});
@@ -749,7 +773,41 @@ if(!['ar','de','en','es','tr','fa','ps','hi','vi'].includes(LANG)) LANG='ar';
 let C = makeCore(S);
 function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} C = makeCore(S); }
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-const licensed = () => licCheck(S.settings.license);
+/* ---- Lizenz & Testphase ---- */
+const SHOP = { polarOrg: '1f421f53-8933-4f0c-8958-b93486fba166', benefit: '9f87e205-b88a-4f99-9cfd-6ee502adf1d9', buyUrl: 'https://buy.polar.sh/polar_cl_HuHca84VCKWOuaP23vUcxU1o6bxjaQhA6vOP22p2mgO', wa: '4917631467103', trialDays: 7 };
+const TRIAL_KEY = 'sonne-buchhaltung-trial';
+function trialStart(){ let a=''; try{ a=localStorage.getItem(TRIAL_KEY)||''; }catch(e){}
+  const b=S.settings.trialStart||''; let d=[a,b].filter(Boolean).sort()[0];
+  if(!d){ d=new Date().toISOString(); }
+  if(S.settings.trialStart!==d){ S.settings.trialStart=d; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+  try{ localStorage.setItem(TRIAL_KEY,d); }catch(e){} return d; }
+function trialLeft(){ const ms=Date.now()-new Date(trialStart()).getTime(); return Math.max(0, SHOP.trialDays - Math.floor(ms/86400000)); }
+const licensed = () => !!(S.settings.act && S.settings.act.id) || licCheck(S.settings.license);
+const canWrite = () => licensed() || trialLeft() > 0;
+const buyHref = () => SHOP.buyUrl || ('https://wa.me/'+SHOP.wa+'?text='+encodeURIComponent('Sonne Buchhaltung – Lizenz kaufen / شراء الترخيص'));
+async function polarCall(path, body){
+  const r = await fetch('https://api.polar.sh/v1/customer-portal/license-keys/'+path, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  let j=null; try{ j=await r.json(); }catch(e){} return {status:r.status, ok:r.ok, data:j}; }
+async function activateCode(code){
+  code=String(code||'').trim(); if(!code) return t('actBad');
+  if(licCheck(code)){ S.settings.license=code.toUpperCase(); log('license',{text:'offline'}); persist(); return ''; }
+  if(!SHOP.polarOrg) return t('actOff');
+  let chk; try{ chk = await polarCall('validate', {key:code, organization_id:SHOP.polarOrg, benefit_id:SHOP.benefit}); }catch(e){ return t('actNet'); }
+  if(!chk.ok) return t('actBad');
+  if(chk.data && chk.data.status && chk.data.status!=='granted') return t('licRevoked');
+  let res; try{ res = await polarCall('activate', {key:code, organization_id:SHOP.polarOrg, label:('Sonne Buchhaltung '+(S.settings.firm||'')).trim().slice(0,100)}); }catch(e){ return t('actNet'); }
+  if(res.ok && res.data && res.data.id){ S.settings.act={key:code, id:res.data.id, at:new Date().toISOString()}; log('license',{text:'activated'}); persist(); return ''; }
+  if(res.status===403) return t('actUsed');
+  return t('actBad'); }
+async function recheckLicense(){
+  const a=S.settings.act; if(!a || !a.id || !SHOP.polarOrg || !navigator.onLine) return;
+  try{ const res = await polarCall('validate', {key:a.key, organization_id:SHOP.polarOrg, activation_id:a.id, benefit_id:SHOP.benefit});
+    if(res.status===404 || (res.ok && res.data && res.data.status && res.data.status!=='granted')){ S.settings.act=null; log('license',{text:'revoked'}); persist(); render(); toast(t('licRevoked')); }
+  }catch(e){} }
+function trialBanner(){ if(licensed()) return '';
+  const n=trialLeft();
+  const btns=`<div class="btns" style="margin-top:10px"><a class="btn p" href="${esc(buyHref())}" target="_blank" rel="noopener">${t('buyNow')}</a><button class="btn" onclick="view='settings';render();setTimeout(()=>{const el=document.getElementById('licIn'); if(el){el.scrollIntoView({block:'center'}); el.focus();}},50)">${t('enterCode')}</button></div>`;
+  return n>0 ? `<div class="note">${esc(t('licTrial').replace('{n}',n))}${btns}</div>` : `<div class="note" style="border-color:#c0392b;background:#fdecea">${esc(t('trialOver'))}${btns}</div>`; }
 const realCount = () => S.entries.filter(e=>!e.demo).length;
 function log(action, data){ S.audit.push({ts:new Date().toISOString(), action, data}); if(S.audit.length>3000) S.audit.shift(); }
 
@@ -794,7 +852,7 @@ function renderNav(){
   $('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{ view=b.dataset.v; try{ history.replaceState(null,'','#'+view); }catch(e){ location.hash=view; } render(); });
   document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));
   const ls=$('#langSel'); ls.innerHTML=LANGS.map(([c,n])=>`<option value="${c}" ${c===LANG?'selected':''}>${n}</option>`).join(''); ls.onchange=()=>{ LANG=S.settings.lang=ls.value; persist(); applyDir(); render(); };
-  $('#licState').innerHTML = licensed() ? `<span class="tag ok">${t('licOk')}</span>` : `<span class="tag sun">${t('licTrial')}</span>`;
+  $('#licState').innerHTML = licensed() ? `<span class="tag ok">${t('licOk')}</span>` : `<span class="tag sun">${esc(t('licTrial').replace('{n}',trialLeft()))}</span>`;
 }
 function applyDir(){ document.documentElement.lang = LANG; document.documentElement.dir = RTL.includes(LANG)?'rtl':'ltr'; }
 window.addEventListener('hashchange', ()=>{ const v=location.hash.slice(1); if(VIEWS.includes(v) && v!==view){ view=v; render(); } });
@@ -811,6 +869,7 @@ function render(){
   if(view==='reports') m.innerHTML = head(t('reports'), yearSel) + vReports();
   if(view==='accounts') m.innerHTML = head(t('accounts')) + vAccounts();
   if(view==='settings') m.innerHTML = head(t('settings')) + vSettings();
+  if(view!=='settings') m.insertAdjacentHTML('afterbegin', trialBanner());
   const ys = $('#yearSel'); if(ys) ys.onchange = () => { S.settings.year = ys.value; persist(); render(); };
   bind[view] && bind[view]();
 }
@@ -900,7 +959,7 @@ function validate(e, isNew){
   if(!e.date || !e.soll || !e.haben || !(e.amount>0)) return t('errBal');
   if(e.soll===e.haben) return t('errSame');
   if(isLocked(e.date)) return t('errLocked');
-  if(isNew && !licensed() && realCount()>=50) return t('errTrial');
+  if(isNew && !canWrite()) return t('errTrial');
   return '';
 }
 function addEntry(e){ e.id=uid(); e.n=S.seq++; e.created=new Date().toISOString(); S.entries.push(e); log('create', e); return e; }
@@ -1011,7 +1070,7 @@ bind.invoices = () => {
     $('#iSave').onclick=()=>{ sync(); const d=invDraft; const tt=invTotals(d);
       if(!d.customer || !(tt.net>0) || d.items.some(i=>!i.d)) return toast(t('errInv'));
       if(isLocked(d.date)) return toast(t('errLocked'));
-      if(!licensed() && realCount() + tt.taxes.length > 50) return toast(t('errTrial'));
+      if(!canWrite()) return toast(t('errTrial'));
       d.entryIds=[];
       for(const [r,netv,taxv] of tt.taxes){
         const haben = S.settings.klein ? 'erlklein' : (r===19?'erl19':r===7?'erl7':'erl0');
@@ -1133,10 +1192,11 @@ function vSettings(){
   <div class="card"><h2>${t('lockTitle')}</h2><p class="sub">${t('lockInfo')}</p><div class="lockbar">${s.lockedUntil?`<span class="tag ok">🔒 ${t('lockedUntil')} <span class="num">${dDe(s.lockedUntil)}</span></span>`:''}
   <input type="date" id="lDate" style="width:auto" value="${s.lockedUntil||''}"><button class="btn" id="lBtn">${t('lockBtn')}</button></div></div>
   <div class="card"><h2>${t('backup')}</h2><div class="btns"><button class="btn p" id="bExp">${t('backup')} (JSON)</button><label class="btn" style="margin:0;color:var(--ink)">${t('restore')}<input type="file" id="bImp" accept=".json,application/json" style="display:none"></label><button class="btn" id="bDemo">${t('demo')}</button><button class="btn d" id="bReset">${t('reset')}</button></div></div>
-  <div class="card"><h2>${t('license')}</h2><div class="row" style="grid-template-columns:1fr auto"><input id="licIn" class="mono" placeholder="SONNE-XXXX-XXXX-XXXX" value="${esc(s.license)}"><button class="btn p" id="licBtn">${t('save')}</button></div>
-  <p class="sub" style="margin-bottom:0">${licensed()?t('licOk'):t('licTrial')}</p></div>
+  <div class="card" id="licCard"><h2>${t('license')}</h2>
+  ${licensed()?`<p style="margin:0"><span class="tag ok">${t('licOk')}</span>${s.act&&s.act.key?` <span class="mono sub">${esc(s.act.key.slice(0,8))}…</span>`:''}</p>`:`${trialBanner()}<p class="sub">${t('codeInfo')}</p>
+  <div class="row" style="grid-template-columns:1fr auto"><input id="licIn" class="mono" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" autocomplete="off"><button class="btn p" id="licBtn">${t('activate')}</button></div>`}</div>
   <div class="card"><h2>${t('help')}</h2><ol style="margin:0;padding-inline-start:20px">${[1,2,3,4,5,6].map(n=>t('help'+n)).map(x=>`<li>${x}</li>`).join('')}</ol></div>
-  <div class="card"><h2>${t('about')}</h2><p style="margin:0"><b>Sonne Buchhaltung</b> <span class="mono">v1.2</span><br>${t('devBy')}: <b>Rabie Al Mehtar</b> · Sonne Markt · <a href="https://sonnemarket.shop">sonnemarket.shop</a><br><span class="sub">© 2026 Rabie Al Mehtar. ${t('rights')}</span></p></div>
+  <div class="card"><h2>${t('about')}</h2><p style="margin:0"><b>Sonne Buchhaltung</b> <span class="mono">v1.3</span><br>${t('devBy')}: <b>Rabie Al Mehtar</b> · Sonne Markt · <a href="https://sonnemarket.shop">sonnemarket.shop</a><br><span class="sub">© 2026 Rabie Al Mehtar. ${t('rights')}</span></p></div>
   <div class="card"><h2>${t('legal')}</h2><p class="sub" style="margin:0">${t('legalText')}</p></div>
   <div class="card"><h2>${t('audit')}</h2><div class="tw" style="max-height:260px"><table><tbody>${S.audit.slice(-60).reverse().map(a=>`<tr><td class="num">${a.ts.slice(0,16).replace('T',' ')}</td><td><span class="tag">${a.action}</span></td><td class="sub">${esc(a.data.text||a.data.no||(a.data.after&&a.data.after.text)||'')}</td></tr>`).join('')||`<tr><td class="sub">${t('noData')}</td></tr>`}</tbody></table></div></div>`;
 }
@@ -1145,17 +1205,17 @@ bind.settings = () => {
   $('#lBtn').onclick=()=>{ const d=$('#lDate').value; if(!d) return; if(S.settings.lockedUntil && d<S.settings.lockedUntil) return toast(t('errUnlock'));
     confirmBox(`${t('lockBtn')}: ${dDe(d)}?<br><span class="sub">${t('lockInfo')}</span>`, ()=>{ S.settings.lockedUntil=d; log('lock',{text:d}); persist(); render(); }); };
   $('#bExp').onclick=()=>deliver(`sonne-buchhaltung-backup-${today()}.json`, JSON.stringify(S,null,1), 'application/json');
-  $('#bImp').onchange=ev=>{ const file=ev.target.files[0]; if(!file) return; const rd=new FileReader(); rd.onload=()=>{ try{ const p=JSON.parse(rd.result); if(!p.entries||!p.settings) throw 0; S=Object.assign(blank(),p,{settings:Object.assign(blank().settings,p.settings)}); persist(); toast(t('importOk')); render(); }catch(e){ toast(t('importBad')); } }; rd.readAsText(file); };
+  $('#bImp').onchange=ev=>{ const file=ev.target.files[0]; if(!file) return; const rd=new FileReader(); rd.onload=()=>{ try{ const p=JSON.parse(rd.result); if(!p.entries||!p.settings) throw 0; const keep={license:S.settings.license, act:S.settings.act, trialStart:S.settings.trialStart}; S=Object.assign(blank(),p,{settings:Object.assign(blank().settings,p.settings,keep)}); persist(); toast(t('importOk')); render(); }catch(e){ toast(t('importBad')); } }; rd.readAsText(file); };
   $('#bDemo').onclick=()=>loadDemo();
-  $('#bReset').onclick=()=>confirmBox(t('resetQ'), ()=>{ const lic=S.settings.license, lang=S.settings.lang; S=blank(); S.settings.license=lic; S.settings.lang=lang; persist(); render(); });
-  $('#licBtn').onclick=()=>{ const k=$('#licIn').value.trim().toUpperCase(); if(k && !licCheck(k)) return toast(t('errKey')); S.settings.license=k; persist(); toast(t('saved')); render(); };
+  $('#bReset').onclick=()=>confirmBox(t('resetQ'), ()=>{ const lic=S.settings.license, act=S.settings.act, ts=S.settings.trialStart, lang=S.settings.lang; S=blank(); S.settings.license=lic; S.settings.act=act; S.settings.trialStart=ts; S.settings.lang=lang; persist(); render(); });
+  const lb=$('#licBtn'); if(lb) lb.onclick=async()=>{ lb.disabled=true; const err=await activateCode($('#licIn').value); lb.disabled=false; if(err) return toast(err); toast(t('actOk')); render(); };
 };
 
 /* ============================== DEMO ============================== */
 function loadDemo(){
   const Y=S.settings.year, d=(m,dd)=>`${Y}-${String(m).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
-  const lic=S.settings.license, lang=S.settings.lang;
-  S=blank(); Object.assign(S.settings,{firm:'Muster Großhandel',owner:'Max Muster',address:'Musterstraße 1\n10115 Berlin',stnr:'37/123/45678',ustid:'DE123456789',iban:'DE00 1001 0010 0000 0000 00',bankName:'Musterbank',email:'info@muster.de',phone:'030 1234567',year:Y,license:lic,lang});
+  const lic=S.settings.license, act=S.settings.act, ts=S.settings.trialStart, lang=S.settings.lang;
+  S=blank(); Object.assign(S.settings,{act, trialStart:ts, firm:'Muster Großhandel',owner:'Max Muster',address:'Musterstraße 1\n10115 Berlin',stnr:'37/123/45678',ustid:'DE123456789',iban:'DE00 1001 0010 0000 0000 00',bankName:'Musterbank',email:'info@muster.de',phone:'030 1234567',year:Y,license:lic,lang});
   const E=(date,beleg,text,soll,haben,amount,tax='')=>addEntry({date,beleg,text,soll,haben,amount,tax,demo:true});
   E(d(1,2),'EB1','Eröffnung Bank','bank','eb',8000); E(d(1,2),'EB2','Eröffnung Kasse','kasse','eb',500); E(d(1,2),'EB3','Eröffnung Kapital','eb','kapital',8500);
   for(let m=1;m<=11;m++){
@@ -1172,7 +1232,8 @@ function loadDemo(){
   persist(); toast(t('demoLoaded')); view='dash'; render();
 }
 
-applyDir(); render();
+applyDir(); trialStart(); render(); setTimeout(recheckLicense, 1500);
 </script>
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}</script>
 </body>
 </html>
