@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Rabie Al Mehtar">
+<title>Sonne Buchhaltung — محاسبة ألمانية بلغتك</title>
+<style>
+:root{--ink:#1d2230;--muted:#5f6577;--line:#e7e2d6;--sun:#e8a317;--sun-d:#b97c06;--sun-l:#fdf3dc;--navy:#1f2a44;--ok:#1f8a5b;--bg:#fbfaf6}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans","Noto Sans Arabic","Noto Sans Devanagari","Nirmala UI",Tahoma,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:16px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{background:var(--navy);color:#fff}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+select{font:inherit;font-size:14px;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff}
+select option{color:#111}
+.hero{padding:46px 0 56px}
+.hero h1{font-size:clamp(28px,4.4vw,44px);line-height:1.2;margin:0 0 14px;max-width:760px}
+.hero p{font-size:18px;color:#d5dbea;max-width:680px;margin:0 0 26px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:10px;font-weight:600;text-decoration:none;border:2px solid transparent;font-size:16px}
+.btn.p{background:var(--sun);color:#1d1600}
+.btn.p:hover{background:#f2b52f}
+.btn.o{border-color:rgba(255,255,255,.4);color:#fff}
+.btn.o2{border-color:var(--navy);color:var(--navy)}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.tag{font-size:13px;padding:4px 11px;border-radius:20px;background:rgba(255,255,255,.1);color:#e9edf6}
+section{padding:54px 0}
+h2{font-size:28px;margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px}
+.card b{display:block;margin-bottom:4px;font-size:17px}
+.card span{color:var(--muted);font-size:14.5px}
+.price{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:center}
+.pbox{background:#fff;border:2px solid var(--sun);border-radius:18px;padding:28px;text-align:center}
+.pbox .old{color:var(--muted);text-decoration:line-through}
+.pbox .now{font-size:46px;font-weight:800;margin:4px 0;direction:ltr}
+.pbox small{display:block;color:var(--muted)}
+.badge{display:inline-block;background:var(--sun-l);color:var(--sun-d);border-radius:20px;padding:3px 12px;font-size:13px;font-weight:600;margin-bottom:10px}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+ol.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;position:relative}
+ol.steps li::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;margin-bottom:8px}
+.honest{background:#fff;border-inline-start:4px solid var(--sun);padding:16px 20px;border-radius:8px;color:var(--muted);font-size:14.5px}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+.alt{background:#f3f0e8}
+footer{background:var(--navy);color:#c6cde0;padding:34px 0;font-size:13.5px}
+footer a{color:#fff}
+.legal{direction:ltr;text-align:left;font-size:13px;color:#333;white-space:pre-line}
+.legal h4{margin:14px 0 4px}
+.num{direction:ltr;unicode-bidi:isolate}
+.wa{position:fixed;bottom:18px;inset-inline-end:18px;background:#1f8a5b;color:#fff;border-radius:40px;padding:12px 18px;text-decoration:none;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+@media(max-width:820px){.grid,ol.steps{grid-template-columns:1fr}.price{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap">
+  <div class="bar">
+   <div class="logo"><svg width="30" height="30" viewBox="0 0 34 34"><circle cx="17" cy="17" r="8" fill="#e8a317"/><g stroke="#e8a317" stroke-width="2.4" stroke-linecap="round"><path d="M17 2v4M17 28v4M2 17h4M28 17h4M6.4 6.4l2.8 2.8M24.8 24.8l2.8 2.8M6.4 27.6l2.8-2.8M24.8 9.2l2.8-2.8"/></g></svg>Sonne Buchhaltung</div>
+   <select id="lang" aria-label="Language"></select>
+  </div>
+  <div class="hero">
+   <h1 data-k="h1"></h1>
+   <p data-k="sub"></p>
+   <div class="btns"><a class="btn p" href="app/" target="_blank" rel="noopener" data-k="tryNow"></a><a class="btn o" data-wa="try" target="_blank" rel="noopener"></a><a class="btn o" href="#price" data-k="ctaPrice"></a></div>
+   <p class="tnote" data-k="trialNote" style="font-size:.9rem;opacity:.85;margin-top:10px"></p>
+   <div class="tags"><span class="tag" data-k="t1"></span><span class="tag" data-k="t2"></span><span class="tag" data-k="t3"></span><span class="tag" data-k="t4"></span></div>
+  </div>
+ </div>
+</header>
+
+<section><div class="wrap">
+ <h2 data-k="fTitle"></h2>
+ <div class="grid" id="feat"></div>
+</div></section>
+
+<section class="alt" id="price"><div class="wrap price">
+ <div>
+  <h2 data-k="pTitle"></h2>
+  <p data-k="pText"></p>
+  <div class="honest" data-k="honest"></div>
+ </div>
+ <div class="pbox">
+  <div class="badge" data-k="launch"></div>
+  <div class="old num">149 € netto</div>
+  <div class="now">99 €</div>
+  <small data-k="net"></small>
+  <small class="num">99 € + 19 % USt = 117,81 €</small>
+  <div style="margin-top:18px" class="btns"><a class="btn p" style="flex:1;justify-content:center" data-wa="buy" target="_blank" rel="noopener"></a></div>
+  <small style="margin-top:10px" data-k="b2b"></small>
+ </div>
+</div></section>
+
+<section><div class="wrap">
+ <h2 data-k="hTitle"></h2>
+ <ol class="steps"><li data-k="s1"></li><li data-k="s2"></li><li data-k="s3"></li></ol>
+</div></section>
+
+<section class="alt"><div class="wrap">
+ <h2 data-k="qTitle"></h2>
+ <div id="faq"></div>
+</div></section>
+
+<section><div class="wrap">
+ <details><summary>Lizenzbedingungen (Kurzfassung) · شروط الترخيص</summary><div class="legal">
+<h4>Lizenzbedingungen „Sonne Buchhaltung“ – Stand 23.11.2026</h4>Lizenzgeber: Rabie Al Mehtar, Sonne Markt, Gernotstraße 32, 10365 Berlin.
+Das Angebot richtet sich ausschließlich an Unternehmer i. S. d. § 14 BGB. Kein Vertragsschluss mit Verbrauchern.
+Gegenstand: Buchführungssoftware als HTML-Datei zur lokalen Nutzung im Browser, mit Lizenzschlüssel. Keine zertifizierte Software, keine ELSTER-Schnittstelle, keine XRechnung/ZUGFeRD, kein Ersatz für eine TSE, keine Steuerberatung.
+Nutzungsrecht: einfach, unbefristet, nicht übertragbar, für ein Unternehmen (eine Steuernummer). Weitergabe, Weiterverkauf und Umgehung der Lizenzprüfung sind untersagt; §§ 69d, 69e UrhG bleiben unberührt.
+Daten: werden ausschließlich lokal im Browser gespeichert; keine Übermittlung an den Lizenzgeber. Der Kunde ist für Datensicherung, GoBD und Aufbewahrungsfristen verantwortlich.
+Mängel: Anzeige innerhalb von 14 Tagen in Textform; Nacherfüllung nach Wahl des Lizenzgebers; Verjährung 12 Monate (außer bei Vorsatz, grober Fahrlässigkeit, Verletzung von Leben, Körper, Gesundheit, ProdHaftG).
+Haftung: unbeschränkt bei Vorsatz, grober Fahrlässigkeit, Leben/Körper/Gesundheit, ProdHaftG, Garantie; bei leichter Fahrlässigkeit nur für wesentliche Vertragspflichten, begrenzt auf den vertragstypischen, vorhersehbaren Schaden.
+Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts; Gerichtsstand Berlin für Kaufleute. Die vollständigen Lizenzbedingungen werden vor Vertragsschluss mit dem Angebot übersandt.</div></details>
+ <details id="impressum"><summary>Impressum</summary><div class="legal">
+<h4>Angaben gemäß § 5 DDG</h4>Rabie Al Mehtar
+Sonne Markt
+Gernotstraße 32
+10365 Berlin
+Deutschland
+
+Telefon / WhatsApp: 0176 31467103
+E-Mail: <a href="mailto:rabihalmehtar33@gmail.com">rabihalmehtar33@gmail.com</a>
+
+Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV: Rabie Al Mehtar, Anschrift wie oben.
+Unsere Angebote richten sich ausschließlich an Unternehmer im Sinne des § 14 BGB.</div></details>
+ <details><summary>Datenschutz</summary><div class="legal">Diese Seite setzt keine Cookies, lädt keine externen Inhalte und verwendet kein Tracking. Wenn Sie uns per WhatsApp oder Telefon kontaktieren, verarbeiten wir Ihre Angaben nur zur Bearbeitung Ihrer Anfrage (Art. 6 Abs. 1 lit. b DSGVO). Für WhatsApp gelten zusätzlich die Datenschutzbestimmungen von WhatsApp Ireland Ltd. Die Testversion der Software läuft vollständig in Ihrem Browser; Ihre Buchungsdaten werden nur lokal in Ihrem Browser gespeichert und nicht an uns übermittelt. Hosting: Diese Seite und die Software werden über GitHub Pages bereitgestellt (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Beim Aufruf verarbeitet GitHub technisch notwendige Zugriffsdaten (z. B. IP-Adresse) zur Auslieferung und Sicherheit der Seite (Art. 6 Abs. 1 lit. f DSGVO). Eine Übermittlung in die USA ist möglich; GitHub ist nach dem EU-US Data Privacy Framework zertifiziert (Art. 45 DSGVO). Verantwortlicher: Rabie Al Mehtar, Anschrift siehe Impressum. Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Beschwerde bei einer Datenschutzaufsichtsbehörde.</div></details>
+</div></section>
+
+<footer><div class="wrap">
+ <div>© 2026 Rabie Al Mehtar · Sonne Markt · Berlin · <a href="#impressum">Impressum</a></div>
+ <div style="margin-top:6px" data-k="foot"></div>
+ <div style="margin-top:6px" class="num">WhatsApp / Tel.: +49 176 31467103 · E-Mail: rabihalmehtar33@gmail.com</div>
+</div></footer>
+<a class="wa" data-wa="buy" target="_blank" rel="noopener">WhatsApp</a>
+
+<script>
+const PHONE = '4917631467103';
+const L = {
+ar:{tryNow:'جرّب البرنامج مجاناً الآن',ask:'اسألنا على واتساب',trialNote:'مجاناً حتى 50 قيداً · بدون تسجيل · بياناتك تبقى في متصفحك — خذ نسخة احتياطية بانتظام من الإعدادات.',name:'العربية',dir:'rtl',h1:'محاسبة ألمانية لمحلك — بلغتك',sub:'سجّل المبيعات والمصاريف، واصنع فواتير ألمانية، واحصل على أرقام إقرار ضريبة المبيعات (UStVA) جاهزة — بالعربية وبـ 8 لغات أخرى. بدون اشتراك شهري.',try:'اطلب نسخة تجريبية مجانية',buy:'اطلب الآن عبر واتساب',ctaPrice:'السعر',t1:'SKR03 / SKR04',t2:'9 لغات',t3:'دفعة واحدة، بدون اشتراك',t4:'بياناتك تبقى على جهازك',
+fTitle:'ماذا يفعل البرنامج؟',f:[['قيود بنقرة واحدة','14 قيداً جاهزاً: بيع نقدي، شراء بضاعة، وقود، إيجار… أدخل المبلغ الإجمالي والبرنامج يفصل الضريبة.'],['فواتير ألمانية صحيحة','فاتورة بالألمانية فيها كل البيانات المطلوبة حسب §14 UStG، ورقم متسلسل تلقائي.'],['أرقام UStVA جاهزة','الأرقام 81 و86 و66 و83 لنقلها إلى ELSTER، شهرياً أو كل ربع سنة.'],['تقارير كاملة','ميزان المراجعة، الأرباح والخسائر، الميزانية، EÜR، ودفتر الصندوق.'],['ملف لمستشارك الضريبي','تصدير CSV بأرقام حسابات DATEV ورموز الضريبة.'],['إقفال حسب GoBD','إقفال الفترات وسجل للتغييرات، وتنبيه إذا صار رصيد الصندوق سالباً.']],
+pTitle:'سعر واحد، بدون اشتراك',pText:'تدفع مرة واحدة وتستعمل البرنامج لشركتك بدون رسوم شهرية. جرّبه أولاً مجاناً حتى 50 قيداً.',honest:'للصراحة: البرنامج لا يرسل الإقرار إلى ELSTER مباشرة (أنت تنقل الأرقام)، ولا يربط حسابك البنكي، ولا يصنع فواتير XRechnung. وهو ليس استشارة ضريبية.',launch:'سعر الإطلاق لأول 100 عميل',net:'صافٍ، دفعة واحدة',b2b:'للشركات وأصحاب المشاريع في ألمانيا فقط (§ 14 BGB)',
+hTitle:'كيف تشتري؟',s1:'راسلنا على واتساب واكتب اسم شركتك. نرسل لك العرض وشروط الترخيص والفاتورة.',s2:'ادفع بتحويل بنكي إلى الحساب المكتوب في الفاتورة.',s3:'خلال 24 ساعة من وصول المبلغ تستلم البرنامج ومفتاح الترخيص، مع شرح قصير للبدء.',
+qTitle:'أسئلة شائعة',q:[['هل يعمل على الهاتف؟','نعم، يعمل في المتصفح على الكمبيوتر والهاتف. الأفضل الكمبيوتر للعمل اليومي.'],['أين تُحفظ بياناتي؟','في متصفحك فقط، ولا تصلنا أي بيانات. خذ نسخة احتياطية بانتظام من الإعدادات.'],['هل يغني عن المستشار الضريبي؟','لا. هو ينظّم دفاترك ويوفّر وقت ومال المستشار، لكن الإقرار السنوي يبقى معه.'],['لدي شركة خارج ألمانيا، هل يناسبني؟','لا، البرنامج مبني على الضرائب الألمانية فقط.']],foot:'تطوير وحقوق النشر: Rabie Al Mehtar',msgTry:'مرحباً، أريد نسخة تجريبية مجانية من Sonne Buchhaltung. اسم شركتي: ',msgBuy:'مرحباً، أريد شراء Sonne Buchhaltung (99 € صافي). اسم شركتي: '},
+de:{tryNow:'Jetzt kostenlos testen',ask:'Fragen per WhatsApp',trialNote:'Kostenlos bis 50 Buchungen · ohne Anmeldung · Ihre Daten bleiben in Ihrem Browser – bitte regelmäßig über die Einstellungen sichern.',name:'Deutsch',dir:'ltr',h1:'Buchhaltung für Ihr Geschäft – in Ihrer Sprache',sub:'Einnahmen und Ausgaben buchen, deutsche Rechnungen schreiben, Werte für die Umsatzsteuer-Voranmeldung erhalten – in 9 Sprachen. Ohne Monatsabo.',try:'Kostenlose Testversion anfordern',buy:'Jetzt per WhatsApp bestellen',ctaPrice:'Preis',t1:'SKR03 / SKR04',t2:'9 Sprachen',t3:'Einmalzahlung, kein Abo',t4:'Daten bleiben bei Ihnen',
+fTitle:'Was kann die Software?',f:[['Buchen mit einem Klick','14 Schnellbuchungen: Barverkauf, Wareneinkauf, Tanken, Miete … Bruttobetrag eingeben, die Steuer wird automatisch berechnet.'],['Korrekte deutsche Rechnungen','Mit allen Pflichtangaben nach § 14 UStG und fortlaufender Rechnungsnummer.'],['UStVA-Werte','Kennzahlen 81, 86, 66 und 83 zur Übertragung in ELSTER – monatlich oder quartalsweise.'],['Alle Auswertungen','Summen- und Saldenliste, GuV, Bilanz, EÜR und Kassenbuch.'],['Export für den Steuerberater','CSV mit DATEV-Kontonummern und Steuerschlüsseln.'],['Festschreibung (GoBD)','Zeiträume festschreiben, Änderungsprotokoll, Warnung bei negativem Kassenbestand.']],
+pTitle:'Ein Preis, kein Abo',pText:'Einmal zahlen und für Ihr Unternehmen ohne Monatsgebühr nutzen. Vorher kostenlos testen (bis 50 Buchungen).',honest:'Ehrlich gesagt: keine direkte ELSTER-Übermittlung (Sie übertragen die Werte), keine Bankanbindung, keine XRechnung. Keine Steuerberatung.',launch:'Einführungspreis für die ersten 100 Kunden',net:'netto, einmalig',b2b:'Nur für Unternehmer in Deutschland (§ 14 BGB)',
+hTitle:'So kaufen Sie',s1:'Schreiben Sie uns per WhatsApp mit Ihrem Firmennamen. Sie erhalten Angebot, Lizenzbedingungen und Rechnung.',s2:'Zahlen Sie per Überweisung auf das in der Rechnung angegebene Konto.',s3:'Innerhalb von 24 Stunden nach Zahlungseingang erhalten Sie die Software, Ihren Lizenzschlüssel und eine kurze Anleitung.',
+qTitle:'Häufige Fragen',q:[['Läuft es auf dem Handy?','Ja, im Browser auf PC und Smartphone. Für die tägliche Arbeit empfehlen wir den PC.'],['Wo liegen meine Daten?','Nur in Ihrem Browser – wir erhalten keine Daten. Sichern Sie regelmäßig über die Einstellungen.'],['Ersetzt es den Steuerberater?','Nein. Es ordnet Ihre Buchhaltung und spart Zeit, die Jahreserklärung bleibt beim Steuerberater.'],['Passt es für Firmen außerhalb Deutschlands?','Nein, die Software basiert auf dem deutschen Steuerrecht.']],foot:'Entwicklung & Urheberrecht: Rabie Al Mehtar',msgTry:'Hallo, ich möchte die kostenlose Testversion von Sonne Buchhaltung. Firma: ',msgBuy:'Hallo, ich möchte Sonne Buchhaltung kaufen (99 € netto). Firma: '},
+en:{tryNow:'Try it free now',ask:'Ask us on WhatsApp',trialNote:'Free up to 50 entries · no sign-up · your data stays in your browser — back up regularly from Settings.',name:'English',dir:'ltr',h1:'German bookkeeping for your business — in your language',sub:'Record sales and expenses, create German invoices and get your VAT return (UStVA) figures — in 9 languages. No monthly subscription.',try:'Request a free trial',buy:'Order now on WhatsApp',ctaPrice:'Price',t1:'SKR03 / SKR04',t2:'9 languages',t3:'One-time payment',t4:'Your data stays with you',
+fTitle:'What does it do?',f:[['One-click entries','14 ready entries: cash sale, buying goods, fuel, rent… enter the gross amount and the tax is split automatically.'],['Correct German invoices','All mandatory details under §14 UStG and automatic sequential numbers.'],['VAT return figures','Fields 81, 86, 66 and 83 to transfer into ELSTER — monthly or quarterly.'],['Full reports','Trial balance, profit & loss, balance sheet, EÜR and cash book.'],['Export for your tax advisor','CSV with DATEV account numbers and tax codes.'],['GoBD locking','Lock periods, change log, warning on negative cash balance.']],
+pTitle:'One price, no subscription',pText:'Pay once and use it for your business with no monthly fee. Try it free first (up to 50 entries).',honest:'To be clear: no direct ELSTER filing (you transfer the figures), no bank connection, no XRechnung. Not tax advice.',launch:'Launch price for the first 100 customers',net:'net, one-time',b2b:'For businesses in Germany only (§14 BGB)',
+hTitle:'How to buy',s1:'Message us on WhatsApp with your company name. You receive the offer, license terms and invoice.',s2:'Pay by bank transfer to the account on the invoice.',s3:'Within 24 hours of payment you receive the software, your license key and a short guide.',
+qTitle:'FAQ',q:[['Does it work on my phone?','Yes, in the browser on PC and phone. A PC is best for daily work.'],['Where is my data stored?','Only in your browser — we receive nothing. Back up regularly from Settings.'],['Does it replace my tax advisor?','No. It organises your books and saves time; the annual return stays with your advisor.'],['My company is outside Germany — does it fit?','No, it is built for German tax rules only.']],foot:'Developed & © by Rabie Al Mehtar',msgTry:'Hello, I would like a free trial of Sonne Buchhaltung. Company: ',msgBuy:'Hello, I would like to buy Sonne Buchhaltung (€99 net). Company: '},
+tr:{tryNow:'Şimdi ücretsiz deneyin',ask:'WhatsApp’tan sorun',trialNote:'50 kayda kadar ücretsiz · kayıt yok · verileriniz tarayıcınızda kalır — Ayarlar’dan düzenli yedek alın.',name:'Türkçe',dir:'ltr',h1:'İşletmeniz için Alman muhasebesi — kendi dilinizde',sub:'Gelir ve giderleri kaydedin, Almanca fatura hazırlayın, KDV beyannamesi (UStVA) rakamlarını alın — 9 dilde. Aylık abonelik yok.',try:'Ücretsiz deneme isteyin',buy:'WhatsApp ile sipariş verin',ctaPrice:'Fiyat',t1:'SKR03 / SKR04',t2:'9 dil',t3:'Tek seferlik ödeme',t4:'Verileriniz sizde kalır',
+fTitle:'Program neler yapar?',f:[['Tek tıkla kayıt','14 hazır kayıt: nakit satış, mal alımı, yakıt, kira… Brüt tutarı girin, KDV otomatik ayrılır.'],['Doğru Almanca faturalar','§14 UStG’ye göre tüm zorunlu bilgiler ve otomatik sıra numarası.'],['UStVA rakamları','ELSTER’e aktarmak için 81, 86, 66 ve 83 numaralı alanlar — aylık veya üç aylık.'],['Tüm raporlar','Mizan, kâr-zarar, bilanço, EÜR ve kasa defteri.'],['Mali müşavir için dışa aktarma','DATEV hesap numaraları ve vergi kodlarıyla CSV.'],['GoBD kilitleme','Dönem kilitleme, değişiklik kaydı, eksi kasa uyarısı.']],
+pTitle:'Tek fiyat, abonelik yok',pText:'Bir kez ödeyin, işletmeniz için aylık ücret olmadan kullanın. Önce ücretsiz deneyin (50 kayda kadar).',honest:'Açıkça söyleyelim: ELSTER’e doğrudan gönderim yok (rakamları siz aktarırsınız), banka bağlantısı yok, XRechnung yok. Vergi danışmanlığı değildir.',launch:'İlk 100 müşteri için lansman fiyatı',net:'net, tek seferlik',b2b:'Yalnızca Almanya’daki işletmeler için (§14 BGB)',
+hTitle:'Nasıl satın alınır?',s1:'WhatsApp’tan firma adınızla yazın. Teklif, lisans şartları ve faturayı gönderelim.',s2:'Faturadaki hesaba banka havalesiyle ödeyin.',s3:'Ödeme ulaştıktan sonra 24 saat içinde program, lisans anahtarı ve kısa kılavuz sizde.',
+qTitle:'Sık sorulan sorular',q:[['Telefonda çalışır mı?','Evet, bilgisayar ve telefonda tarayıcıda çalışır. Günlük iş için bilgisayar daha iyidir.'],['Verilerim nerede saklanır?','Yalnızca tarayıcınızda; bize veri gelmez. Ayarlar’dan düzenli yedek alın.'],['Mali müşavirin yerini tutar mı?','Hayır. Defterlerinizi düzenler ve zaman kazandırır; yıllık beyan müşavirde kalır.'],['Firmam Almanya dışında, uygun mu?','Hayır, program yalnızca Alman vergi kurallarına göre yapılmıştır.']],foot:'Geliştiren ve © sahibi: Rabie Al Mehtar',msgTry:'Merhaba, Sonne Buchhaltung ücretsiz deneme sürümünü istiyorum. Firma: ',msgBuy:'Merhaba, Sonne Buchhaltung satın almak istiyorum (99 € net). Firma: '},
+es:{tryNow:'Pruébalo gratis ahora',ask:'Pregúntanos por WhatsApp',trialNote:'Gratis hasta 50 asientos · sin registro · tus datos se quedan en tu navegador — haz copias de seguridad desde Ajustes.',name:'Español',dir:'ltr',h1:'Contabilidad alemana para tu negocio — en tu idioma',sub:'Registra ventas y gastos, crea facturas alemanas y obtén las cifras de tu declaración de IVA (UStVA) — en 9 idiomas. Sin suscripción mensual.',try:'Pide una prueba gratis',buy:'Pide ahora por WhatsApp',ctaPrice:'Precio',t1:'SKR03 / SKR04',t2:'9 idiomas',t3:'Pago único',t4:'Tus datos se quedan contigo',
+fTitle:'¿Qué hace?',f:[['Asientos con un clic','14 asientos rápidos: venta en efectivo, compra de mercancía, combustible, alquiler… introduce el bruto y el IVA se separa solo.'],['Facturas alemanas correctas','Todos los datos obligatorios según §14 UStG y numeración automática.'],['Cifras de la UStVA','Casillas 81, 86, 66 y 83 para pasar a ELSTER — mensual o trimestral.'],['Informes completos','Balance de sumas y saldos, pérdidas y ganancias, balance, EÜR y libro de caja.'],['Exportación para tu asesor','CSV con cuentas DATEV y claves de IVA.'],['Cierre GoBD','Cierre de periodos, registro de cambios y aviso de caja negativa.']],
+pTitle:'Un precio, sin suscripción',pText:'Pagas una vez y lo usas en tu empresa sin cuota mensual. Pruébalo gratis antes (hasta 50 asientos).',honest:'Para ser claros: no envía directamente a ELSTER (tú pasas las cifras), no se conecta al banco y no crea XRechnung. No es asesoría fiscal.',launch:'Precio de lanzamiento para los 100 primeros clientes',net:'neto, pago único',b2b:'Solo para empresas en Alemania (§14 BGB)',
+hTitle:'Cómo comprar',s1:'Escríbenos por WhatsApp con el nombre de tu empresa. Te enviamos la oferta, las condiciones de licencia y la factura.',s2:'Paga por transferencia a la cuenta indicada en la factura.',s3:'En 24 horas tras el pago recibes el programa, tu clave de licencia y una guía breve.',
+qTitle:'Preguntas frecuentes',q:[['¿Funciona en el móvil?','Sí, en el navegador del PC y del móvil. Para el trabajo diario es mejor el PC.'],['¿Dónde se guardan mis datos?','Solo en tu navegador; no recibimos nada. Haz copias de seguridad desde Ajustes.'],['¿Sustituye al asesor fiscal?','No. Ordena tu contabilidad y ahorra tiempo; la declaración anual sigue con tu asesor.'],['Mi empresa está fuera de Alemania, ¿me sirve?','No, está hecho solo para la normativa fiscal alemana.']],foot:'Desarrollado y © por Rabie Al Mehtar',msgTry:'Hola, quiero una prueba gratis de Sonne Buchhaltung. Empresa: ',msgBuy:'Hola, quiero comprar Sonne Buchhaltung (99 € netos). Empresa: '},
+fa:{tryNow:'همین حالا رایگان امتحان کنید',ask:'در واتس\u200cاپ بپرسید',trialNote:'رایگان تا ۵۰ سند · بدون ثبت\u200cنام · داده\u200cها در مرورگر شما می\u200cماند — از تنظیمات مرتب پشتیبان بگیرید.',name:'فارسی',dir:'rtl',h1:'حسابداری آلمانی برای کسب‌وکار شما — به زبان خودتان',sub:'فروش و هزینه را ثبت کنید، فاکتور آلمانی بسازید و ارقام اظهارنامه مالیات بر ارزش افزوده (UStVA) را آماده بگیرید — به ۹ زبان. بدون اشتراک ماهانه.',try:'درخواست نسخه آزمایشی رایگان',buy:'سفارش از طریق واتس‌اپ',ctaPrice:'قیمت',t1:'SKR03 / SKR04',t2:'۹ زبان',t3:'پرداخت یک‌باره',t4:'داده‌ها نزد خودتان می‌ماند',
+fTitle:'برنامه چه می‌کند؟',f:[['ثبت با یک کلیک','۱۴ سند آماده: فروش نقدی، خرید کالا، سوخت، اجاره… مبلغ ناخالص را وارد کنید، مالیات خودکار جدا می‌شود.'],['فاکتور آلمانی درست','همه اطلاعات الزامی طبق §14 UStG و شماره‌گذاری خودکار.'],['ارقام UStVA','کدهای ۸۱، ۸۶، ۶۶ و ۸۳ برای انتقال به ELSTER — ماهانه یا فصلی.'],['گزارش‌های کامل','تراز آزمایشی، سود و زیان، ترازنامه، EÜR و دفتر صندوق.'],['خروجی برای مشاور مالیاتی','CSV با شماره حساب‌های DATEV و کدهای مالیاتی.'],['قفل طبق GoBD','قفل دوره‌ها، گزارش تغییرات و هشدار موجودی منفی صندوق.']],
+pTitle:'یک قیمت، بدون اشتراک',pText:'یک بار بپردازید و بدون هزینه ماهانه برای شرکت خود استفاده کنید. اول رایگان امتحان کنید (تا ۵۰ سند).',honest:'صادقانه: ارسال مستقیم به ELSTER ندارد (ارقام را خودتان منتقل می‌کنید)، اتصال بانکی و XRechnung ندارد. مشاوره مالیاتی نیست.',launch:'قیمت افتتاحیه برای ۱۰۰ مشتری اول',net:'خالص، یک‌باره',b2b:'فقط برای کسب‌وکارها در آلمان (§14 BGB)',
+hTitle:'چطور بخریم؟',s1:'در واتس‌اپ با نام شرکت‌تان پیام دهید. پیشنهاد، شرایط مجوز و فاکتور را می‌فرستیم.',s2:'با حواله بانکی به حساب درج‌شده در فاکتور پرداخت کنید.',s3:'ظرف ۲۴ ساعت پس از واریز، برنامه، کلید مجوز و راهنمای کوتاه را دریافت می‌کنید.',
+qTitle:'پرسش‌های رایج',q:[['روی گوشی کار می‌کند؟','بله، در مرورگر رایانه و گوشی. برای کار روزانه رایانه بهتر است.'],['داده‌هایم کجا ذخیره می‌شود؟','فقط در مرورگر شما؛ چیزی به ما نمی‌رسد. از تنظیمات مرتب پشتیبان بگیرید.'],['جای مشاور مالیاتی را می‌گیرد؟','نه. دفاتر را منظم می‌کند و وقت صرفه‌جویی می‌کند؛ اظهارنامه سالانه با مشاور است.'],['شرکتم خارج از آلمان است، مناسب است؟','نه، فقط برای قوانین مالیاتی آلمان ساخته شده است.']],foot:'توسعه و حق نشر: Rabie Al Mehtar',msgTry:'سلام، نسخه آزمایشی رایگان Sonne Buchhaltung را می‌خواهم. نام شرکت: ',msgBuy:'سلام، می‌خواهم Sonne Buchhaltung را بخرم (۹۹ یورو خالص). نام شرکت: '},
+ps:{tryNow:'اوس یې وړیا وازمویئ',ask:'په واټس اپ کې پوښتنه وکړئ',trialNote:'تر ۵۰ ثبتونو وړیا · پرته له نوم لیکنې · معلومات ستاسو په براوزر کې پاتې کېږي — له تنظیماتو منظم بیک اپ واخلئ.',name:'پښتو',dir:'rtl',h1:'ستاسو د کاروبار لپاره الماني محاسبه — په خپله ژبه',sub:'پلور او لګښت ثبت کړئ، الماني بلونه جوړ کړئ او د ارزښت زیاتوالي مالیې اظهارنامې (UStVA) شمېرې چمتو ترلاسه کړئ — په ۹ ژبو. میاشتنی فیس نشته.',try:'وړیا آزمایښتي نسخه وغواړئ',buy:'اوس په واټس اپ فرمایش ورکړئ',ctaPrice:'بیه',t1:'SKR03 / SKR04',t2:'۹ ژبې',t3:'یوځلي تادیه',t4:'معلومات ستاسو سره پاتې کېږي',
+fTitle:'پروګرام څه کوي؟',f:[['په یوه کلیک ثبت','۱۴ چمتو ثبتونه: نغدي پلور، د مال پېرود، تېل، کرایه… ناخالص مبلغ ولیکئ، مالیه پخپله جلا کېږي.'],['سم الماني بلونه','د §14 UStG له مخې ټول اړین معلومات او اتومات شمېره.'],['د UStVA شمېرې','۸۱، ۸۶، ۶۶ او ۸۳ شمېرې ELSTER ته د لېږد لپاره — میاشتنی یا درې میاشتنی.'],['بشپړ راپورونه','آزمایښتي بیلانس، ګټه او تاوان، بیلانس شیټ، EÜR او د صندوق کتاب.'],['د مالیاتي مشاور لپاره صادرول','CSV د DATEV حسابونو او مالیاتي کوډونو سره.'],['د GoBD قفل','د دورو قفلول، د بدلونونو ثبت او د منفي صندوق خبرداری.']],
+pTitle:'یوه بیه، بې اشتراکه',pText:'یو ځل یې ورکړئ او د خپل شرکت لپاره پرته له میاشتني فیس څخه یې وکاروئ. لومړی یې وړیا وازمویئ (تر ۵۰ ثبتونو).',honest:'په رښتیا: ELSTER ته مستقیم نه لېږي (شمېرې تاسو لېږدوئ)، له بانک سره نه نښلي او XRechnung نه جوړوي. مالیاتي مشوره نه ده.',launch:'د لومړیو ۱۰۰ پېرودونکو لپاره د پیل بیه',net:'خالص، یوځلي',b2b:'یوازې په آلمان کې د سوداګرو لپاره (§14 BGB)',
+hTitle:'څنګه یې واخلئ؟',s1:'په واټس اپ کې د خپل شرکت له نوم سره پیغام راکړئ. وړاندیز، د جواز شرطونه او بل درلېږو.',s2:'په بل کې ورکړل شوي حساب ته د بانکي حوالې له لارې تادیه وکړئ.',s3:'د پیسو له رسېدو ۲۴ ساعته وروسته پروګرام، د جواز کیلي او لنډ لارښود ترلاسه کوئ.',
+qTitle:'عام پوښتنې',q:[['په ګرځنده تلیفون کار کوي؟','هو، د کمپیوټر او تلیفون په براوزر کې. د ورځني کار لپاره کمپیوټر غوره دی.'],['زما معلومات چېرته ساتل کېږي؟','یوازې ستاسو په براوزر کې؛ موږ ته هېڅ نه راځي. له تنظیماتو منظم بیک اپ واخلئ.'],['آیا د مالیاتي مشاور ځای نیسي؟','نه. ستاسو کتابونه منظموي او وخت سپموي؛ کلنۍ اظهارنامه له مشاور سره پاتې کېږي.'],['زما شرکت له آلمان بهر دی، ښه دی؟','نه، یوازې د آلمان د مالیاتي قوانینو لپاره جوړ شوی.']],foot:'جوړونکی او د خپرولو حق: Rabie Al Mehtar',msgTry:'سلام، د Sonne Buchhaltung وړیا آزمایښتي نسخه غواړم. د شرکت نوم: ',msgBuy:'سلام، غواړم Sonne Buchhaltung واخلم (۹۹ یورو خالص). د شرکت نوم: '},
+hi:{tryNow:'अभी मुफ़्त आज़माएँ',ask:'WhatsApp पर पूछें',trialNote:'50 प्रविष्टियों तक मुफ़्त · बिना रजिस्ट्रेशन · आपका डेटा आपके ब्राउज़र में रहता है — सेटिंग्स से नियमित बैकअप लें।',name:'हिन्दी',dir:'ltr',h1:'आपके व्यवसाय के लिए जर्मन लेखांकन — आपकी भाषा में',sub:'बिक्री और खर्च दर्ज करें, जर्मन बिल बनाएँ और VAT रिटर्न (UStVA) के आँकड़े तैयार पाएँ — 9 भाषाओं में। कोई मासिक शुल्क नहीं।',try:'मुफ़्त ट्रायल माँगें',buy:'अभी WhatsApp पर ऑर्डर करें',ctaPrice:'कीमत',t1:'SKR03 / SKR04',t2:'9 भाषाएँ',t3:'एक बार भुगतान',t4:'डेटा आपके पास रहता है',
+fTitle:'यह क्या करता है?',f:[['एक क्लिक में प्रविष्टि','14 तैयार प्रविष्टियाँ: नकद बिक्री, माल खरीद, ईंधन, किराया… सकल राशि डालें, कर अपने आप अलग होता है।'],['सही जर्मन बिल','§14 UStG के अनुसार सभी ज़रूरी विवरण और स्वचालित क्रम संख्या।'],['UStVA आँकड़े','ELSTER में डालने के लिए फ़ील्ड 81, 86, 66 और 83 — मासिक या तिमाही।'],['पूरी रिपोर्ट','तलपट, लाभ-हानि, तुलन पत्र, EÜR और रोकड़ बही।'],['कर सलाहकार के लिए निर्यात','DATEV खाता संख्या और कर कोड के साथ CSV।'],['GoBD लॉक','अवधि लॉक, परिवर्तन लॉग और ऋणात्मक नकद की चेतावनी।']],
+pTitle:'एक कीमत, कोई सदस्यता नहीं',pText:'एक बार भुगतान करें और बिना मासिक शुल्क अपने व्यवसाय में इस्तेमाल करें। पहले मुफ़्त आज़माएँ (50 प्रविष्टियों तक)।',honest:'साफ़ बात: ELSTER को सीधे नहीं भेजता (आँकड़े आप डालते हैं), बैंक से नहीं जुड़ता, XRechnung नहीं बनाता। यह कर सलाह नहीं है।',launch:'पहले 100 ग्राहकों के लिए लॉन्च कीमत',net:'शुद्ध, एक बार',b2b:'केवल जर्मनी के व्यवसायों के लिए (§14 BGB)',
+hTitle:'कैसे खरीदें?',s1:'अपनी कंपनी के नाम के साथ WhatsApp पर संदेश भेजें। हम ऑफ़र, लाइसेंस शर्तें और बिल भेजेंगे।',s2:'बिल में दिए खाते में बैंक ट्रांसफ़र से भुगतान करें।',s3:'भुगतान मिलने के 24 घंटे में प्रोग्राम, लाइसेंस कुंजी और छोटी गाइड आपको मिल जाएगी।',
+qTitle:'अक्सर पूछे जाने वाले प्रश्न',q:[['क्या यह फ़ोन पर चलता है?','हाँ, कंप्यूटर और फ़ोन के ब्राउज़र में। रोज़ के काम के लिए कंप्यूटर बेहतर है।'],['मेरा डेटा कहाँ रहता है?','केवल आपके ब्राउज़र में; हमें कुछ नहीं मिलता। सेटिंग्स से नियमित बैकअप लें।'],['क्या यह कर सलाहकार की जगह लेता है?','नहीं। यह बहीखाते व्यवस्थित करता है और समय बचाता है; वार्षिक रिटर्न सलाहकार के पास रहता है।'],['मेरी कंपनी जर्मनी के बाहर है, क्या यह चलेगा?','नहीं, यह केवल जर्मन कर नियमों के लिए बना है।']],foot:'विकास एवं © अधिकार: Rabie Al Mehtar',msgTry:'नमस्ते, मुझे Sonne Buchhaltung का मुफ़्त ट्रायल चाहिए। कंपनी: ',msgBuy:'नमस्ते, मैं Sonne Buchhaltung खरीदना चाहता हूँ (€99 शुद्ध)। कंपनी: '},
+vi:{tryNow:'Dùng thử miễn phí ngay',ask:'Hỏi qua WhatsApp',trialNote:'Miễn phí tối đa 50 bút toán · không cần đăng ký · dữ liệu nằm trong trình duyệt của bạn — hãy sao lưu thường xuyên trong Cài đặt.',name:'Tiếng Việt',dir:'ltr',h1:'Kế toán Đức cho cửa hàng của bạn — bằng tiếng Việt',sub:'Ghi thu chi, lập hóa đơn tiếng Đức và có sẵn số liệu tờ khai thuế GTGT (UStVA) — bằng 9 ngôn ngữ. Không phí hằng tháng.',try:'Yêu cầu bản dùng thử miễn phí',buy:'Đặt mua qua WhatsApp',ctaPrice:'Giá',t1:'SKR03 / SKR04',t2:'9 ngôn ngữ',t3:'Trả một lần',t4:'Dữ liệu ở lại với bạn',
+fTitle:'Chương trình làm được gì?',f:[['Ghi sổ một chạm','14 bút toán có sẵn: bán tiền mặt, mua hàng, nhiên liệu, tiền thuê… nhập số tiền gồm thuế, thuế được tách tự động.'],['Hóa đơn tiếng Đức đúng chuẩn','Đủ thông tin bắt buộc theo §14 UStG và tự đánh số liên tục.'],['Số liệu UStVA','Các ô 81, 86, 66 và 83 để nhập vào ELSTER — theo tháng hoặc quý.'],['Đầy đủ báo cáo','Bảng cân đối số phát sinh, lãi lỗ, bảng cân đối, EÜR và sổ quỹ.'],['Xuất cho cố vấn thuế','CSV với số tài khoản DATEV và mã thuế.'],['Khóa sổ GoBD','Khóa kỳ, nhật ký thay đổi và cảnh báo quỹ âm.']],
+pTitle:'Một giá, không thuê bao',pText:'Trả một lần và dùng cho doanh nghiệp của bạn, không phí tháng. Hãy dùng thử miễn phí trước (tối đa 50 bút toán).',honest:'Nói rõ: không gửi thẳng lên ELSTER (bạn tự nhập số liệu), không kết nối ngân hàng, không tạo XRechnung. Không phải tư vấn thuế.',launch:'Giá ra mắt cho 100 khách hàng đầu tiên',net:'chưa thuế, trả một lần',b2b:'Chỉ dành cho doanh nghiệp tại Đức (§14 BGB)',
+hTitle:'Cách mua',s1:'Nhắn WhatsApp kèm tên công ty. Chúng tôi gửi báo giá, điều kiện bản quyền và hóa đơn.',s2:'Thanh toán bằng chuyển khoản vào tài khoản ghi trên hóa đơn.',s3:'Trong 24 giờ sau khi nhận tiền, bạn nhận chương trình, mã bản quyền và hướng dẫn ngắn.',
+qTitle:'Câu hỏi thường gặp',q:[['Có chạy trên điện thoại không?','Có, trên trình duyệt máy tính và điện thoại. Làm việc hằng ngày nên dùng máy tính.'],['Dữ liệu của tôi lưu ở đâu?','Chỉ trong trình duyệt của bạn; chúng tôi không nhận dữ liệu. Hãy sao lưu thường xuyên trong Cài đặt.'],['Có thay thế cố vấn thuế không?','Không. Chương trình giúp sổ sách gọn gàng và tiết kiệm thời gian; quyết toán năm vẫn do cố vấn làm.'],['Công ty tôi ở ngoài nước Đức có dùng được không?','Không, chương trình chỉ dành cho quy định thuế của Đức.']],foot:'Phát triển & bản quyền: Rabie Al Mehtar',msgTry:'Xin chào, tôi muốn dùng thử miễn phí Sonne Buchhaltung. Công ty: ',msgBuy:'Xin chào, tôi muốn mua Sonne Buchhaltung (99 € chưa thuế). Công ty: '}
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cur = 'ar';
+try{ const h=(location.hash||'').slice(1); if(L[h]) cur=h; else { const n=(navigator.language||'').slice(0,2); if(L[n]) cur=n; } }catch(e){}
+const sel = document.getElementById('lang');
+sel.innerHTML = Object.entries(L).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join('');
+function render(){
+  const T = L[cur]; sel.value = cur;
+  document.documentElement.lang = cur; document.documentElement.dir = T.dir;
+  document.title = 'Sonne Buchhaltung — ' + T.h1;
+  document.querySelectorAll('[data-k]').forEach(el => { if(T[el.dataset.k]!==undefined) el.textContent = T[el.dataset.k]; });
+  document.getElementById('feat').innerHTML = T.f.map(([a,b])=>`<div class="card"><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('');
+  document.getElementById('faq').innerHTML = T.q.map(([a,b])=>`<details><summary>${esc(a)}</summary><p>${esc(b)}</p></details>`).join('');
+  document.querySelectorAll('[data-wa]').forEach(a => {
+    const isTry = a.dataset.wa==='try';
+    a.href = 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(isTry ? T.msgTry : T.msgBuy);
+    if(!a.classList.contains('wa')) a.textContent = isTry ? T.ask : T.buy;
+  });
+}
+sel.onchange = () => { cur = sel.value; try{ history.replaceState(null,'','#'+cur); }catch(e){} render(); };
+render();
+</script>
+</body>
+</html>
