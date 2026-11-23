@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="author" content="Rabie Al Mehtar">
+<meta name="copyright" content="© 2026 Rabie Al Mehtar, Sonne Markt">
+<!-- Sonne Buchhaltung v1.2 · © 2026 Rabie Al Mehtar (Sonne Markt, sonnemarket.shop). All rights reserved. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sonne Buchhaltung — صن للمحاسبة</title>
+<style>
+:root{
+  --bg:#f6f4ef; --panel:#fff; --ink:#1d2230; --muted:#6b7080; --line:#e6e2d8;
+  --sun:#e8a317; --sun-d:#b97c06; --sun-l:#fdf3dc; --navy:#1f2a44;
+  --ok:#1f8a5b; --ok-l:#e3f4ec; --bad:#c0392b; --bad-l:#fbe9e7; --info:#2d6cdf;
+  --r:12px; --sh:0 1px 2px rgba(20,25,40,.06),0 4px 16px rgba(20,25,40,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI","Noto Sans","Noto Sans Arabic","Noto Sans Devanagari","Nirmala UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.55}
+.num,.mono{font-family:ui-monospace,Consolas,"Cascadia Mono",Menlo,monospace;direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:var(--navy);color:#dfe4f0;padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:10px}
+.brand b{font-size:17px;color:#fff;display:block;line-height:1.2}
+.brand small{color:#9aa4bf;font-size:12px}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;color:#c9d0e2;width:100%;box-sizing:border-box}
+.nav button:hover{background:rgba(255,255,255,.06)}
+.nav button.on{background:var(--sun);color:#1d1600;font-weight:600}
+.nav svg{width:18px;height:18px;flex:none}
+aside .foot{margin-top:auto;font-size:12px;color:#8e98b3;padding:8px}
+.lang{display:flex;gap:6px;margin-bottom:8px}
+.lang select{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:6px 8px;font-size:13px}
+.lang select option{color:#111}
+main{padding:24px 28px 60px;max-width:1280px;width:100%}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+h1{font-size:22px;margin:0}
+h2{font-size:16px;margin:0 0 12px}
+.sub{color:var(--muted);font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px;margin-bottom:16px}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.kpi{padding:16px}
+.kpi .l{color:var(--muted);font-size:12.5px}
+.kpi .v{font-size:21px;font-weight:600;margin-top:4px}
+.kpi.sun{background:var(--sun-l);border-color:#f2dca8}
+.pos{color:var(--ok)}.neg{color:var(--bad)}
+label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:4px}
+input,select,textarea{font:inherit;width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid #f5cf7a;border-color:var(--sun)}
+.row{display:grid;gap:10px;align-items:end}
+.btn{font:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:8px;font-weight:500;white-space:nowrap}
+.btn:hover{border-color:#cfc8b8}
+.btn.p{background:var(--sun);border-color:var(--sun);color:#1d1600}
+.btn.p:hover{background:var(--sun-d);color:#fff}
+.btn.d{color:var(--bad)}
+.btn.s{padding:4px 9px;font-size:12.5px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;background:#faf8f3;position:sticky;top:0}
+td.r,th.r{text-align:end;white-space:nowrap}
+tr.tot td{font-weight:700;border-top:2px solid var(--ink)}
+tr.sec td{background:#faf8f3;font-weight:600}
+.tw{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:10px}
+.tag{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11.5px;background:#eef0f5;color:#47506a}
+.tag.ok{background:var(--ok-l);color:var(--ok)}.tag.bad{background:var(--bad-l);color:var(--bad)}.tag.sun{background:var(--sun-l);color:var(--sun-d)}
+.note{padding:10px 14px;border-radius:9px;background:var(--sun-l);border:1px solid #f2dca8;font-size:13px;margin-bottom:14px}
+.note.bad{background:var(--bad-l);border-color:#f3c5bf}
+.note.ok{background:var(--ok-l);border-color:#bfe3d0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{font:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;padding:6px 13px;border-radius:20px}
+.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tpl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tpl button{font:inherit;font-size:12.5px;cursor:pointer;border:1px dashed #d8cfb8;background:#fffdf8;padding:5px 10px;border-radius:7px}
+.tpl button:hover{border-color:var(--sun);background:var(--sun-l)}
+.preview{font-size:12.5px;background:#faf8f3;border-radius:8px;padding:8px 12px;margin-top:10px;color:#47506a}
+.modal{position:fixed;inset:0;background:rgba(15,20,35,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:50;overflow:auto}
+.modal.on{display:flex}
+.modal .box{background:#fff;border-radius:14px;max-width:880px;width:100%;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.toast{position:fixed;bottom:22px;inset-inline-start:50%;transform:translateX(50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
+[dir=ltr] .toast{transform:translateX(-50%)}
+.toast.on{opacity:1}
+.bars{display:flex;align-items:flex-end;gap:8px;height:170px;padding-top:10px}
+.bars .m{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bars .pair{display:flex;align-items:flex-end;gap:3px;height:140px}
+.bars .b{width:11px;border-radius:3px 3px 0 0}
+.bars .m small{font-size:11px;color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-inline-end:5px;vertical-align:-1px}
+/* Invoice (German document, always LTR) */
+.inv{direction:ltr;text-align:left;font-family:Arial,Helvetica,sans-serif;color:#111;font-size:13px;padding:10px}
+.inv h3{font-size:22px;margin:22px 0 4px}
+.inv .hd{display:flex;justify-content:space-between;gap:20px}
+.inv .snd{font-size:10.5px;color:#666;border-bottom:1px solid #aaa;display:inline-block;margin-bottom:6px}
+.inv table th{background:#f2f2f2;position:static}
+.inv .ft{margin-top:28px;font-size:11px;color:#555;border-top:1px solid #ccc;padding-top:8px;display:flex;gap:24px;flex-wrap:wrap}
+.lockbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap}
+  .brand{border:none;padding:4px;margin:0;width:100%}
+  .nav{display:flex;flex-wrap:wrap;gap:4px}.nav button{width:auto}
+  aside .foot{display:none}
+  .g4,.g3{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}
+  main{padding:16px}
+}
+@media print{
+  body *{visibility:hidden}
+  #printArea,#printArea *{visibility:visible}
+  #printArea{position:absolute;inset:0;padding:0}
+  .modal{background:none;padding:0;position:absolute}
+  .modal .box{box-shadow:none;padding:0}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="8" fill="#e8a317"/><g stroke="#e8a317" stroke-width="2.4" stroke-linecap="round"><path d="M17 2v4M17 28v4M2 17h4M28 17h4M6.4 6.4l2.8 2.8M24.8 24.8l2.8 2.8M6.4 27.6l2.8-2.8M24.8 9.2l2.8-2.8"/></g></svg>
+      <div><b>Sonne Buchhaltung</b><small data-t="tagline"></small></div>
+    </div>
+    <div class="nav" id="nav"></div>
+    <div class="foot">
+      <div class="lang"><select id="langSel" aria-label="Language"></select></div>
+      <div id="licState"></div>
+      <div style="margin-top:10px;line-height:1.4"><span data-t="devBy"></span><br><b style="color:#fff">Rabie Al Mehtar</b><br><span class="mono" style="font-size:11px">© 2026 · Sonne Markt</span></div>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div>
+<div class="modal" id="modal"><div class="box" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================== CORE (pure logic) ============================== */
+//CORE-START
+const ACC = [
+ // key, SKR03, SKR04, Deutsch, عربي, Typ (A=Aktiv, L=Passiv, E=Eigenkapital, P=Privat, R=Ertrag, X=Aufwand), Automatik-Steuer
+ ['bueroAus','0420','0650','Büroeinrichtung','أثاث المكتب','A',''],
+ ['laden','0430','0640','Ladeneinrichtung','تجهيزات المحل','A',''],
+ ['gwg','0480','0670','Geringwertige Wirtschaftsgüter','أصول منخفضة القيمة (GWG)','A',''],
+ ['masch','0210','0440','Maschinen','الآلات','A',''],
+ ['pkw','0320','0520','Pkw','السيارات','A',''],
+ ['kasse','1000','1600','Kasse','الصندوق النقدي','A',''],
+ ['bank','1200','1800','Bank','البنك','A',''],
+ ['transit','1360','1460','Geldtransit','أموال في الطريق','A',''],
+ ['ford','1400','1200','Forderungen aus Lieferungen und Leistungen','ذمم العملاء (مدينون)','A',''],
+ ['vst7','1571','1401','Abziehbare Vorsteuer 7 %','ضريبة المدخلات 7%','A',''],
+ ['vst19','1576','1406','Abziehbare Vorsteuer 19 %','ضريبة المدخلات 19%','A',''],
+ ['darlehen','0630','3150','Verbindlichkeiten gegenüber Kreditinstituten','قروض بنكية','L',''],
+ ['verb','1600','3300','Verbindlichkeiten aus Lieferungen und Leistungen','ذمم الموردين (دائنون)','L',''],
+ ['sverb','1700','3500','Sonstige Verbindlichkeiten','التزامات أخرى','L',''],
+ ['ust7','1771','3801','Umsatzsteuer 7 %','ضريبة المبيعات 7%','L',''],
+ ['ust19','1776','3806','Umsatzsteuer 19 %','ضريبة المبيعات 19%','L',''],
+ ['ustvz','1780','3820','Umsatzsteuer-Vorauszahlungen','دفعات ضريبة المبيعات للمالية','L',''],
+ ['kapital','0880','2010','Variables Kapital','رأس المال','E',''],
+ ['eb','9000','9000','Saldenvorträge, Sachkonten','الأرصدة الافتتاحية','E',''],
+ ['privat','1800','2100','Privatentnahmen allgemein','مسحوبات شخصية','P',''],
+ ['einlage','1890','2180','Privateinlagen','إيداعات شخصية','P',''],
+ ['erl19','8400','4400','Erlöse 19 % USt','المبيعات 19%','R','U19'],
+ ['erl7','8300','4300','Erlöse 7 % USt','المبيعات 7%','R','U7'],
+ ['erl0','8100','4100','Steuerfreie Umsätze § 4 Nr. 8 ff. UStG','مبيعات معفاة من الضريبة','R',''],
+ ['erligl','8125','4125','Steuerfreie innergemeinschaftliche Lieferungen','توريدات معفاة داخل الاتحاد الأوروبي','R',''],
+ ['erlklein','8195','4185','Erlöse als Kleinunternehmer (§ 19 UStG)','مبيعات المشروع الصغير (§19)','R',''],
+ ['sonstErtrag','2700','4830','Sonstige betriebliche Erträge','إيرادات أخرى','R',''],
+ ['zinsertrag','2650','7100','Sonstige Zinsen und ähnliche Erträge','إيرادات الفوائد','R',''],
+ ['we19','3400','5400','Wareneingang 19 % Vorsteuer','مشتريات بضاعة 19%','X','V19'],
+ ['we7','3300','5300','Wareneingang 7 % Vorsteuer','مشتريات بضاعة 7%','X','V7'],
+ ['we0','3200','5200','Wareneingang','مشتريات بضاعة (بدون ضريبة)','X',''],
+ ['gehalt','4120','6020','Gehälter','الرواتب','X',''],
+ ['sozial','4130','6110','Gesetzliche soziale Aufwendungen','التأمينات الاجتماعية','X',''],
+ ['miete','4210','6310','Miete (unbewegliche Wirtschaftsgüter)','الإيجار','X',''],
+ ['energie','4240','6325','Gas, Strom, Wasser','غاز وكهرباء وماء','X','V19'],
+ ['versich','4360','6400','Versicherungen','التأمينات','X',''],
+ ['beitraege','4380','6420','Beiträge','الاشتراكات والرسوم','X',''],
+ ['kfzsteuer','4510','7685','Kfz-Steuer','ضريبة السيارة','X',''],
+ ['kfz','4530','6530','Laufende Kfz-Betriebskosten','مصاريف تشغيل السيارة والوقود','X','V19'],
+ ['kfzrep','4540','6540','Kfz-Reparaturen','إصلاح السيارة','X','V19'],
+ ['werbung','4600','6600','Werbekosten','الدعاية والإعلان','X','V19'],
+ ['bewirt','4650','6640','Bewirtungskosten','مصاريف الضيافة','X','V19'],
+ ['reise','4670','6670','Reisekosten Unternehmer','مصاريف السفر','X',''],
+ ['afa','4830','6220','Abschreibungen auf Sachanlagen','الإهلاك','X',''],
+ ['gwgafa','4855','6260','Sofortabschreibung GWG','إهلاك فوري للأصول الصغيرة','X',''],
+ ['sonstAufw','4900','6300','Sonstige betriebliche Aufwendungen','مصاريف تشغيل أخرى','X','V19'],
+ ['porto','4910','6800','Porto','البريد','X',''],
+ ['tel','4920','6805','Telefon','الهاتف والإنترنت','X','V19'],
+ ['buero','4930','6815','Bürobedarf','القرطاسية ولوازم المكتب','X','V19'],
+ ['beratung','4950','6825','Rechts- und Beratungskosten','الاستشارات القانونية','X','V19'],
+ ['buchf','4955','6830','Buchführungskosten','تكاليف المحاسبة والمستشار الضريبي','X','V19'],
+ ['geld','4970','6855','Nebenkosten des Geldverkehrs','رسوم بنكية','X',''],
+ ['zinsaufw','2100','7300','Zinsen und ähnliche Aufwendungen','مصاريف الفوائد','X',''],
+];
+const RATES = {U19:.19, U7:.07, V19:.19, V7:.07};
+const TAXACC = {U19:'ust19', U7:'ust7', V19:'vst19', V7:'vst7'};
+const BU = {U19:'3', U7:'2', V19:'9', V7:'8'}; // DATEV-Steuerschlüssel
+const r2 = x => Math.round((x + (x>=0?1:-1)*Number.EPSILON) * 100) / 100;
+
+function parseNum(s){
+  s = String(s ?? '').trim().replace(/\s|€/g,'');
+  if(!s) return NaN;
+  if(s.includes(',')) s = s.replace(/\./g,'').replace(',', '.');
+  return parseFloat(s);
+}
+function makeCore(state){
+  const custom = (state.customAccounts||[]).map(c => ['c'+c.no, c.no, c.no, c.de, c.ar||c.de, c.type, c.tax||'']);
+  const list = ACC.concat(custom);
+  const map = {}; list.forEach(a => map[a[0]] = a);
+  const skr = state.settings.skr === '04' ? 2 : 1;
+  const acc = k => map[k];
+  const no = k => map[k] ? map[k][skr] : '?';
+  const type = k => map[k] ? map[k][5] : '';
+  const pl = t => t==='R' || t==='X';
+
+  function lines(e){
+    const G = r2(e.amount);
+    if(!e.tax || !RATES[e.tax]) return [{a:e.soll,s:'S',v:G},{a:e.haben,s:'H',v:G}];
+    const net = r2(G/(1+RATES[e.tax])), tax = r2(G-net);
+    const ts = type(e.soll), th = type(e.haben);
+    let side;
+    if(pl(th) && !pl(ts)) side='H'; else if(pl(ts) && !pl(th)) side='S'; else side = e.tax[0]==='U' ? 'H' : 'S';
+    const ta = TAXACC[e.tax];
+    if(side==='H') return [{a:e.soll,s:'S',v:G},{a:e.haben,s:'H',v:net,base:e.tax},{a:ta,s:'H',v:tax,tx:e.tax}];
+    return [{a:e.soll,s:'S',v:net,base:e.tax},{a:ta,s:'S',v:tax,tx:e.tax},{a:e.haben,s:'H',v:G}];
+  }
+  // balances: S-H per account for entries passing filter
+  function balances(filter){
+    const b = {};
+    for(const e of state.entries){ if(filter && !filter(e)) continue;
+      for(const l of lines(e)){ const x = b[l.a] || (b[l.a] = {S:0,H:0}); x[l.s] = r2(x[l.s] + l.v); } }
+    return b;
+  }
+  const saldo = (b,k) => b[k] ? r2(b[k].S - b[k].H) : 0;
+  const inYear = y => e => e.date.slice(0,4) === String(y);
+  const upTo = d => e => e.date <= d;
+  const between = (a,z) => e => e.date >= a && e.date <= z;
+
+  function guv(y){
+    const b = balances(inYear(y)); const rev=[], exp=[]; let R=0, X=0;
+    for(const a of list){ const k=a[0];
+      if(a[5]==='R'){ const v=-saldo(b,k); if(v){rev.push([k,v]); R=r2(R+v);} }
+      if(a[5]==='X'){ const v=saldo(b,k); if(v){exp.push([k,v]); X=r2(X+v);} } }
+    return {rev, exp, R, X, profit:r2(R-X)};
+  }
+  function bilanz(y){
+    const end = y+'-12-31', start = y+'-01-01';
+    const all = balances(upTo(end)), prior = balances(e => e.date < start);
+    const g = guv(y);
+    const akt=[], pas=[]; let A=0, L=0, EK=0;
+    for(const a of list){ const k=a[0], t=a[5];
+      if(t==='A'){ const v=saldo(all,k); if(v){akt.push([k,v]); A=r2(A+v);} }
+      if(t==='L'){ const v=-saldo(all,k); if(v){pas.push([k,v]); L=r2(L+v);} } }
+    const ekLines=[];
+    for(const k of list.filter(a=>a[5]==='E').map(a=>a[0])){ const v=-saldo(all,k); if(v){ekLines.push([k,v]); EK=r2(EK+v);} }
+    // Vorjahre: Ergebnis + Privat
+    let vor=0; for(const a of list){ if(a[5]==='R'||a[5]==='X'||a[5]==='P') vor = r2(vor - saldo(prior,a[0])); }
+    let privY=0; for(const a of list){ if(a[5]==='P') privY = r2(privY - (saldo(all,a[0]) - saldo(prior,a[0]))); }
+    EK = r2(EK + vor + privY + g.profit);
+    return {akt, pas, ekLines, vor, privY, profit:g.profit, A, L, EK, P:r2(L+EK), ok: Math.abs(r2(A-(L+EK)))<0.005};
+  }
+  function ustva(from, to){
+    let b19=0,b7=0, t19=0,t7=0, vst=0, igl=0, frei=0;
+    for(const e of state.entries){ if(e.date<from || e.date>to) continue;
+      for(const l of lines(e)){
+        const sg = l.s==='H' ? 1 : -1;
+        if(l.base==='U19') b19 = r2(b19 + sg*l.v);
+        if(l.base==='U7')  b7  = r2(b7 + sg*l.v);
+        if(l.a==='ust19') t19 = r2(t19 + sg*l.v);
+        if(l.a==='ust7')  t7  = r2(t7 + sg*l.v);
+        if(l.a==='vst19'||l.a==='vst7') vst = r2(vst - sg*l.v);
+        if(l.a==='erligl') igl = r2(igl + sg*l.v);
+        if(l.a==='erl0') frei = r2(frei + sg*l.v);
+      } }
+    return {kz81:b19, kz86:b7, t19, t7, kz41:igl, kz48:frei, kz66:vst, kz83:r2(t19+t7-vst)};
+  }
+  function euer(y){
+    const g = guv(y), u = ustva(y+'-01-01', y+'-12-31');
+    const b = balances(inYear(y));
+    const ustPaid = saldo(b,'ustvz');
+    const groups = {};
+    const grp = k => ({we19:'we',we7:'we',we0:'we',gehalt:'pers',sozial:'pers',miete:'raum',energie:'raum',afa:'afa',gwgafa:'afa',kfz:'kfz',kfzrep:'kfz',kfzsteuer:'kfz'}[k] || 'sonst');
+    for(const [k,v] of g.exp){ const gk=grp(k); groups[gk]=r2((groups[gk]||0)+v); }
+    const ein = r2(g.R + u.t19 + u.t7);
+    const aus = r2(g.X + u.kz66 + ustPaid);
+    return {erl:g.R, ust:r2(u.t19+u.t7), ein, groups, vst:u.kz66, ustPaid, aus, gewinn:r2(ein-aus)};
+  }
+  return {list, acc, no, type, lines, balances, saldo, inYear, upTo, between, guv, bilanz, ustva, euer};
+}
+// License check (offline). SONNE-XXXX-XXXX-CCCC
+const LIC_SALT = 'SonneBuchhaltung#2026';
+function fnv(s){ let h=0x811c9dc5; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0; } return h>>>0; }
+function licCheck(k){ const m=/^SONNE-([A-Z0-9]{4})-([A-Z0-9]{4})-([A-Z0-9]{4})$/.exec(String(k||'').trim().toUpperCase());
+  if(!m) return false; return (fnv(m[1]+'-'+m[2]+LIC_SALT) % 1679616).toString(36).toUpperCase().padStart(4,'0') === m[3]; }
+//CORE-END
+
+/* ============================== i18n ============================== */
+const T = {
+ tagline:['محاسبة ألمانية للتاجر','Buchhaltung für Händler'],
+ dash:['لوحة التحكم','Übersicht'], journal:['القيود اليومية','Buchungen'], invoices:['الفواتير','Rechnungen'],
+ accounts:['دليل الحسابات','Kontenplan'], reports:['التقارير','Auswertungen'], settings:['الإعدادات','Einstellungen'],
+ revenue:['المبيعات (صافي)','Umsatz (netto)'], expenses:['المصاريف (صافي)','Aufwand (netto)'], profit:['الربح','Gewinn'],
+ bank:['رصيد البنك','Bankguthaben'], cash:['رصيد الصندوق','Kassenbestand'], openRec:['فواتير غير مدفوعة','Offene Forderungen'],
+ vatDue:['ضريبة مستحقة للمالية','USt-Zahllast offen'], entriesN:['عدد القيود','Anzahl Buchungen'],
+ monthly:['المبيعات والمصاريف شهرياً','Umsatz und Aufwand pro Monat'],
+ date:['التاريخ','Datum'], beleg:['رقم المستند','Beleg-Nr.'], text:['البيان','Buchungstext'], soll:['مدين (Soll)','Soll'], haben:['دائن (Haben)','Haben'],
+ amount:['المبلغ الإجمالي (Brutto)','Betrag (brutto)'], tax:['الضريبة','Steuer'], none:['بدون','ohne'],
+ save:['حفظ','Speichern'], cancel:['إلغاء','Abbrechen'], edit:['تعديل','Bearbeiten'], del:['حذف','Löschen'], storno:['عكس القيد','Storno'],
+ newEntry:['قيد جديد','Neue Buchung'], quick:['قيود سريعة:','Schnellbuchung:'], search:['بحث…','Suchen…'], all:['الكل','Alle'],
+ month:['الشهر','Monat'], locked:['مُقفل','festgeschrieben'], account:['الحساب','Konto'], name:['الاسم','Bezeichnung'], type:['النوع','Typ'],
+ balance:['الرصيد','Saldo'], year:['السنة المالية','Geschäftsjahr'],
+ sum:['المجموع','Summe'], noData:['لا توجد بيانات بعد','Noch keine Daten'],
+ tSalden:['ميزان المراجعة','Summen- und Saldenliste'], tGuv:['الأرباح والخسائر','GuV'], tBilanz:['الميزانية','Bilanz'], tEuer:['EÜR','EÜR'],
+ tUst:['إقرار ضريبة المبيعات','UStVA'], tKasse:['دفتر الصندوق','Kassenbuch'], tJournal:['دفتر اليومية','Journal'],
+ export:['تصدير','Export'], csvSb:['CSV للمستشار الضريبي','CSV für Steuerberater'],
+ backup:['نسخة احتياطية','Datensicherung'], restore:['استعادة','Wiederherstellen'],
+ typeA:['أصول','Aktiv'],typeL:['التزامات','Passiv'],typeE:['حقوق ملكية','Eigenkapital'],typeP:['شخصي','Privat'],typeR:['إيرادات','Ertrag'],typeX:['مصاريف','Aufwand'],
+ addAcc:['إضافة حساب','Konto hinzufügen'], number:['الرقم','Nummer'],
+ firm:['اسم الشركة','Firmenname'], owner:['المالك','Inhaber'], address:['العنوان','Anschrift'], stnr:['الرقم الضريبي','Steuernummer'], ustid:['رقم ضريبة القيمة المضافة','USt-IdNr.'],
+ iban:['IBAN','IBAN'], bic:['BIC','BIC'], bankName:['اسم البنك','Bank'], email:['البريد الإلكتروني','E-Mail'], phone:['الهاتف','Telefon'],
+ skr:['دليل الحسابات','Kontenrahmen'], klein:['مشروع صغير معفى (§19 UStG)','Kleinunternehmer (§ 19 UStG)'],
+ prefix:['بادئة رقم الفاتورة','Rechnungsnummer-Präfix'], terms:['مهلة الدفع (أيام)','Zahlungsziel (Tage)'],
+ license:['مفتاح الترخيص','Lizenzschlüssel'], licOk:['النسخة مرخّصة ✓','Lizenz aktiv ✓'], licTrial:["تجربة مجانية: باقٍ {n} يوم", "Testphase: noch {n} Tage"],
+ lockTitle:['الإقفال (Festschreibung) حسب GoBD','Festschreibung (GoBD)'],
+ lockInfo:['القيود حتى هذا التاريخ لا يمكن تعديلها أو حذفها، فقط عكسها بقيد Storno. القانون يطلب الإقفال بانتظام (عادةً عند تقديم إقرار الضريبة الشهري/الفصلي).','Buchungen bis zu diesem Datum können nicht mehr geändert oder gelöscht, nur storniert werden.'],
+ lockUntil:['إقفال حتى تاريخ','Festschreiben bis'], lockBtn:['إقفال نهائي','Festschreiben'], lockedUntil:['مقفل حتى','Festgeschrieben bis'],
+ audit:['سجل التغييرات','Änderungsprotokoll'],
+ newInv:['فاتورة جديدة','Neue Rechnung'], customer:['العميل','Kunde'], custAddr:['عنوان العميل','Anschrift Kunde'], custUstid:['رقم ضريبة العميل (اختياري)','USt-IdNr. Kunde (optional)'],
+ invDate:['تاريخ الفاتورة','Rechnungsdatum'], lDate:['تاريخ التوريد/الخدمة','Leistungsdatum'], items:['البنود','Positionen'], desc:['الوصف','Beschreibung'],
+ qty:['الكمية','Menge'], price:['سعر الوحدة (صافي)','Einzelpreis netto'], rate:['النسبة','USt-Satz'], addItem:['+ بند','+ Position'],
+ net:['الصافي','Netto'], gross:['الإجمالي','Brutto'], status:['الحالة','Status'], open:['غير مدفوعة','offen'], paid:['مدفوعة','bezahlt'], cancelled:['ملغاة','storniert'],
+ pay:['تسجيل الدفع','Zahlung buchen'], view:['عرض / طباعة','Ansehen / Drucken'], print:['طباعة / PDF','Drucken / PDF'], invNo:['رقم الفاتورة','Rechnungs-Nr.'],
+ payVia:['الدفع عبر','Zahlung über'], close:['إغلاق','Schließen'], copy:['نسخ','Kopieren'], copied:['تم النسخ','Kopiert'],
+ saved:['تم الحفظ','Gespeichert'], deleted:['تم الحذف','Gelöscht'],
+ errBal:['اختر حساب المدين والدائن ومبلغاً صحيحاً','Soll, Haben und gültigen Betrag angeben'], errSame:['المدين والدائن لا يمكن أن يكونا نفس الحساب','Soll und Haben dürfen nicht gleich sein'],
+ errLocked:['هذا التاريخ ضمن فترة مقفلة','Datum liegt im festgeschriebenen Zeitraum'], errTrial:["انتهت التجربة المجانية. اشترِ الترخيص وأدخل الكود في الإعدادات.", "Testphase beendet. Bitte Lizenz kaufen und Code in den Einstellungen eingeben."],
+ cashNeg:['تحذير: رصيد الصندوق أصبح سالباً — هذا غير ممكن قانونياً (Kassenfehlbetrag) ويُعرّض الدفاتر للرفض عند التدقيق الضريبي.','Warnung: Negativer Kassenbestand ist nicht zulässig.'],
+ period:['الفترة','Zeitraum'], q:['ربع','Quartal'],
+ kz81:['مبيعات خاضعة 19% (Kz 81)','Steuerpfl. Umsätze 19 % (Kz 81)'], kz86:['مبيعات خاضعة 7% (Kz 86)','Steuerpfl. Umsätze 7 % (Kz 86)'],
+ kz41:['توريدات معفاة داخل الاتحاد الأوروبي (Kz 41)','Innergem. Lieferungen (Kz 41)'], kz48:['مبيعات معفاة أخرى (Kz 48)','Steuerfreie Umsätze ohne VSt-Abzug (Kz 48)'],
+ kz66:['ضريبة المدخلات القابلة للخصم (Kz 66)','Vorsteuerbeträge (Kz 66)'], kz83:['المبلغ المستحق / المسترد (Kz 83)','Verbleibende USt-Vorauszahlung (Kz 83)'],
+ taxAmt:['الضريبة','Steuer'], base:['الأساس','Bemessungsgrundlage'],
+ ustNote:['هذه أرقام مساعدة للتعبئة في ELSTER. الإرسال الرسمي يتم عبر ELSTER أو عبر المستشار الضريبي.','Hilfswerte für ELSTER. Übermittlung über ELSTER oder Steuerberater.'],
+ euerNote:['EÜR مبسّطة لأغراض المتابعة (حسب القيود المسجلة). الإقرار الرسمي (Anlage EÜR) يُعدّ مع المستشار الضريبي.','Vereinfachte EÜR zur Kontrolle. Anlage EÜR mit dem Steuerberater erstellen.'],
+ ein:['إيرادات تشغيلية','Betriebseinnahmen'], aus:['مصاريف تشغيلية','Betriebsausgaben'], ustIn:['ضريبة مبيعات محصّلة','Vereinnahmte USt'],
+ vstOut:['ضريبة مدخلات مدفوعة','Gezahlte Vorsteuer'], ustPaidL:['ضريبة مدفوعة للمالية','An das Finanzamt gezahlte USt'],
+ gWe:['مشتريات البضاعة','Wareneinkauf'], gPers:['تكاليف الموظفين','Personalkosten'], gRaum:['تكاليف المكان','Raumkosten'], gAfa:['الإهلاك','Abschreibungen'], gKfz:['تكاليف السيارة','Kfz-Kosten'], gSonst:['مصاريف أخرى','Sonstige Kosten'],
+ aktiva:['الأصول (Aktiva)','Aktiva'], passiva:['الخصوم وحقوق الملكية (Passiva)','Passiva'], ek:['حقوق الملكية','Eigenkapital'],
+ vortrag:['نتائج ومسحوبات السنوات السابقة','Ergebnis-/Privatvortrag Vorjahre'], privY:['الحركة الشخصية هذه السنة','Privat (laufendes Jahr)'],
+ bilOk:['الميزانية متوازنة ✓','Bilanz ausgeglichen ✓'], bilBad:['الميزانية غير متوازنة','Bilanz nicht ausgeglichen'],
+ opening:['رصيد سابق','Anfangsbestand'], in:['وارد','Einnahme'], out:['صادر','Ausgabe'],
+ demo:['تحميل بيانات تجريبية','Demodaten laden'], reset:['حذف كل البيانات','Alle Daten löschen'], confirm:['تأكيد','Bestätigen'],
+ resetQ:['سيتم حذف كل القيود والفواتير من هذا المتصفح. هل أنت متأكد؟ (خذ نسخة احتياطية أولاً)','Alle Daten in diesem Browser löschen?'],
+ help:['تعليمات سريعة','Kurzanleitung'],
+ legal:['تنبيه قانوني','Rechtlicher Hinweis'],
+ storageNote:['البيانات محفوظة في هذا المتصفح فقط. خذ نسخة احتياطية بانتظام.','Daten liegen nur in diesem Browser. Regelmäßig sichern!'],
+ importOk:['تمت الاستعادة','Wiederhergestellt'], importBad:['ملف غير صالح','Ungültige Datei'],
+ exportTitle:['انسخ المحتوى التالي واحفظه في ملف','Inhalt kopieren und als Datei speichern'],
+ tplSaleCash19:['بيع نقدي 19%','Barverkauf 19 %'], tplSaleCash7:['بيع نقدي 7%','Barverkauf 7 %'], tplSaleBank19:['بيع عبر البنك 19%','Verkauf Bank 19 %'],
+ tplBuy19:['شراء بضاعة 19% (بنك)','Wareneinkauf 19 % Bank'], tplBuy7:['شراء بضاعة 7% (بنك)','Wareneinkauf 7 % Bank'], tplBuyCash7:['شراء بضاعة 7% (نقداً)','Wareneinkauf 7 % bar'],
+ tplRent:['إيجار','Miete'], tplFuel:['وقود','Tanken'], tplTel:['هاتف/إنترنت','Telefon'], tplFee:['رسوم بنكية','Bankgebühr'],
+ tplPriv:['سحب شخصي نقدي','Privatentnahme bar'], tplEinl:['إيداع شخصي في البنك','Privateinlage Bank'], tplKB:['إيداع الصندوق في البنك','Kasse an Bank'], tplUst:['دفع الضريبة للمالية','USt-Zahlung FA'],
+ bookPrev:['القيد الناتج:','Buchungssätze:'],
+ devBy:["تطوير وحقوق النشر", "Entwicklung & Urheberrecht"],
+ about:["حول البرنامج", "Über das Programm"],
+ rights:["جميع الحقوق محفوظة. يُمنع نسخ البرنامج أو إعادة بيعه بدون إذن المطوّر.", "Alle Rechte vorbehalten. Kopieren oder Weiterverkauf ohne Zustimmung des Entwicklers ist untersagt."],
+ accNote:["أرقام الحسابات حسب دليل DATEV <b>SKR{skr}</b>. الحسابات التي فيها ضريبة تلقائية (مثل المبيعات 19%) تقسم المبلغ الإجمالي تلقائياً إلى صافي + ضريبة.", "Kontennummern nach DATEV <b>SKR{skr}</b>. Automatikkonten teilen den Bruttobetrag automatisch in Netto + Steuer auf."],
+ help1:["ar", "Firmendaten eingeben, SKR03 oder SKR04 wählen."],
+ help2:["أدخل بيانات شركتك واختر SKR03 (الأكثر شيوعاً للتجار) أو SKR04 حسب ما يستخدمه مستشارك الضريبي.", "Eröffnungsbilanz: z. B. Bank an 9000."],
+ help3:["أدخل الأرصدة الافتتاحية: مثلاً البنك مدين ← حساب 9000 دائن.", "Alle Geschäftsvorfälle brutto buchen – Steuer wird automatisch berechnet."],
+ help4:["سجّل كل عملية في «القيود اليومية». استخدم القيود السريعة؛ أدخل دائماً المبلغ الإجمالي (Brutto) والتطبيق يفصل الضريبة.", "Rechnungen erstellen und Zahlungen buchen."],
+ help5:["أنشئ الفواتير من «الفواتير»؛ يتم قيدها تلقائياً على ذمم العملاء، وعند الدفع اضغط «تسجيل الدفع».", "UStVA-Werte in ELSTER übertragen, Zeitraum festschreiben."],
+ help6:["كل شهر/ربع: افتح «التقارير ← UStVA» وانقل الأرقام إلى ELSTER، ثم أقفل الفترة.", "CSV an Steuerberater, regelmäßig sichern."],
+ taxU:["ضريبة مبيعات", "USt"],
+ taxV:["ضريبة مدخلات", "VSt"],
+ startNote:["ابدأ من <b>الإعدادات</b>: أدخل بيانات شركتك واختر دليل الحسابات SKR03 أو SKR04. أو جرّب التطبيق بـ <a href=\"#\" id=\"demoLink\">بيانات تجريبية</a>.", "Starten Sie in den <b>Einstellungen</b> oder <a href=\"#\" id=\"demoLink\">laden Sie Demodaten</a>."],
+ bookS:["مدين", "Soll"],
+ bookH:["دائن", "Haben"],
+ invMissing:["الفاتورة في ألمانيا يجب أن تحتوي (حسب §14 UStG) على اسمك وعنوانك والرقم الضريبي أو USt-IdNr. أكمل هذه البيانات في الإعدادات.", "Pflichtangaben nach § 14 UStG fehlen: Name, Anschrift, Steuernummer/USt-IdNr. in den Einstellungen ergänzen."],
+ errInv:["أدخل اسم العميل ووصف البنود ومبالغ صحيحة", "Kunde, Beschreibung und Beträge angeben"],
+ printNote:["للطباعة أو الحفظ PDF: افتح التطبيق في نافذة مستقلة (أو الملف المحمّل) ثم اضغط طباعة.", "Zum Drucken die App in einem eigenen Fenster öffnen."],
+ ustKlein:["أنت مسجّل كمشروع صغير (§19): لا تحتاج عادةً لتقديم UStVA.", "Kleinunternehmer: in der Regel keine UStVA."],
+ ustCent:["(في ELSTER تُكتب الأسس بدون سنتات.)", "(Bemessungsgrundlagen in ELSTER ohne Cent.)"],
+ tseNote:["ملاحظة: إذا كنت تستخدم آلة كاشير إلكترونية فهي تحتاج قانونياً إلى وحدة أمان TSE، وهذا الدفتر لا يغني عنها.", "Hinweis: Elektronische Kassen benötigen eine TSE; dieses Kassenbuch ersetzt sie nicht."],
+ errAccNo:["أدخل رقماً من 4 خانات واسماً", "4-stellige Nummer und Name angeben"],
+ errAccDup:["الرقم مستخدم", "Nummer vergeben"],
+ kleinNo:["لا — أحسب ضريبة المبيعات", "Nein"],
+ kleinYes:["نعم — §19 UStG", "Ja"],
+ legalText:["هذا البرنامج أداة مساعدة لمسك الدفاتر وليس برنامجاً معتمداً رسمياً، ولا يرسل البيانات إلى ELSTER. مسؤولية صحة القيود والالتزام بقواعد GoBD (الحفظ 8–10 سنوات، الإقفال، وثيقة الإجراءات Verfahrensdokumentation) تقع على المستخدم. يُنصح بمراجعة المستشار الضريبي.", "Hilfsprogramm zur Buchführung, keine zertifizierte Software und keine ELSTER-Schnittstelle. Verantwortung für GoBD-Konformität (Aufbewahrung, Festschreibung, Verfahrensdokumentation) liegt beim Anwender."],
+ errUnlock:["لا يمكن إلغاء الإقفال", "Festschreibung kann nicht zurückgenommen werden"],
+ errKey:["مفتاح غير صحيح", "Ungültiger Schlüssel"],
+ demoLoaded:["تم تحميل البيانات التجريبية", "Demodaten geladen"],
+ trialOver:["انتهت التجربة المجانية (7 أيام). بياناتك محفوظة، ويمكنك عرضها وتصديرها. لمتابعة الإدخال اشترِ الترخيص وأدخل الكود.", "Die 7-tägige Testphase ist beendet. Ihre Daten bleiben erhalten und können angesehen und exportiert werden. Zum Weiterbuchen Lizenz kaufen und Code eingeben."],
+ buyNow:["اشترِ الترخيص الآن", "Lizenz jetzt kaufen"],
+ enterCode:["أدخل كود التفعيل", "Aktivierungscode eingeben"],
+ codeInfo:["بعد الدفع يصلك كود التفعيل على بريدك الإلكتروني فوراً. الكود صالح لتفعيل جهاز واحد مرة واحدة فقط.", "Nach der Zahlung erhalten Sie den Aktivierungscode sofort per E-Mail. Der Code kann nur einmal für ein Gerät aktiviert werden."],
+ activate:["تفعيل", "Aktivieren"],
+ actOk:["تم التفعيل بنجاح ✓ شكراً لك!", "Erfolgreich aktiviert ✓ Vielen Dank!"],
+ actUsed:["هذا الكود مستعمل من قبل على جهاز آخر.", "Dieser Code wurde bereits auf einem anderen Gerät verwendet."],
+ actBad:["الكود غير صحيح. تأكد منه وحاول مرة أخرى.", "Ungültiger Code. Bitte prüfen und erneut versuchen."],
+ actNet:["التفعيل يحتاج اتصالاً بالإنترنت. اتصل وحاول مرة أخرى.", "Für die Aktivierung ist eine Internetverbindung nötig."],
+ actOff:["التفعيل التلقائي غير متاح بعد. راسلنا على واتساب لنرسل لك الكود.", "Automatische Aktivierung noch nicht verfügbar. Bitte per WhatsApp melden."],
+ licRevoked:["تم إيقاف هذا الترخيص. راسلنا على واتساب.", "Diese Lizenz wurde deaktiviert. Bitte per WhatsApp melden."],
+};
+let LANG = 'ar';
+const TR = {};
+TR.en = {
+tagline:'German bookkeeping for traders',dash:'Dashboard',journal:'Journal entries',invoices:'Invoices',accounts:'Chart of accounts',reports:'Reports',settings:'Settings',
+revenue:'Revenue (net)',expenses:'Expenses (net)',profit:'Profit',bank:'Bank balance',cash:'Cash balance',openRec:'Unpaid invoices',vatDue:'VAT owed to tax office',entriesN:'Number of entries',monthly:'Revenue and expenses per month',
+date:'Date',beleg:'Receipt no.',text:'Description',soll:'Debit (Soll)',haben:'Credit (Haben)',amount:'Amount (gross)',tax:'Tax',none:'none',
+save:'Save',cancel:'Cancel',edit:'Edit',del:'Delete',storno:'Reverse',newEntry:'New entry',quick:'Quick entries:',search:'Search…',all:'All',month:'Month',locked:'locked',
+account:'Account',name:'Name',type:'Type',balance:'Balance',year:'Fiscal year',sum:'Total',noData:'No data yet',
+tSalden:'Trial balance',tGuv:'Profit & loss',tBilanz:'Balance sheet',tEuer:'EÜR (cash-basis result)',tUst:'VAT return (UStVA)',tKasse:'Cash book',tJournal:'Journal',
+export:'Export',csvSb:'CSV for tax advisor',backup:'Backup',restore:'Restore',
+typeA:'Assets',typeL:'Liabilities',typeE:'Equity',typeP:'Private',typeR:'Income',typeX:'Expense',addAcc:'Add account',number:'Number',
+firm:'Company name',owner:'Owner',address:'Address',stnr:'Tax number',ustid:'VAT ID',iban:'IBAN',bic:'BIC',bankName:'Bank',email:'Email',phone:'Phone',
+skr:'Chart of accounts',klein:'Small business (§19 UStG, no VAT)',prefix:'Invoice number prefix',terms:'Payment term (days)',
+license:'License key',licOk:'Licensed ✓',licTrial:"Free trial: {n} days left",
+lockTitle:'Locking (Festschreibung, GoBD)',lockInfo:'Entries up to this date can no longer be edited or deleted, only reversed. The law requires locking regularly (usually when you file the monthly/quarterly VAT return).',
+lockUntil:'Lock until',lockBtn:'Lock permanently',lockedUntil:'Locked until',audit:'Change log',
+newInv:'New invoice',customer:'Customer',custAddr:'Customer address',custUstid:'Customer VAT ID (optional)',invDate:'Invoice date',lDate:'Delivery/service date',items:'Items',desc:'Description',
+qty:'Qty',price:'Unit price (net)',rate:'VAT rate',addItem:'+ Item',net:'Net',gross:'Gross',status:'Status',open:'open',paid:'paid',cancelled:'cancelled',
+pay:'Record payment',view:'View / Print',print:'Print / PDF',invNo:'Invoice no.',payVia:'Paid via',close:'Close',copy:'Copy',copied:'Copied',saved:'Saved',deleted:'Deleted',
+errBal:'Choose debit, credit and a valid amount',errSame:'Debit and credit cannot be the same account',errLocked:'This date is in a locked period',errTrial:"Free trial ended. Buy a license and enter your code in Settings.",
+cashNeg:'Warning: the cash balance became negative — this is not legally possible (cash shortfall) and can lead to your books being rejected in a tax audit.',
+period:'Period',q:'Quarter',kz81:'Taxable sales 19% (Kz 81)',kz86:'Taxable sales 7% (Kz 86)',kz41:'Tax-free intra-EU supplies (Kz 41)',kz48:'Other tax-free sales (Kz 48)',kz66:'Deductible input VAT (Kz 66)',kz83:'Amount payable / refundable (Kz 83)',
+taxAmt:'Tax',base:'Tax base',ustNote:'These are helper figures for ELSTER. Official filing is done via ELSTER or your tax advisor.',
+euerNote:'Simplified EÜR for monitoring (based on recorded entries). The official form (Anlage EÜR) should be prepared with your tax advisor.',
+ein:'Business income',aus:'Business expenses',ustIn:'VAT collected',vstOut:'Input VAT paid',ustPaidL:'VAT paid to tax office',
+gWe:'Goods purchased',gPers:'Staff costs',gRaum:'Premises costs',gAfa:'Depreciation',gKfz:'Vehicle costs',gSonst:'Other costs',
+aktiva:'Assets (Aktiva)',passiva:'Liabilities & equity (Passiva)',ek:'Equity',vortrag:'Results and private items of previous years',privY:'Private movements this year',
+bilOk:'Balance sheet balances ✓',bilBad:'Balance sheet does not balance',opening:'Opening balance',in:'In',out:'Out',
+demo:'Load demo data',reset:'Delete all data',confirm:'Confirm',resetQ:'All entries and invoices in this browser will be deleted. Are you sure? (Make a backup first)',
+help:'Quick guide',legal:'Legal notice',storageNote:'Data is stored in this browser only. Make regular backups.',importOk:'Restored',importBad:'Invalid file',exportTitle:'Copy the content below and save it as a file',
+tplSaleCash19:'Cash sale 19%',tplSaleCash7:'Cash sale 7%',tplSaleBank19:'Bank sale 19%',tplBuy19:'Buy goods 19% (bank)',tplBuy7:'Buy goods 7% (bank)',tplBuyCash7:'Buy goods 7% (cash)',
+tplRent:'Rent',tplFuel:'Fuel',tplTel:'Phone/Internet',tplFee:'Bank fee',tplPriv:'Private withdrawal (cash)',tplEinl:'Private deposit (bank)',tplKB:'Cash to bank',tplUst:'VAT payment to tax office',
+bookPrev:'Resulting postings:',accNote:'Account numbers follow the DATEV <b>SKR{skr}</b> chart. Accounts with automatic tax (e.g. sales 19%) split the gross amount into net + tax automatically.',
+help1:'Enter your company details and choose SKR03 (most common for traders) or SKR04, whichever your tax advisor uses.',
+help2:'Enter opening balances: e.g. Bank debit → account 9000 credit.',
+help3:'Record every transaction under “Journal entries”. Use quick entries; always enter the gross amount — the app splits out the tax.',
+help4:'Create invoices under “Invoices”; they are posted to receivables automatically. When paid, click “Record payment”.',
+help5:'Every month/quarter: open “Reports → VAT return”, transfer the figures to ELSTER, then lock the period.',
+help6:'Export the CSV and send it to your tax advisor; make a JSON backup regularly.',
+taxU:'Output VAT',taxV:'Input VAT',startNote:'Start in <b>Settings</b>: enter your company details and choose SKR03 or SKR04. Or try the app with <a href="#" id="demoLink">demo data</a>.',
+bookS:'Debit',bookH:'Credit',invMissing:'In Germany an invoice must contain (§14 UStG) your name, address and tax number or VAT ID. Complete these in Settings.',
+errInv:'Enter customer name, item descriptions and valid amounts',printNote:'To print or save as PDF: open the app in its own window (or the downloaded file), then click Print.',
+ustKlein:'You are registered as a small business (§19): you usually do not need to file a VAT return.',ustCent:'(In ELSTER the tax bases are entered without cents.)',
+tseNote:'Note: an electronic cash register legally needs a TSE security module; this cash book does not replace it.',
+errAccNo:'Enter a 4-digit number and a name',errAccDup:'Number already in use',kleinNo:'No — I charge VAT',kleinYes:'Yes — §19 UStG',
+legalText:'This program is a bookkeeping aid, not officially certified software, and does not send data to ELSTER. The user is responsible for correct entries and GoBD compliance (8–10 year retention, locking, process documentation). Consulting a tax advisor is recommended.',
+errUnlock:'Locking cannot be undone',errKey:'Invalid key',demoLoaded:'Demo data loaded',
+trialOver:"Your 7-day free trial has ended. Your data is kept and you can still view and export it. To keep entering data, buy a license and enter your code.",buyNow:"Buy license now",enterCode:"Enter activation code",codeInfo:"After payment you receive your activation code by e-mail right away. The code can be activated only once, on one device.",activate:"Activate",actOk:"Activated successfully ✓ Thank you!",actUsed:"This code has already been used on another device.",actBad:"Invalid code. Please check it and try again.",actNet:"Activation needs an internet connection. Please try again.",actOff:"Automatic activation is not available yet. Please contact us on WhatsApp.",licRevoked:"This license has been deactivated. Please contact us on WhatsApp."
+};
+TR.es = {
+tagline:'Contabilidad alemana para comerciantes',dash:'Panel',journal:'Asientos',invoices:'Facturas',accounts:'Plan de cuentas',reports:'Informes',settings:'Ajustes',
+revenue:'Ventas (neto)',expenses:'Gastos (neto)',profit:'Beneficio',bank:'Saldo bancario',cash:'Saldo de caja',openRec:'Facturas pendientes',vatDue:'IVA a pagar a Hacienda',entriesN:'Número de asientos',monthly:'Ventas y gastos por mes',
+date:'Fecha',beleg:'N.º de justificante',text:'Concepto',soll:'Debe (Soll)',haben:'Haber (Haben)',amount:'Importe (bruto)',tax:'Impuesto',none:'sin',
+save:'Guardar',cancel:'Cancelar',edit:'Editar',del:'Eliminar',storno:'Anular',newEntry:'Nuevo asiento',quick:'Asientos rápidos:',search:'Buscar…',all:'Todos',month:'Mes',locked:'bloqueado',
+account:'Cuenta',name:'Nombre',type:'Tipo',balance:'Saldo',year:'Ejercicio',sum:'Total',noData:'Aún no hay datos',
+tSalden:'Balance de sumas y saldos',tGuv:'Pérdidas y ganancias',tBilanz:'Balance',tEuer:'EÜR (resultado de caja)',tUst:'Declaración de IVA (UStVA)',tKasse:'Libro de caja',tJournal:'Diario',
+export:'Exportar',csvSb:'CSV para el asesor fiscal',backup:'Copia de seguridad',restore:'Restaurar',
+typeA:'Activo',typeL:'Pasivo',typeE:'Patrimonio',typeP:'Privado',typeR:'Ingreso',typeX:'Gasto',addAcc:'Añadir cuenta',number:'Número',
+firm:'Nombre de la empresa',owner:'Titular',address:'Dirección',stnr:'Número fiscal',ustid:'NIF-IVA',iban:'IBAN',bic:'BIC',bankName:'Banco',email:'Correo',phone:'Teléfono',
+skr:'Plan de cuentas',klein:'Pequeña empresa (§19 UStG, sin IVA)',prefix:'Prefijo del n.º de factura',terms:'Plazo de pago (días)',
+license:'Clave de licencia',licOk:'Licencia activa ✓',licTrial:"Prueba gratis: quedan {n} días",
+lockTitle:'Cierre (Festschreibung, GoBD)',lockInfo:'Los asientos hasta esta fecha ya no se pueden editar ni borrar, solo anular. La ley exige cerrar periódicamente (normalmente al presentar la declaración de IVA mensual/trimestral).',
+lockUntil:'Cerrar hasta',lockBtn:'Cerrar definitivamente',lockedUntil:'Cerrado hasta',audit:'Registro de cambios',
+newInv:'Nueva factura',customer:'Cliente',custAddr:'Dirección del cliente',custUstid:'NIF-IVA del cliente (opcional)',invDate:'Fecha de factura',lDate:'Fecha de entrega/servicio',items:'Conceptos',desc:'Descripción',
+qty:'Cant.',price:'Precio unitario (neto)',rate:'Tipo de IVA',addItem:'+ Concepto',net:'Neto',gross:'Bruto',status:'Estado',open:'pendiente',paid:'pagada',cancelled:'anulada',
+pay:'Registrar pago',view:'Ver / Imprimir',print:'Imprimir / PDF',invNo:'N.º de factura',payVia:'Pagado por',close:'Cerrar',copy:'Copiar',copied:'Copiado',saved:'Guardado',deleted:'Eliminado',
+errBal:'Elija debe, haber y un importe válido',errSame:'Debe y haber no pueden ser la misma cuenta',errLocked:'Esta fecha está en un periodo cerrado',errTrial:"La prueba terminó. Compra la licencia e introduce el código en Ajustes.",
+cashNeg:'Atención: el saldo de caja es negativo — esto no es legalmente posible y puede hacer que se rechace su contabilidad en una inspección fiscal.',
+period:'Periodo',q:'Trimestre',kz81:'Ventas sujetas 19% (Kz 81)',kz86:'Ventas sujetas 7% (Kz 86)',kz41:'Entregas intracomunitarias exentas (Kz 41)',kz48:'Otras ventas exentas (Kz 48)',kz66:'IVA soportado deducible (Kz 66)',kz83:'Importe a pagar / devolver (Kz 83)',
+taxAmt:'Impuesto',base:'Base imponible',ustNote:'Cifras de ayuda para ELSTER. La presentación oficial se hace por ELSTER o por su asesor fiscal.',
+euerNote:'EÜR simplificada para control (según los asientos registrados). El formulario oficial (Anlage EÜR) debe prepararse con su asesor fiscal.',
+ein:'Ingresos de explotación',aus:'Gastos de explotación',ustIn:'IVA repercutido cobrado',vstOut:'IVA soportado pagado',ustPaidL:'IVA pagado a Hacienda',
+gWe:'Compra de mercancías',gPers:'Gastos de personal',gRaum:'Gastos de local',gAfa:'Amortizaciones',gKfz:'Gastos de vehículo',gSonst:'Otros gastos',
+aktiva:'Activo (Aktiva)',passiva:'Pasivo y patrimonio (Passiva)',ek:'Patrimonio neto',vortrag:'Resultados y movimientos privados de años anteriores',privY:'Movimientos privados de este año',
+bilOk:'El balance cuadra ✓',bilBad:'El balance no cuadra',opening:'Saldo inicial',in:'Entrada',out:'Salida',
+demo:'Cargar datos de demostración',reset:'Borrar todos los datos',confirm:'Confirmar',resetQ:'Se borrarán todos los asientos y facturas de este navegador. ¿Seguro? (Haga antes una copia de seguridad)',
+help:'Guía rápida',legal:'Aviso legal',storageNote:'Los datos solo se guardan en este navegador. Haga copias de seguridad con regularidad.',importOk:'Restaurado',importBad:'Archivo no válido',exportTitle:'Copie el contenido y guárdelo como archivo',
+tplSaleCash19:'Venta en efectivo 19%',tplSaleCash7:'Venta en efectivo 7%',tplSaleBank19:'Venta por banco 19%',tplBuy19:'Compra mercancía 19% (banco)',tplBuy7:'Compra mercancía 7% (banco)',tplBuyCash7:'Compra mercancía 7% (efectivo)',
+tplRent:'Alquiler',tplFuel:'Combustible',tplTel:'Teléfono/Internet',tplFee:'Comisión bancaria',tplPriv:'Retiro privado (efectivo)',tplEinl:'Aportación privada (banco)',tplKB:'Caja al banco',tplUst:'Pago de IVA a Hacienda',
+bookPrev:'Apuntes resultantes:',accNote:'Los números de cuenta siguen el plan DATEV <b>SKR{skr}</b>. Las cuentas con impuesto automático (p. ej. ventas 19%) dividen el importe bruto en neto + impuesto.',
+help1:'Introduzca los datos de su empresa y elija SKR03 (el más común para comerciantes) o SKR04, según use su asesor fiscal.',
+help2:'Introduzca los saldos iniciales: p. ej. Banco al debe → cuenta 9000 al haber.',
+help3:'Registre cada operación en «Asientos». Use los asientos rápidos; introduzca siempre el importe bruto y la app separa el impuesto.',
+help4:'Cree facturas en «Facturas»; se contabilizan automáticamente en clientes. Al cobrar, pulse «Registrar pago».',
+help5:'Cada mes/trimestre: abra «Informes → Declaración de IVA», pase las cifras a ELSTER y cierre el periodo.',
+help6:'Exporte el CSV y envíelo a su asesor fiscal; haga una copia JSON con regularidad.',
+taxU:'IVA repercutido',taxV:'IVA soportado',startNote:'Empiece en <b>Ajustes</b>: introduzca los datos de su empresa y elija SKR03 o SKR04. O pruebe la app con <a href="#" id="demoLink">datos de demostración</a>.',
+bookS:'Debe',bookH:'Haber',invMissing:'En Alemania la factura debe incluir (§14 UStG) su nombre, dirección y número fiscal o NIF-IVA. Complételos en Ajustes.',
+errInv:'Introduzca cliente, descripciones e importes válidos',printNote:'Para imprimir o guardar en PDF: abra la app en una ventana propia (o el archivo descargado) y pulse Imprimir.',
+ustKlein:'Está registrado como pequeña empresa (§19): normalmente no necesita presentar declaración de IVA.',ustCent:'(En ELSTER las bases se introducen sin céntimos.)',
+tseNote:'Nota: una caja registradora electrónica necesita por ley un módulo de seguridad TSE; este libro de caja no lo sustituye.',
+errAccNo:'Introduzca un número de 4 cifras y un nombre',errAccDup:'Número ya utilizado',kleinNo:'No — cobro IVA',kleinYes:'Sí — §19 UStG',
+legalText:'Este programa es una ayuda para la contabilidad, no un software certificado oficialmente, y no envía datos a ELSTER. El usuario es responsable de la exactitud de los asientos y del cumplimiento de GoBD (conservación 8–10 años, cierre, documentación de procedimientos). Se recomienda consultar a un asesor fiscal.',
+errUnlock:'El cierre no se puede deshacer',errKey:'Clave no válida',demoLoaded:'Datos de demostración cargados',
+trialOver:"La prueba gratuita de 7 días ha terminado. Tus datos se conservan y puedes verlos y exportarlos. Para seguir registrando, compra la licencia e introduce el código.",buyNow:"Comprar licencia",enterCode:"Introducir código",codeInfo:"Tras el pago recibes el código por correo al instante. El código solo se puede activar una vez, en un dispositivo.",activate:"Activar",actOk:"Activado correctamente ✓ ¡Gracias!",actUsed:"Este código ya se usó en otro dispositivo.",actBad:"Código no válido. Revísalo e inténtalo de nuevo.",actNet:"La activación necesita conexión a internet.",actOff:"La activación automática aún no está disponible. Escríbenos por WhatsApp.",licRevoked:"Esta licencia fue desactivada. Escríbenos por WhatsApp."
+};
+TR.tr = {
+tagline:'Tüccarlar için Alman muhasebesi',dash:'Genel bakış',journal:'Yevmiye kayıtları',invoices:'Faturalar',accounts:'Hesap planı',reports:'Raporlar',settings:'Ayarlar',
+revenue:'Satışlar (net)',expenses:'Giderler (net)',profit:'Kâr',bank:'Banka bakiyesi',cash:'Kasa bakiyesi',openRec:'Ödenmemiş faturalar',vatDue:'Vergi dairesine ödenecek KDV',entriesN:'Kayıt sayısı',monthly:'Aylık satış ve giderler',
+date:'Tarih',beleg:'Belge no.',text:'Açıklama',soll:'Borç (Soll)',haben:'Alacak (Haben)',amount:'Tutar (brüt)',tax:'Vergi',none:'yok',
+save:'Kaydet',cancel:'İptal',edit:'Düzenle',del:'Sil',storno:'Ters kayıt',newEntry:'Yeni kayıt',quick:'Hızlı kayıtlar:',search:'Ara…',all:'Tümü',month:'Ay',locked:'kilitli',
+account:'Hesap',name:'Ad',type:'Tür',balance:'Bakiye',year:'Mali yıl',sum:'Toplam',noData:'Henüz veri yok',
+tSalden:'Mizan',tGuv:'Kâr ve zarar',tBilanz:'Bilanço',tEuer:'EÜR (nakit esaslı sonuç)',tUst:'KDV beyannamesi (UStVA)',tKasse:'Kasa defteri',tJournal:'Yevmiye',
+export:'Dışa aktar',csvSb:'Mali müşavir için CSV',backup:'Yedekleme',restore:'Geri yükle',
+typeA:'Varlık',typeL:'Borç',typeE:'Özsermaye',typeP:'Özel',typeR:'Gelir',typeX:'Gider',addAcc:'Hesap ekle',number:'Numara',
+firm:'Firma adı',owner:'Sahibi',address:'Adres',stnr:'Vergi numarası',ustid:'KDV kimlik no.',iban:'IBAN',bic:'BIC',bankName:'Banka',email:'E-posta',phone:'Telefon',
+skr:'Hesap planı',klein:'Küçük işletme (§19 UStG, KDV yok)',prefix:'Fatura numarası öneki',terms:'Ödeme vadesi (gün)',
+license:'Lisans anahtarı',licOk:'Lisans etkin ✓',licTrial:"Ücretsiz deneme: {n} gün kaldı",
+lockTitle:'Kilitleme (Festschreibung, GoBD)',lockInfo:'Bu tarihe kadarki kayıtlar artık düzenlenemez veya silinemez, yalnızca ters kayıtla iptal edilebilir. Yasa düzenli kilitleme ister (genellikle aylık/üç aylık KDV beyannamesi verildiğinde).',
+lockUntil:'Şu tarihe kadar kilitle',lockBtn:'Kalıcı olarak kilitle',lockedUntil:'Kilitli tarih',audit:'Değişiklik kaydı',
+newInv:'Yeni fatura',customer:'Müşteri',custAddr:'Müşteri adresi',custUstid:'Müşteri KDV no. (isteğe bağlı)',invDate:'Fatura tarihi',lDate:'Teslim/hizmet tarihi',items:'Kalemler',desc:'Açıklama',
+qty:'Miktar',price:'Birim fiyat (net)',rate:'KDV oranı',addItem:'+ Kalem',net:'Net',gross:'Brüt',status:'Durum',open:'açık',paid:'ödendi',cancelled:'iptal',
+pay:'Ödemeyi kaydet',view:'Görüntüle / Yazdır',print:'Yazdır / PDF',invNo:'Fatura no.',payVia:'Ödeme yolu',close:'Kapat',copy:'Kopyala',copied:'Kopyalandı',saved:'Kaydedildi',deleted:'Silindi',
+errBal:'Borç, alacak ve geçerli bir tutar seçin',errSame:'Borç ve alacak aynı hesap olamaz',errLocked:'Bu tarih kilitli bir dönemde',errTrial:"Deneme bitti. Lisans alın ve kodu Ayarlar’a girin.",
+cashNeg:'Uyarı: kasa bakiyesi eksiye düştü — bu yasal olarak mümkün değildir ve vergi denetiminde defterlerin reddine yol açabilir.',
+period:'Dönem',q:'Çeyrek',kz81:'%19 vergiye tabi satışlar (Kz 81)',kz86:'%7 vergiye tabi satışlar (Kz 86)',kz41:'AB içi vergisiz teslimler (Kz 41)',kz48:'Diğer vergisiz satışlar (Kz 48)',kz66:'İndirilecek KDV (Kz 66)',kz83:'Ödenecek / iade edilecek tutar (Kz 83)',
+taxAmt:'Vergi',base:'Matrah',ustNote:'Bunlar ELSTER için yardımcı rakamlardır. Resmî beyan ELSTER veya mali müşavir üzerinden yapılır.',
+euerNote:'Takip amaçlı basitleştirilmiş EÜR (girilen kayıtlara göre). Resmî form (Anlage EÜR) mali müşavirle hazırlanmalıdır.',
+ein:'İşletme gelirleri',aus:'İşletme giderleri',ustIn:'Tahsil edilen KDV',vstOut:'Ödenen indirilecek KDV',ustPaidL:'Vergi dairesine ödenen KDV',
+gWe:'Mal alımları',gPers:'Personel giderleri',gRaum:'Mekân giderleri',gAfa:'Amortisman',gKfz:'Araç giderleri',gSonst:'Diğer giderler',
+aktiva:'Aktifler (Aktiva)',passiva:'Pasifler ve özsermaye (Passiva)',ek:'Özsermaye',vortrag:'Önceki yılların sonuçları ve özel hareketleri',privY:'Bu yılın özel hareketleri',
+bilOk:'Bilanço denk ✓',bilBad:'Bilanço denk değil',opening:'Açılış bakiyesi',in:'Giriş',out:'Çıkış',
+demo:'Örnek verileri yükle',reset:'Tüm verileri sil',confirm:'Onayla',resetQ:'Bu tarayıcıdaki tüm kayıtlar ve faturalar silinecek. Emin misiniz? (Önce yedek alın)',
+help:'Hızlı kılavuz',legal:'Yasal uyarı',storageNote:'Veriler yalnızca bu tarayıcıda saklanır. Düzenli yedek alın.',importOk:'Geri yüklendi',importBad:'Geçersiz dosya',exportTitle:'Aşağıdaki içeriği kopyalayıp dosya olarak kaydedin',
+tplSaleCash19:'Nakit satış %19',tplSaleCash7:'Nakit satış %7',tplSaleBank19:'Banka ile satış %19',tplBuy19:'Mal alımı %19 (banka)',tplBuy7:'Mal alımı %7 (banka)',tplBuyCash7:'Mal alımı %7 (nakit)',
+tplRent:'Kira',tplFuel:'Yakıt',tplTel:'Telefon/İnternet',tplFee:'Banka ücreti',tplPriv:'Özel çekim (nakit)',tplEinl:'Özel yatırma (banka)',tplKB:'Kasadan bankaya',tplUst:'Vergi dairesine KDV ödemesi',
+bookPrev:'Oluşan kayıtlar:',accNote:'Hesap numaraları DATEV <b>SKR{skr}</b> planına göredir. Otomatik vergili hesaplar (ör. satış %19) brüt tutarı otomatik olarak net + vergi olarak ayırır.',
+help1:'Firma bilgilerinizi girin ve mali müşavirinizin kullandığına göre SKR03 (tüccarlarda en yaygın) veya SKR04 seçin.',
+help2:'Açılış bakiyelerini girin: ör. Banka borç → 9000 hesabı alacak.',
+help3:'Her işlemi «Yevmiye kayıtları»na girin. Hızlı kayıtları kullanın; her zaman brüt tutarı girin, uygulama vergiyi ayırır.',
+help4:'Faturaları «Faturalar»dan oluşturun; otomatik olarak alacaklara işlenir. Ödendiğinde «Ödemeyi kaydet»e basın.',
+help5:'Her ay/çeyrek: «Raporlar → KDV beyannamesi»ni açın, rakamları ELSTER’e aktarın, sonra dönemi kilitleyin.',
+help6:'CSV’yi dışa aktarıp mali müşavirinize gönderin; düzenli olarak JSON yedeği alın.',
+taxU:'Hesaplanan KDV',taxV:'İndirilecek KDV',startNote:'<b>Ayarlar</b>dan başlayın: firma bilgilerinizi girin ve SKR03 veya SKR04 seçin. Ya da uygulamayı <a href="#" id="demoLink">örnek verilerle</a> deneyin.',
+bookS:'Borç',bookH:'Alacak',invMissing:'Almanya’da fatura (§14 UStG) adınızı, adresinizi ve vergi numaranızı veya KDV kimlik numaranızı içermelidir. Bunları Ayarlar’da tamamlayın.',
+errInv:'Müşteri adı, kalem açıklamaları ve geçerli tutarlar girin',printNote:'Yazdırmak veya PDF kaydetmek için: uygulamayı ayrı bir pencerede (veya indirilen dosyada) açıp Yazdır’a basın.',
+ustKlein:'Küçük işletme olarak kayıtlısınız (§19): genellikle KDV beyannamesi vermeniz gerekmez.',ustCent:'(ELSTER’de matrahlar kuruşsuz girilir.)',
+tseNote:'Not: elektronik yazar kasa yasal olarak TSE güvenlik modülü gerektirir; bu kasa defteri onun yerini tutmaz.',
+errAccNo:'4 haneli bir numara ve ad girin',errAccDup:'Numara zaten kullanılıyor',kleinNo:'Hayır — KDV hesaplıyorum',kleinYes:'Evet — §19 UStG',
+legalText:'Bu program bir muhasebe yardımcısıdır; resmî olarak onaylı bir yazılım değildir ve ELSTER’e veri göndermez. Kayıtların doğruluğu ve GoBD kurallarına uyum (8–10 yıl saklama, kilitleme, süreç belgelemesi) kullanıcının sorumluluğundadır. Mali müşavire danışılması önerilir.',
+errUnlock:'Kilitleme geri alınamaz',errKey:'Geçersiz anahtar',demoLoaded:'Örnek veriler yüklendi',
+trialOver:"7 günlük ücretsiz deneme sona erdi. Verileriniz korunur; görüntüleyebilir ve dışa aktarabilirsiniz. Kayda devam etmek için lisans alın ve kodu girin.",buyNow:"Lisansı şimdi satın al",enterCode:"Aktivasyon kodunu gir",codeInfo:"Ödemeden hemen sonra aktivasyon kodu e-postanıza gelir. Kod yalnızca bir kez, tek cihazda etkinleştirilebilir.",activate:"Etkinleştir",actOk:"Başarıyla etkinleştirildi ✓ Teşekkürler!",actUsed:"Bu kod başka bir cihazda zaten kullanıldı.",actBad:"Geçersiz kod. Kontrol edip tekrar deneyin.",actNet:"Etkinleştirme için internet bağlantısı gerekir.",actOff:"Otomatik etkinleştirme henüz yok. Lütfen WhatsApp’tan yazın.",licRevoked:"Bu lisans devre dışı bırakıldı. WhatsApp’tan yazın."
+};
+TR.fa = {
+tagline:'حسابداری آلمانی برای بازرگانان',dash:'داشبورد',journal:'ثبت اسناد',invoices:'فاکتورها',accounts:'سرفصل حساب‌ها',reports:'گزارش‌ها',settings:'تنظیمات',
+revenue:'فروش (خالص)',expenses:'هزینه‌ها (خالص)',profit:'سود',bank:'موجودی بانک',cash:'موجودی صندوق',openRec:'فاکتورهای پرداخت‌نشده',vatDue:'مالیات بر ارزش افزوده بدهی به اداره مالیات',entriesN:'تعداد اسناد',monthly:'فروش و هزینه ماهانه',
+date:'تاریخ',beleg:'شماره سند',text:'شرح',soll:'بدهکار (Soll)',haben:'بستانکار (Haben)',amount:'مبلغ (ناخالص)',tax:'مالیات',none:'بدون',
+save:'ذخیره',cancel:'لغو',edit:'ویرایش',del:'حذف',storno:'سند معکوس',newEntry:'سند جدید',quick:'اسناد سریع:',search:'جستجو…',all:'همه',month:'ماه',locked:'قفل‌شده',
+account:'حساب',name:'نام',type:'نوع',balance:'مانده',year:'سال مالی',sum:'جمع',noData:'هنوز داده‌ای نیست',
+tSalden:'تراز آزمایشی',tGuv:'سود و زیان',tBilanz:'ترازنامه',tEuer:'EÜR (نتیجه نقدی)',tUst:'اظهارنامه مالیات بر ارزش افزوده (UStVA)',tKasse:'دفتر صندوق',tJournal:'دفتر روزنامه',
+export:'خروجی',csvSb:'CSV برای مشاور مالیاتی',backup:'پشتیبان‌گیری',restore:'بازیابی',
+typeA:'دارایی',typeL:'بدهی',typeE:'سرمایه',typeP:'شخصی',typeR:'درآمد',typeX:'هزینه',addAcc:'افزودن حساب',number:'شماره',
+firm:'نام شرکت',owner:'مالک',address:'نشانی',stnr:'شماره مالیاتی',ustid:'شناسه مالیات بر ارزش افزوده',iban:'IBAN',bic:'BIC',bankName:'بانک',email:'ایمیل',phone:'تلفن',
+skr:'سرفصل حساب‌ها',klein:'کسب‌وکار کوچک (§19 UStG، بدون مالیات)',prefix:'پیشوند شماره فاکتور',terms:'مهلت پرداخت (روز)',
+license:'کلید مجوز',licOk:'مجوز فعال ✓',licTrial:"آزمایش رایگان: {n} روز مانده",
+lockTitle:'قفل کردن (Festschreibung طبق GoBD)',lockInfo:'اسناد تا این تاریخ دیگر قابل ویرایش یا حذف نیستند و فقط با سند معکوس اصلاح می‌شوند. قانون قفل کردن منظم را الزامی می‌داند (معمولاً هنگام ارسال اظهارنامه ماهانه/فصلی).',
+lockUntil:'قفل تا تاریخ',lockBtn:'قفل نهایی',lockedUntil:'قفل‌شده تا',audit:'گزارش تغییرات',
+newInv:'فاکتور جدید',customer:'مشتری',custAddr:'نشانی مشتری',custUstid:'شناسه مالیاتی مشتری (اختیاری)',invDate:'تاریخ فاکتور',lDate:'تاریخ تحویل/خدمت',items:'اقلام',desc:'شرح',
+qty:'تعداد',price:'قیمت واحد (خالص)',rate:'نرخ مالیات',addItem:'+ قلم',net:'خالص',gross:'ناخالص',status:'وضعیت',open:'باز',paid:'پرداخت‌شده',cancelled:'باطل‌شده',
+pay:'ثبت پرداخت',view:'نمایش / چاپ',print:'چاپ / PDF',invNo:'شماره فاکتور',payVia:'پرداخت از طریق',close:'بستن',copy:'کپی',copied:'کپی شد',saved:'ذخیره شد',deleted:'حذف شد',
+errBal:'حساب بدهکار، بستانکار و مبلغ معتبر را انتخاب کنید',errSame:'بدهکار و بستانکار نمی‌توانند یک حساب باشند',errLocked:'این تاریخ در دوره قفل‌شده است',errTrial:"آزمایش تمام شد. مجوز بخرید و کد را در تنظیمات وارد کنید.",
+cashNeg:'هشدار: موجودی صندوق منفی شد — این از نظر قانونی ممکن نیست و می‌تواند باعث رد دفاتر در حسابرسی مالیاتی شود.',
+period:'دوره',q:'فصل',kz81:'فروش مشمول ۱۹٪ (Kz 81)',kz86:'فروش مشمول ۷٪ (Kz 86)',kz41:'تحویل‌های معاف داخل اتحادیه اروپا (Kz 41)',kz48:'سایر فروش‌های معاف (Kz 48)',kz66:'مالیات خرید قابل کسر (Kz 66)',kz83:'مبلغ قابل پرداخت / استرداد (Kz 83)',
+taxAmt:'مالیات',base:'مبنای مالیات',ustNote:'این ارقام کمکی برای ELSTER هستند. ارسال رسمی از طریق ELSTER یا مشاور مالیاتی انجام می‌شود.',
+euerNote:'EÜR ساده‌شده برای پیگیری (بر اساس اسناد ثبت‌شده). فرم رسمی (Anlage EÜR) باید با مشاور مالیاتی تهیه شود.',
+ein:'درآمدهای عملیاتی',aus:'هزینه‌های عملیاتی',ustIn:'مالیات فروش دریافت‌شده',vstOut:'مالیات خرید پرداخت‌شده',ustPaidL:'مالیات پرداخت‌شده به اداره مالیات',
+gWe:'خرید کالا',gPers:'هزینه کارکنان',gRaum:'هزینه محل کار',gAfa:'استهلاک',gKfz:'هزینه خودرو',gSonst:'سایر هزینه‌ها',
+aktiva:'دارایی‌ها (Aktiva)',passiva:'بدهی‌ها و سرمایه (Passiva)',ek:'حقوق صاحبان سرمایه',vortrag:'نتایج و برداشت‌های شخصی سال‌های قبل',privY:'گردش شخصی امسال',
+bilOk:'ترازنامه متوازن است ✓',bilBad:'ترازنامه متوازن نیست',opening:'مانده اول دوره',in:'دریافت',out:'پرداخت',
+demo:'بارگذاری داده نمونه',reset:'حذف همه داده‌ها',confirm:'تأیید',resetQ:'همه اسناد و فاکتورهای این مرورگر حذف می‌شوند. مطمئن هستید؟ (اول پشتیبان بگیرید)',
+help:'راهنمای سریع',legal:'تذکر حقوقی',storageNote:'داده‌ها فقط در همین مرورگر ذخیره می‌شوند. مرتب پشتیبان بگیرید.',importOk:'بازیابی شد',importBad:'فایل نامعتبر',exportTitle:'محتوای زیر را کپی کرده و به‌صورت فایل ذخیره کنید',
+tplSaleCash19:'فروش نقدی ۱۹٪',tplSaleCash7:'فروش نقدی ۷٪',tplSaleBank19:'فروش بانکی ۱۹٪',tplBuy19:'خرید کالا ۱۹٪ (بانک)',tplBuy7:'خرید کالا ۷٪ (بانک)',tplBuyCash7:'خرید کالا ۷٪ (نقدی)',
+tplRent:'اجاره',tplFuel:'سوخت',tplTel:'تلفن/اینترنت',tplFee:'کارمزد بانک',tplPriv:'برداشت شخصی نقدی',tplEinl:'واریز شخصی به بانک',tplKB:'واریز صندوق به بانک',tplUst:'پرداخت مالیات به اداره مالیات',
+bookPrev:'ثبت‌های حاصل:',accNote:'شماره حساب‌ها طبق سرفصل DATEV <b>SKR{skr}</b> است. حساب‌های دارای مالیات خودکار (مثلاً فروش ۱۹٪) مبلغ ناخالص را خودکار به خالص + مالیات تقسیم می‌کنند.',
+help1:'اطلاعات شرکت را وارد کنید و SKR03 (رایج‌ترین برای بازرگانان) یا SKR04 را مطابق مشاور مالیاتی خود انتخاب کنید.',
+help2:'مانده‌های افتتاحیه را وارد کنید: مثلاً بانک بدهکار ← حساب 9000 بستانکار.',
+help3:'هر معامله را در «ثبت اسناد» وارد کنید. از اسناد سریع استفاده کنید؛ همیشه مبلغ ناخالص را وارد کنید، برنامه مالیات را جدا می‌کند.',
+help4:'فاکتورها را در «فاکتورها» بسازید؛ خودکار به حساب مشتریان ثبت می‌شوند. هنگام پرداخت «ثبت پرداخت» را بزنید.',
+help5:'هر ماه/فصل: «گزارش‌ها ← اظهارنامه مالیات» را باز کنید، ارقام را به ELSTER منتقل کنید و دوره را قفل کنید.',
+help6:'فایل CSV را خروجی بگیرید و برای مشاور مالیاتی بفرستید؛ مرتب پشتیبان JSON بگیرید.',
+taxU:'مالیات فروش',taxV:'مالیات خرید',startNote:'از <b>تنظیمات</b> شروع کنید: اطلاعات شرکت را وارد کرده و SKR03 یا SKR04 را انتخاب کنید. یا برنامه را با <a href="#" id="demoLink">داده نمونه</a> امتحان کنید.',
+bookS:'بدهکار',bookH:'بستانکار',invMissing:'در آلمان فاکتور باید (طبق §14 UStG) نام، نشانی و شماره مالیاتی یا شناسه مالیاتی شما را داشته باشد. آن‌ها را در تنظیمات کامل کنید.',
+errInv:'نام مشتری، شرح اقلام و مبالغ معتبر را وارد کنید',printNote:'برای چاپ یا ذخیره PDF: برنامه را در پنجره جداگانه (یا فایل دانلودشده) باز کنید و چاپ را بزنید.',
+ustKlein:'شما به‌عنوان کسب‌وکار کوچک (§19) ثبت شده‌اید: معمولاً نیازی به ارسال UStVA ندارید.',ustCent:'(در ELSTER مبناها بدون سنت وارد می‌شوند.)',
+tseNote:'توجه: صندوق فروش الکترونیکی طبق قانون به ماژول امنیتی TSE نیاز دارد؛ این دفتر صندوق جایگزین آن نیست.',
+errAccNo:'یک شماره ۴ رقمی و نام وارد کنید',errAccDup:'این شماره قبلاً استفاده شده',kleinNo:'خیر — مالیات حساب می‌کنم',kleinYes:'بله — §19 UStG',
+legalText:'این برنامه ابزار کمکی دفترداری است، نرم‌افزار رسماً تأییدشده نیست و داده‌ای به ELSTER ارسال نمی‌کند. مسئولیت درستی اسناد و رعایت GoBD (نگهداری ۸ تا ۱۰ ساله، قفل کردن، مستندسازی روش‌ها) با کاربر است. مشورت با مشاور مالیاتی توصیه می‌شود.',
+errUnlock:'قفل قابل بازگشت نیست',errKey:'کلید نامعتبر',demoLoaded:'داده نمونه بارگذاری شد',
+trialOver:"آزمایش رایگان ۷ روزه تمام شد. داده‌های شما حفظ می‌شود و می‌توانید آن‌ها را ببینید و خروجی بگیرید. برای ادامه ثبت، مجوز بخرید و کد را وارد کنید.",buyNow:"همین حالا مجوز بخرید",enterCode:"وارد کردن کد فعال‌سازی",codeInfo:"پس از پرداخت، کد فعال‌سازی فوراً به ایمیل شما می‌رسد. کد فقط یک بار و برای یک دستگاه فعال می‌شود.",activate:"فعال‌سازی",actOk:"با موفقیت فعال شد ✓ سپاس!",actUsed:"این کد قبلاً روی دستگاه دیگری استفاده شده است.",actBad:"کد نامعتبر است. بررسی کنید و دوباره تلاش کنید.",actNet:"فعال‌سازی به اینترنت نیاز دارد.",actOff:"فعال‌سازی خودکار هنوز فعال نیست. در واتس‌اپ پیام دهید.",licRevoked:"این مجوز غیرفعال شده است. در واتس‌اپ پیام دهید."
+};
+TR.ps = {
+tagline:'د سوداګرو لپاره الماني محاسبه',dash:'ډشبورډ',journal:'ورځني ثبتونه',invoices:'بلونه',accounts:'د حسابونو لړلیک',reports:'راپورونه',settings:'تنظیمات',
+revenue:'پلور (خالص)',expenses:'لګښتونه (خالص)',profit:'ګټه',bank:'د بانک بیلانس',cash:'د صندوق بیلانس',openRec:'نه ورکړل شوي بلونه',vatDue:'مالیې ادارې ته د ورکړې وړ مالیه',entriesN:'د ثبتونو شمېر',monthly:'میاشتنی پلور او لګښتونه',
+date:'نېټه',beleg:'د سند شمېره',text:'تشریح',soll:'پور (Soll)',haben:'کرېډیټ (Haben)',amount:'ټوله اندازه (ناخالص)',tax:'مالیه',none:'پرته',
+save:'خوندي کول',cancel:'لغوه',edit:'سمول',del:'ړنګول',storno:'معکوس ثبت',newEntry:'نوی ثبت',quick:'چټک ثبتونه:',search:'لټون…',all:'ټول',month:'میاشت',locked:'قفل شوی',
+account:'حساب',name:'نوم',type:'ډول',balance:'بیلانس',year:'مالي کال',sum:'ټولټال',noData:'لا تر اوسه معلومات نشته',
+tSalden:'آزمایښتي بیلانس',tGuv:'ګټه او تاوان',tBilanz:'بیلانس شیټ',tEuer:'EÜR (نغدي پایله)',tUst:'د ارزښت زیاتوالي مالیې اظهارنامه (UStVA)',tKasse:'د صندوق کتاب',tJournal:'ورځنی کتاب',
+export:'صادرول',csvSb:'د مالیاتي مشاور لپاره CSV',backup:'بیک اپ',restore:'بېرته راوړل',
+typeA:'شتمني',typeL:'پورونه',typeE:'پانګه',typeP:'شخصي',typeR:'عاید',typeX:'لګښت',addAcc:'حساب زیاتول',number:'شمېره',
+firm:'د شرکت نوم',owner:'مالک',address:'پته',stnr:'مالیاتي شمېره',ustid:'د ارزښت زیاتوالي مالیې شمېره',iban:'IBAN',bic:'BIC',bankName:'بانک',email:'برېښنالیک',phone:'تلیفون',
+skr:'د حسابونو لړلیک',klein:'کوچنۍ سوداګري (§19 UStG، بې مالیې)',prefix:'د بل شمېرې مخکینی',terms:'د تادیې موده (ورځې)',
+license:'د جواز کیلي',licOk:'جواز فعال دی ✓',licTrial:"وړیا ازموینه: {n} ورځې پاتې",
+lockTitle:'قفلول (Festschreibung د GoBD له مخې)',lockInfo:'تر دې نېټې پورې ثبتونه نور نه سمېږي او نه ړنګېږي، یوازې په معکوس ثبت سره اصلاح کېږي. قانون منظم قفلول غواړي (معمولاً د میاشتني/درې میاشتني اظهارنامې پر وخت).',
+lockUntil:'تر دې نېټې قفل',lockBtn:'وروستی قفل',lockedUntil:'قفل شوی تر',audit:'د بدلونونو ثبت',
+newInv:'نوی بل',customer:'پېرودونکی',custAddr:'د پېرودونکي پته',custUstid:'د پېرودونکي مالیاتي شمېره (اختیاري)',invDate:'د بل نېټه',lDate:'د تحویلي/خدمت نېټه',items:'توکي',desc:'تشریح',
+qty:'شمېر',price:'د یوه بیه (خالص)',rate:'د مالیې کچه',addItem:'+ توکی',net:'خالص',gross:'ناخالص',status:'حالت',open:'خلاص',paid:'ورکړل شوی',cancelled:'لغوه شوی',
+pay:'تادیه ثبتول',view:'کتل / چاپ',print:'چاپ / PDF',invNo:'د بل شمېره',payVia:'تادیه له لارې',close:'بندول',copy:'کاپي',copied:'کاپي شو',saved:'خوندي شو',deleted:'ړنګ شو',
+errBal:'پور، کرېډیټ او سمه اندازه وټاکئ',errSame:'پور او کرېډیټ یو حساب نشي کېدای',errLocked:'دا نېټه په قفل شوې دوره کې ده',errTrial:"ازموینه پای ته ورسېده. جواز واخلئ او کوډ په تنظیماتو کې ولیکئ.",
+cashNeg:'خبرداری: د صندوق بیلانس منفي شو — دا په قانوني ډول ممکن نه دی او کېدای شي په مالیاتي پلټنه کې ستاسو کتابونه رد شي.',
+period:'دوره',q:'درې میاشتنی',kz81:'۱۹٪ مالیې وړ پلور (Kz 81)',kz86:'۷٪ مالیې وړ پلور (Kz 86)',kz41:'د اروپايي اتحادیې دننه معاف تحویلي (Kz 41)',kz48:'نور معاف پلور (Kz 48)',kz66:'د کمولو وړ د پېرود مالیه (Kz 66)',kz83:'د ورکړې / بېرته اخیستو وړ اندازه (Kz 83)',
+taxAmt:'مالیه',base:'د مالیې بنسټ',ustNote:'دا د ELSTER لپاره مرستندوی شمېرې دي. رسمي سپارل د ELSTER یا مالیاتي مشاور له لارې کېږي.',
+euerNote:'د څارنې لپاره ساده EÜR (د ثبت شویو ثبتونو پر بنسټ). رسمي فورمه (Anlage EÜR) باید له مالیاتي مشاور سره چمتو شي.',
+ein:'سوداګریز عاید',aus:'سوداګریز لګښتونه',ustIn:'ترلاسه شوې د پلور مالیه',vstOut:'ورکړل شوې د پېرود مالیه',ustPaidL:'مالیې ادارې ته ورکړل شوې مالیه',
+gWe:'د مالونو پېرود',gPers:'د کارکوونکو لګښت',gRaum:'د ځای لګښت',gAfa:'استهلاک',gKfz:'د موټر لګښت',gSonst:'نور لګښتونه',
+aktiva:'شتمنۍ (Aktiva)',passiva:'پورونه او پانګه (Passiva)',ek:'د مالک پانګه',vortrag:'د تېرو کلونو پایلې او شخصي اخیستنې',privY:'د سږ کال شخصي حرکت',
+bilOk:'بیلانس برابر دی ✓',bilBad:'بیلانس برابر نه دی',opening:'پیل بیلانس',in:'راتلونکی',out:'وتونکی',
+demo:'آزمایښتي معلومات پورته کول',reset:'ټول معلومات ړنګول',confirm:'تایید',resetQ:'په دې براوزر کې ټول ثبتونه او بلونه ړنګېږي. ډاډه یاست؟ (لومړی بیک اپ واخلئ)',
+help:'چټک لارښود',legal:'قانوني یادونه',storageNote:'معلومات یوازې په همدې براوزر کې ساتل کېږي. منظم بیک اپ واخلئ.',importOk:'بېرته راوړل شو',importBad:'ناسم فایل',exportTitle:'لاندې منځپانګه کاپي او د فایل په توګه یې خوندي کړئ',
+tplSaleCash19:'نغدي پلور ۱۹٪',tplSaleCash7:'نغدي پلور ۷٪',tplSaleBank19:'د بانک له لارې پلور ۱۹٪',tplBuy19:'د مال پېرود ۱۹٪ (بانک)',tplBuy7:'د مال پېرود ۷٪ (بانک)',tplBuyCash7:'د مال پېرود ۷٪ (نغد)',
+tplRent:'کرایه',tplFuel:'تېل',tplTel:'تلیفون/انټرنېټ',tplFee:'د بانک فیس',tplPriv:'شخصي نغدي اخیستنه',tplEinl:'بانک ته شخصي زیرمه',tplKB:'له صندوق څخه بانک ته',tplUst:'مالیې ادارې ته د مالیې ورکړه',
+bookPrev:'پایله کې ثبتونه:',accNote:'د حسابونو شمېرې د DATEV <b>SKR{skr}</b> لړلیک له مخې دي. هغه حسابونه چې اتومات مالیه لري (لکه پلور ۱۹٪) ناخالص مبلغ په اتومات ډول په خالص + مالیه وېشي.',
+help1:'د شرکت معلومات ولیکئ او SKR03 (د سوداګرو لپاره تر ټولو عام) یا SKR04 د خپل مالیاتي مشاور له مخې وټاکئ.',
+help2:'پیل بیلانسونه ولیکئ: لکه بانک پور ← حساب 9000 کرېډیټ.',
+help3:'هره معامله په «ورځني ثبتونو» کې ولیکئ. چټک ثبتونه وکاروئ؛ تل ناخالص مبلغ ولیکئ، اپلیکېشن مالیه جلا کوي.',
+help4:'بلونه له «بلونو» جوړ کړئ؛ په اتومات ډول د پېرودونکو په حساب ثبتېږي. د تادیې پر وخت «تادیه ثبتول» کېکاږئ.',
+help5:'هره میاشت/درې میاشتې: «راپورونه ← اظهارنامه» پرانیزئ، شمېرې ELSTER ته ولېږدوئ او بیا دوره قفل کړئ.',
+help6:'CSV فایل صادر او خپل مالیاتي مشاور ته یې ولېږئ؛ منظم JSON بیک اپ واخلئ.',
+taxU:'د پلور مالیه',taxV:'د پېرود مالیه',startNote:'له <b>تنظیماتو</b> پیل وکړئ: د شرکت معلومات ولیکئ او SKR03 یا SKR04 وټاکئ. یا اپلیکېشن د <a href="#" id="demoLink">آزمایښتي معلوماتو</a> سره وازمویئ.',
+bookS:'پور',bookH:'کرېډیټ',invMissing:'په آلمان کې بل باید (د §14 UStG له مخې) ستاسو نوم، پته او مالیاتي شمېره ولري. دا په تنظیماتو کې بشپړ کړئ.',
+errInv:'د پېرودونکي نوم، د توکو تشریح او سمې اندازې ولیکئ',printNote:'د چاپ یا PDF لپاره: اپلیکېشن په جلا کړکۍ (یا ښکته شوي فایل) کې پرانیزئ او چاپ کېکاږئ.',
+ustKlein:'تاسو د کوچنۍ سوداګرۍ (§19) په توګه ثبت یاست: معمولاً UStVA ته اړتیا نه لرئ.',ustCent:'(په ELSTER کې بنسټونه بې سنتو لیکل کېږي.)',
+tseNote:'یادونه: برېښنايي کاشیر ماشین په قانوني ډول د TSE امنیتي ماډل ته اړتیا لري؛ دا د صندوق کتاب د هغه ځای نه نیسي.',
+errAccNo:'۴ رقمي شمېره او نوم ولیکئ',errAccDup:'دا شمېره دمخه کارول شوې',kleinNo:'نه — مالیه حسابوم',kleinYes:'هو — §19 UStG',
+legalText:'دا پروګرام د حساب ساتنې مرستندویه وسیله ده، رسمي تایید شوی سافټویر نه دی او ELSTER ته معلومات نه لېږي. د ثبتونو سموالی او د GoBD مقرراتو رعایت (۸–۱۰ کاله ساتنه، قفلول، د کړنلارې اسناد) د کاروونکي مسؤلیت دی. له مالیاتي مشاور سره مشوره سپارښتنه کېږي.',
+errUnlock:'قفل بېرته نشي خلاصېدای',errKey:'ناسمه کیلي',demoLoaded:'آزمایښتي معلومات پورته شول',
+trialOver:"۷ ورځنۍ وړیا ازموینه پای ته ورسېده. ستاسو معلومات خوندي دي او لیدلی او ایستلی یې شئ. د ثبت د دوام لپاره جواز واخلئ او کوډ ولیکئ.",buyNow:"اوس جواز واخلئ",enterCode:"د فعالولو کوډ ولیکئ",codeInfo:"له تادیې وروسته د فعالولو کوډ سمدستي ستاسو برېښنالیک ته درځي. کوډ یوازې یو ځل او په یوه وسیله فعالېږي.",activate:"فعالول",actOk:"په بریالیتوب فعال شو ✓ مننه!",actUsed:"دا کوډ مخکې په بله وسیله کارول شوی.",actBad:"کوډ ناسم دی. وګورئ او بیا هڅه وکړئ.",actNet:"فعالول انټرنېټ ته اړتیا لري.",actOff:"اتومات فعالول لا نشته. په واټس اپ کې پیغام راکړئ.",licRevoked:"دا جواز غیرفعال شو. په واټس اپ کې پیغام راکړئ."
+};
+TR.hi = {
+tagline:'व्यापारियों के लिए जर्मन लेखांकन',dash:'डैशबोर्ड',journal:'जर्नल प्रविष्टियाँ',invoices:'बिल',accounts:'खातों की सूची',reports:'रिपोर्ट',settings:'सेटिंग्स',
+revenue:'बिक्री (शुद्ध)',expenses:'खर्च (शुद्ध)',profit:'लाभ',bank:'बैंक शेष',cash:'नकद शेष',openRec:'बकाया बिल',vatDue:'कर कार्यालय को देय VAT',entriesN:'प्रविष्टियों की संख्या',monthly:'मासिक बिक्री और खर्च',
+date:'तारीख',beleg:'रसीद सं.',text:'विवरण',soll:'नामे (Soll)',haben:'जमा (Haben)',amount:'राशि (सकल)',tax:'कर',none:'कोई नहीं',
+save:'सहेजें',cancel:'रद्द करें',edit:'संपादित करें',del:'हटाएँ',storno:'उलट प्रविष्टि',newEntry:'नई प्रविष्टि',quick:'त्वरित प्रविष्टियाँ:',search:'खोजें…',all:'सभी',month:'महीना',locked:'लॉक',
+account:'खाता',name:'नाम',type:'प्रकार',balance:'शेष',year:'वित्तीय वर्ष',sum:'कुल',noData:'अभी कोई डेटा नहीं',
+tSalden:'तलपट (ट्रायल बैलेंस)',tGuv:'लाभ-हानि',tBilanz:'तुलन पत्र',tEuer:'EÜR (नकद आधारित परिणाम)',tUst:'VAT रिटर्न (UStVA)',tKasse:'रोकड़ बही',tJournal:'जर्नल',
+export:'निर्यात',csvSb:'कर सलाहकार के लिए CSV',backup:'बैकअप',restore:'पुनर्स्थापित करें',
+typeA:'संपत्ति',typeL:'देनदारी',typeE:'पूँजी',typeP:'निजी',typeR:'आय',typeX:'व्यय',addAcc:'खाता जोड़ें',number:'संख्या',
+firm:'कंपनी का नाम',owner:'मालिक',address:'पता',stnr:'कर संख्या',ustid:'VAT पहचान सं.',iban:'IBAN',bic:'BIC',bankName:'बैंक',email:'ईमेल',phone:'फ़ोन',
+skr:'खातों की सूची',klein:'लघु व्यवसाय (§19 UStG, बिना VAT)',prefix:'बिल संख्या उपसर्ग',terms:'भुगतान अवधि (दिन)',
+license:'लाइसेंस कुंजी',licOk:'लाइसेंस सक्रिय ✓',licTrial:"मुफ़्त ट्रायल: {n} दिन बाकी",
+lockTitle:'लॉक करना (Festschreibung, GoBD)',lockInfo:'इस तारीख तक की प्रविष्टियाँ अब बदली या हटाई नहीं जा सकतीं, केवल उलटी जा सकती हैं। कानून नियमित लॉक करना आवश्यक मानता है (आमतौर पर मासिक/तिमाही VAT रिटर्न भरते समय)।',
+lockUntil:'इस तारीख तक लॉक',lockBtn:'स्थायी रूप से लॉक करें',lockedUntil:'लॉक तक',audit:'परिवर्तन लॉग',
+newInv:'नया बिल',customer:'ग्राहक',custAddr:'ग्राहक का पता',custUstid:'ग्राहक VAT सं. (वैकल्पिक)',invDate:'बिल की तारीख',lDate:'डिलीवरी/सेवा की तारीख',items:'मदें',desc:'विवरण',
+qty:'मात्रा',price:'इकाई मूल्य (शुद्ध)',rate:'VAT दर',addItem:'+ मद',net:'शुद्ध',gross:'सकल',status:'स्थिति',open:'बकाया',paid:'भुगतान हुआ',cancelled:'रद्द',
+pay:'भुगतान दर्ज करें',view:'देखें / प्रिंट',print:'प्रिंट / PDF',invNo:'बिल सं.',payVia:'भुगतान माध्यम',close:'बंद करें',copy:'कॉपी',copied:'कॉपी हो गया',saved:'सहेजा गया',deleted:'हटाया गया',
+errBal:'नामे, जमा और सही राशि चुनें',errSame:'नामे और जमा एक ही खाता नहीं हो सकते',errLocked:'यह तारीख लॉक अवधि में है',errTrial:"ट्रायल खत्म। लाइसेंस खरीदें और सेटिंग्स में कोड डालें।",
+cashNeg:'चेतावनी: नकद शेष ऋणात्मक हो गया — यह कानूनी रूप से संभव नहीं है और कर जाँच में आपकी बहियाँ अस्वीकार हो सकती हैं।',
+period:'अवधि',q:'तिमाही',kz81:'19% कर योग्य बिक्री (Kz 81)',kz86:'7% कर योग्य बिक्री (Kz 86)',kz41:'EU के भीतर कर-मुक्त आपूर्ति (Kz 41)',kz48:'अन्य कर-मुक्त बिक्री (Kz 48)',kz66:'घटाने योग्य इनपुट VAT (Kz 66)',kz83:'देय / वापसी योग्य राशि (Kz 83)',
+taxAmt:'कर',base:'कर आधार',ustNote:'ये ELSTER के लिए सहायक आँकड़े हैं। आधिकारिक जमा ELSTER या कर सलाहकार के माध्यम से होता है।',
+euerNote:'निगरानी के लिए सरलीकृत EÜR (दर्ज प्रविष्टियों के आधार पर)। आधिकारिक फ़ॉर्म (Anlage EÜR) कर सलाहकार के साथ तैयार करें।',
+ein:'व्यावसायिक आय',aus:'व्यावसायिक खर्च',ustIn:'प्राप्त VAT',vstOut:'भुगतान किया इनपुट VAT',ustPaidL:'कर कार्यालय को भुगतान किया VAT',
+gWe:'माल की खरीद',gPers:'कर्मचारी खर्च',gRaum:'परिसर खर्च',gAfa:'मूल्यह्रास',gKfz:'वाहन खर्च',gSonst:'अन्य खर्च',
+aktiva:'संपत्तियाँ (Aktiva)',passiva:'देनदारियाँ और पूँजी (Passiva)',ek:'स्वामी की पूँजी',vortrag:'पिछले वर्षों के परिणाम और निजी निकासी',privY:'इस वर्ष की निजी गतिविधि',
+bilOk:'तुलन पत्र संतुलित है ✓',bilBad:'तुलन पत्र संतुलित नहीं है',opening:'प्रारंभिक शेष',in:'आवक',out:'जावक',
+demo:'डेमो डेटा लोड करें',reset:'सारा डेटा हटाएँ',confirm:'पुष्टि करें',resetQ:'इस ब्राउज़र की सभी प्रविष्टियाँ और बिल हटा दिए जाएँगे। क्या आप निश्चित हैं? (पहले बैकअप लें)',
+help:'त्वरित मार्गदर्शिका',legal:'कानूनी सूचना',storageNote:'डेटा केवल इसी ब्राउज़र में रहता है। नियमित बैकअप लें।',importOk:'पुनर्स्थापित हुआ',importBad:'अमान्य फ़ाइल',exportTitle:'नीचे की सामग्री कॉपी करें और फ़ाइल के रूप में सहेजें',
+tplSaleCash19:'नकद बिक्री 19%',tplSaleCash7:'नकद बिक्री 7%',tplSaleBank19:'बैंक बिक्री 19%',tplBuy19:'माल खरीद 19% (बैंक)',tplBuy7:'माल खरीद 7% (बैंक)',tplBuyCash7:'माल खरीद 7% (नकद)',
+tplRent:'किराया',tplFuel:'ईंधन',tplTel:'फ़ोन/इंटरनेट',tplFee:'बैंक शुल्क',tplPriv:'निजी नकद निकासी',tplEinl:'बैंक में निजी जमा',tplKB:'नकद से बैंक',tplUst:'कर कार्यालय को VAT भुगतान',
+bookPrev:'परिणामी प्रविष्टियाँ:',accNote:'खाता संख्याएँ DATEV <b>SKR{skr}</b> सूची के अनुसार हैं। स्वचालित कर वाले खाते (जैसे बिक्री 19%) सकल राशि को अपने आप शुद्ध + कर में बाँटते हैं।',
+help1:'कंपनी का विवरण डालें और अपने कर सलाहकार के अनुसार SKR03 (व्यापारियों में सबसे आम) या SKR04 चुनें।',
+help2:'प्रारंभिक शेष डालें: जैसे बैंक नामे → खाता 9000 जमा।',
+help3:'हर लेन-देन «जर्नल प्रविष्टियाँ» में दर्ज करें। त्वरित प्रविष्टियाँ उपयोग करें; हमेशा सकल राशि डालें, ऐप कर अलग कर देता है।',
+help4:'«बिल» में बिल बनाएँ; वे अपने आप ग्राहक खाते में दर्ज होते हैं। भुगतान मिलने पर «भुगतान दर्ज करें» दबाएँ।',
+help5:'हर महीने/तिमाही: «रिपोर्ट → VAT रिटर्न» खोलें, आँकड़े ELSTER में डालें, फिर अवधि लॉक करें।',
+help6:'CSV निर्यात करके कर सलाहकार को भेजें; नियमित रूप से JSON बैकअप लें।',
+taxU:'बिक्री VAT',taxV:'इनपुट VAT',startNote:'<b>सेटिंग्स</b> से शुरू करें: कंपनी का विवरण डालें और SKR03 या SKR04 चुनें। या ऐप को <a href="#" id="demoLink">डेमो डेटा</a> के साथ आज़माएँ।',
+bookS:'नामे',bookH:'जमा',invMissing:'जर्मनी में बिल में (§14 UStG के अनुसार) आपका नाम, पता और कर संख्या या VAT पहचान सं. होना ज़रूरी है। इन्हें सेटिंग्स में पूरा करें।',
+errInv:'ग्राहक का नाम, मदों का विवरण और सही राशियाँ डालें',printNote:'प्रिंट या PDF के लिए: ऐप को अलग विंडो (या डाउनलोड की गई फ़ाइल) में खोलें और प्रिंट दबाएँ।',
+ustKlein:'आप लघु व्यवसाय (§19) के रूप में पंजीकृत हैं: आमतौर पर VAT रिटर्न की ज़रूरत नहीं होती।',ustCent:'(ELSTER में कर आधार बिना सेंट के लिखे जाते हैं।)',
+tseNote:'ध्यान दें: इलेक्ट्रॉनिक कैश रजिस्टर के लिए कानूनन TSE सुरक्षा मॉड्यूल ज़रूरी है; यह रोकड़ बही उसकी जगह नहीं लेती।',
+errAccNo:'4 अंकों की संख्या और नाम डालें',errAccDup:'संख्या पहले से उपयोग में है',kleinNo:'नहीं — मैं VAT लेता हूँ',kleinYes:'हाँ — §19 UStG',
+legalText:'यह प्रोग्राम बहीखाता सहायक उपकरण है, आधिकारिक रूप से प्रमाणित सॉफ़्टवेयर नहीं है और ELSTER को डेटा नहीं भेजता। प्रविष्टियों की शुद्धता और GoBD नियमों (8–10 वर्ष संग्रह, लॉक करना, प्रक्रिया दस्तावेज़) का पालन उपयोगकर्ता की ज़िम्मेदारी है। कर सलाहकार से परामर्श की सलाह दी जाती है।',
+errUnlock:'लॉक वापस नहीं हटाया जा सकता',errKey:'अमान्य कुंजी',demoLoaded:'डेमो डेटा लोड हुआ',
+trialOver:"7 दिन का मुफ़्त ट्रायल खत्म हो गया। आपका डेटा सुरक्षित है, आप उसे देख और एक्सपोर्ट कर सकते हैं। आगे प्रविष्टि के लिए लाइसेंस खरीदें और कोड डालें।",buyNow:"अभी लाइसेंस खरीदें",enterCode:"एक्टिवेशन कोड डालें",codeInfo:"भुगतान के तुरंत बाद एक्टिवेशन कोड ई-मेल से मिलता है। कोड केवल एक बार, एक डिवाइस पर सक्रिय होता है।",activate:"सक्रिय करें",actOk:"सफलतापूर्वक सक्रिय ✓ धन्यवाद!",actUsed:"यह कोड पहले ही किसी दूसरे डिवाइस पर इस्तेमाल हो चुका है।",actBad:"कोड गलत है। जाँचें और फिर से कोशिश करें।",actNet:"एक्टिवेशन के लिए इंटरनेट चाहिए।",actOff:"स्वचालित एक्टिवेशन अभी उपलब्ध नहीं। WhatsApp पर संपर्क करें।",licRevoked:"यह लाइसेंस निष्क्रिय कर दिया गया है। WhatsApp पर संपर्क करें।"
+};
+TR.vi = {
+tagline:'Kế toán Đức cho thương nhân',dash:'Tổng quan',journal:'Bút toán',invoices:'Hóa đơn',accounts:'Hệ thống tài khoản',reports:'Báo cáo',settings:'Cài đặt',
+revenue:'Doanh thu (thuần)',expenses:'Chi phí (thuần)',profit:'Lợi nhuận',bank:'Số dư ngân hàng',cash:'Số dư quỹ tiền mặt',openRec:'Hóa đơn chưa thanh toán',vatDue:'Thuế GTGT phải nộp cơ quan thuế',entriesN:'Số bút toán',monthly:'Doanh thu và chi phí theo tháng',
+date:'Ngày',beleg:'Số chứng từ',text:'Diễn giải',soll:'Nợ (Soll)',haben:'Có (Haben)',amount:'Số tiền (gộp thuế)',tax:'Thuế',none:'không',
+save:'Lưu',cancel:'Hủy',edit:'Sửa',del:'Xóa',storno:'Bút toán đảo',newEntry:'Bút toán mới',quick:'Bút toán nhanh:',search:'Tìm…',all:'Tất cả',month:'Tháng',locked:'đã khóa',
+account:'Tài khoản',name:'Tên',type:'Loại',balance:'Số dư',year:'Năm tài chính',sum:'Tổng',noData:'Chưa có dữ liệu',
+tSalden:'Bảng cân đối số phát sinh',tGuv:'Lãi và lỗ',tBilanz:'Bảng cân đối kế toán',tEuer:'EÜR (kết quả theo dòng tiền)',tUst:'Tờ khai thuế GTGT (UStVA)',tKasse:'Sổ quỹ tiền mặt',tJournal:'Sổ nhật ký',
+export:'Xuất',csvSb:'CSV cho cố vấn thuế',backup:'Sao lưu',restore:'Khôi phục',
+typeA:'Tài sản',typeL:'Nợ phải trả',typeE:'Vốn chủ sở hữu',typeP:'Cá nhân',typeR:'Thu nhập',typeX:'Chi phí',addAcc:'Thêm tài khoản',number:'Số',
+firm:'Tên công ty',owner:'Chủ sở hữu',address:'Địa chỉ',stnr:'Mã số thuế',ustid:'Mã số thuế GTGT',iban:'IBAN',bic:'BIC',bankName:'Ngân hàng',email:'Email',phone:'Điện thoại',
+skr:'Hệ thống tài khoản',klein:'Doanh nghiệp nhỏ (§19 UStG, không thuế GTGT)',prefix:'Tiền tố số hóa đơn',terms:'Hạn thanh toán (ngày)',
+license:'Mã bản quyền',licOk:'Bản quyền đã kích hoạt ✓',licTrial:"Dùng thử miễn phí: còn {n} ngày",
+lockTitle:'Khóa sổ (Festschreibung, GoBD)',lockInfo:'Các bút toán đến ngày này không thể sửa hoặc xóa nữa, chỉ có thể đảo. Luật yêu cầu khóa sổ định kỳ (thường khi nộp tờ khai thuế GTGT hằng tháng/quý).',
+lockUntil:'Khóa đến ngày',lockBtn:'Khóa vĩnh viễn',lockedUntil:'Đã khóa đến',audit:'Nhật ký thay đổi',
+newInv:'Hóa đơn mới',customer:'Khách hàng',custAddr:'Địa chỉ khách hàng',custUstid:'Mã số thuế GTGT khách hàng (tùy chọn)',invDate:'Ngày hóa đơn',lDate:'Ngày giao hàng/dịch vụ',items:'Các mục',desc:'Mô tả',
+qty:'SL',price:'Đơn giá (chưa thuế)',rate:'Thuế suất',addItem:'+ Mục',net:'Chưa thuế',gross:'Gồm thuế',status:'Trạng thái',open:'chưa trả',paid:'đã trả',cancelled:'đã hủy',
+pay:'Ghi nhận thanh toán',view:'Xem / In',print:'In / PDF',invNo:'Số hóa đơn',payVia:'Thanh toán qua',close:'Đóng',copy:'Sao chép',copied:'Đã sao chép',saved:'Đã lưu',deleted:'Đã xóa',
+errBal:'Chọn tài khoản Nợ, Có và số tiền hợp lệ',errSame:'Nợ và Có không thể cùng một tài khoản',errLocked:'Ngày này thuộc kỳ đã khóa',errTrial:"Hết thời gian dùng thử. Hãy mua bản quyền và nhập mã trong Cài đặt.",
+cashNeg:'Cảnh báo: số dư quỹ tiền mặt bị âm — điều này không hợp lệ về mặt pháp lý và có thể khiến sổ sách bị bác bỏ khi thanh tra thuế.',
+period:'Kỳ',q:'Quý',kz81:'Doanh thu chịu thuế 19% (Kz 81)',kz86:'Doanh thu chịu thuế 7% (Kz 86)',kz41:'Giao hàng nội khối EU miễn thuế (Kz 41)',kz48:'Doanh thu miễn thuế khác (Kz 48)',kz66:'Thuế GTGT đầu vào được khấu trừ (Kz 66)',kz83:'Số phải nộp / được hoàn (Kz 83)',
+taxAmt:'Thuế',base:'Giá tính thuế',ustNote:'Đây là số liệu hỗ trợ cho ELSTER. Việc nộp chính thức qua ELSTER hoặc cố vấn thuế.',
+euerNote:'EÜR giản lược để theo dõi (dựa trên các bút toán đã ghi). Mẫu chính thức (Anlage EÜR) nên lập cùng cố vấn thuế.',
+ein:'Thu nhập kinh doanh',aus:'Chi phí kinh doanh',ustIn:'Thuế GTGT đã thu',vstOut:'Thuế GTGT đầu vào đã trả',ustPaidL:'Thuế GTGT đã nộp cơ quan thuế',
+gWe:'Mua hàng hóa',gPers:'Chi phí nhân sự',gRaum:'Chi phí mặt bằng',gAfa:'Khấu hao',gKfz:'Chi phí xe',gSonst:'Chi phí khác',
+aktiva:'Tài sản (Aktiva)',passiva:'Nợ và vốn (Passiva)',ek:'Vốn chủ sở hữu',vortrag:'Kết quả và rút vốn cá nhân các năm trước',privY:'Giao dịch cá nhân năm nay',
+bilOk:'Bảng cân đối cân bằng ✓',bilBad:'Bảng cân đối không cân bằng',opening:'Số dư đầu kỳ',in:'Thu',out:'Chi',
+demo:'Tải dữ liệu mẫu',reset:'Xóa toàn bộ dữ liệu',confirm:'Xác nhận',resetQ:'Toàn bộ bút toán và hóa đơn trong trình duyệt này sẽ bị xóa. Bạn chắc chứ? (Hãy sao lưu trước)',
+help:'Hướng dẫn nhanh',legal:'Thông báo pháp lý',storageNote:'Dữ liệu chỉ lưu trong trình duyệt này. Hãy sao lưu thường xuyên.',importOk:'Đã khôi phục',importBad:'Tệp không hợp lệ',exportTitle:'Sao chép nội dung dưới đây và lưu thành tệp',
+tplSaleCash19:'Bán tiền mặt 19%',tplSaleCash7:'Bán tiền mặt 7%',tplSaleBank19:'Bán qua ngân hàng 19%',tplBuy19:'Mua hàng 19% (ngân hàng)',tplBuy7:'Mua hàng 7% (ngân hàng)',tplBuyCash7:'Mua hàng 7% (tiền mặt)',
+tplRent:'Tiền thuê',tplFuel:'Nhiên liệu',tplTel:'Điện thoại/Internet',tplFee:'Phí ngân hàng',tplPriv:'Rút tiền mặt cá nhân',tplEinl:'Nộp vốn cá nhân vào ngân hàng',tplKB:'Nộp quỹ vào ngân hàng',tplUst:'Nộp thuế GTGT',
+bookPrev:'Bút toán phát sinh:',accNote:'Số tài khoản theo hệ thống DATEV <b>SKR{skr}</b>. Tài khoản có thuế tự động (vd. doanh thu 19%) tự tách số tiền gộp thành chưa thuế + thuế.',
+help1:'Nhập thông tin công ty và chọn SKR03 (phổ biến nhất với thương nhân) hoặc SKR04 theo cố vấn thuế của bạn.',
+help2:'Nhập số dư đầu kỳ: vd. Ngân hàng Nợ → tài khoản 9000 Có.',
+help3:'Ghi mọi giao dịch trong «Bút toán». Dùng bút toán nhanh; luôn nhập số tiền gồm thuế, ứng dụng tự tách thuế.',
+help4:'Tạo hóa đơn trong «Hóa đơn»; chúng tự ghi vào phải thu khách hàng. Khi được trả, bấm «Ghi nhận thanh toán».',
+help5:'Mỗi tháng/quý: mở «Báo cáo → Tờ khai thuế GTGT», chuyển số liệu vào ELSTER rồi khóa kỳ.',
+help6:'Xuất CSV gửi cố vấn thuế; sao lưu JSON thường xuyên.',
+taxU:'Thuế GTGT đầu ra',taxV:'Thuế GTGT đầu vào',startNote:'Bắt đầu tại <b>Cài đặt</b>: nhập thông tin công ty và chọn SKR03 hoặc SKR04. Hoặc thử ứng dụng với <a href="#" id="demoLink">dữ liệu mẫu</a>.',
+bookS:'Nợ',bookH:'Có',invMissing:'Ở Đức, hóa đơn phải có (theo §14 UStG) tên, địa chỉ và mã số thuế hoặc mã số thuế GTGT của bạn. Hãy bổ sung trong Cài đặt.',
+errInv:'Nhập tên khách hàng, mô tả các mục và số tiền hợp lệ',printNote:'Để in hoặc lưu PDF: mở ứng dụng trong cửa sổ riêng (hoặc tệp đã tải về) rồi bấm In.',
+ustKlein:'Bạn đăng ký là doanh nghiệp nhỏ (§19): thường không cần nộp tờ khai thuế GTGT.',ustCent:'(Trong ELSTER, giá tính thuế nhập không có xu.)',
+tseNote:'Lưu ý: máy tính tiền điện tử bắt buộc phải có mô-đun bảo mật TSE; sổ quỹ này không thay thế được.',
+errAccNo:'Nhập số gồm 4 chữ số và tên',errAccDup:'Số đã được dùng',kleinNo:'Không — tôi tính thuế GTGT',kleinYes:'Có — §19 UStG',
+legalText:'Chương trình này là công cụ hỗ trợ ghi sổ, không phải phần mềm được chứng nhận chính thức và không gửi dữ liệu tới ELSTER. Người dùng chịu trách nhiệm về tính đúng đắn của bút toán và tuân thủ GoBD (lưu trữ 8–10 năm, khóa sổ, tài liệu quy trình). Nên tham khảo cố vấn thuế.',
+errUnlock:'Không thể mở khóa',errKey:'Mã không hợp lệ',demoLoaded:'Đã tải dữ liệu mẫu',
+trialOver:"Thời gian dùng thử 7 ngày đã hết. Dữ liệu của bạn vẫn được giữ, bạn vẫn xem và xuất được. Để tiếp tục ghi sổ, hãy mua bản quyền và nhập mã.",buyNow:"Mua bản quyền ngay",enterCode:"Nhập mã kích hoạt",codeInfo:"Sau khi thanh toán, mã kích hoạt được gửi ngay qua e-mail. Mã chỉ kích hoạt được một lần, trên một thiết bị.",activate:"Kích hoạt",actOk:"Kích hoạt thành công ✓ Cảm ơn bạn!",actUsed:"Mã này đã được dùng trên thiết bị khác.",actBad:"Mã không hợp lệ. Vui lòng kiểm tra và thử lại.",actNet:"Kích hoạt cần kết nối internet.",actOff:"Kích hoạt tự động chưa sẵn sàng. Hãy nhắn WhatsApp cho chúng tôi.",licRevoked:"Bản quyền này đã bị vô hiệu. Hãy nhắn WhatsApp cho chúng tôi."
+};
+
+Object.assign(TR.en,{"devBy": "Developed & © by", "about": "About", "rights": "All rights reserved. Copying or reselling this program without the developer’s permission is prohibited."});
+Object.assign(TR.es,{"devBy": "Desarrollado y © por", "about": "Acerca de", "rights": "Todos los derechos reservados. Prohibida la copia o reventa sin permiso del desarrollador."});
+Object.assign(TR.tr,{"devBy": "Geliştiren ve © sahibi", "about": "Program hakkında", "rights": "Tüm hakları saklıdır. Programın geliştiricinin izni olmadan kopyalanması veya yeniden satılması yasaktır."});
+Object.assign(TR.fa,{"devBy": "توسعه و حق نشر", "about": "درباره برنامه", "rights": "تمام حقوق محفوظ است. کپی یا فروش مجدد برنامه بدون اجازه توسعه‌دهنده ممنوع است."});
+Object.assign(TR.ps,{"devBy": "جوړونکی او د خپرولو حق", "about": "د پروګرام په اړه", "rights": "ټول حقونه خوندي دي. د جوړونکي له اجازې پرته د پروګرام کاپي یا بیا پلورل منع دي."});
+Object.assign(TR.hi,{"devBy": "विकास एवं © अधिकार", "about": "प्रोग्राम के बारे में", "rights": "सर्वाधिकार सुरक्षित। डेवलपर की अनुमति के बिना प्रोग्राम की नकल या पुनर्विक्रय निषिद्ध है।"});
+Object.assign(TR.vi,{"devBy": "Phát triển & bản quyền", "about": "Giới thiệu", "rights": "Bảo lưu mọi quyền. Cấm sao chép hoặc bán lại chương trình khi chưa có sự cho phép của nhà phát triển."});
+const LANGS = [['ar','العربية'],['de','Deutsch'],['en','English'],['es','Español'],['tr','Türkçe'],['fa','فارسی'],['ps','پښتو'],['hi','हिन्दी'],['vi','Tiếng Việt']];
+const RTL = ['ar','fa','ps'];
+const ACC_EN = {"bueroAus": "Office furniture", "laden": "Shop fittings", "gwg": "Low-value assets", "masch": "Machinery", "pkw": "Cars", "kasse": "Cash", "bank": "Bank", "transit": "Cash in transit", "ford": "Trade receivables", "vst7": "Input VAT 7%", "vst19": "Input VAT 19%", "darlehen": "Bank loans", "verb": "Trade payables", "sverb": "Other liabilities", "ust7": "Output VAT 7%", "ust19": "Output VAT 19%", "ustvz": "VAT prepayments", "kapital": "Owner capital", "eb": "Opening balances", "privat": "Private withdrawals", "einlage": "Private contributions", "erl19": "Sales 19% VAT", "erl7": "Sales 7% VAT", "erl0": "Tax-exempt sales", "erligl": "Tax-free intra-EU supplies", "erlklein": "Sales as small business (\u00a719)", "sonstErtrag": "Other operating income", "zinsertrag": "Interest income", "we19": "Goods purchased 19% VAT", "we7": "Goods purchased 7% VAT", "we0": "Goods purchased (no VAT)", "gehalt": "Salaries", "sozial": "Social security contributions", "miete": "Rent", "energie": "Gas, electricity, water", "versich": "Insurance", "beitraege": "Fees and memberships", "kfzsteuer": "Vehicle tax", "kfz": "Vehicle running costs / fuel", "kfzrep": "Vehicle repairs", "werbung": "Advertising", "bewirt": "Entertainment", "reise": "Travel expenses (owner)", "afa": "Depreciation", "gwgafa": "Immediate write-off of low-value assets", "sonstAufw": "Other operating expenses", "porto": "Postage", "tel": "Phone and internet", "buero": "Office supplies", "beratung": "Legal and consulting fees", "buchf": "Bookkeeping costs", "geld": "Bank charges", "zinsaufw": "Interest expense"};
+const t = k => { if(LANG==='ar') return T[k]?T[k][0]:k; if(LANG==='de') return T[k]?T[k][1]:k; const d=TR[LANG]||{}; return d[k] ?? (TR.en[k] ?? (T[k]?T[k][1]:k)); };
+// account name in current language: Arabic, English; other languages show the official German SKR name
+const ACC_TR = {
+es:{bueroAus:'Mobiliario de oficina',laden:'Instalaciones de tienda',gwg:'Activos de bajo valor',masch:'Maquinaria',pkw:'Turismos',kasse:'Caja',bank:'Banco',transit:'Dinero en tránsito',ford:'Clientes (deudores)',vst7:'IVA soportado 7%',vst19:'IVA soportado 19%',darlehen:'Préstamos bancarios',verb:'Proveedores (acreedores)',sverb:'Otras deudas',ust7:'IVA repercutido 7%',ust19:'IVA repercutido 19%',ustvz:'Pagos de IVA a Hacienda',kapital:'Capital del titular',eb:'Saldos iniciales',privat:'Retiros privados',einlage:'Aportaciones privadas',erl19:'Ventas 19% IVA',erl7:'Ventas 7% IVA',erl0:'Ventas exentas',erligl:'Entregas intracomunitarias exentas',erlklein:'Ventas pequeña empresa (§19)',sonstErtrag:'Otros ingresos',zinsertrag:'Ingresos por intereses',we19:'Compras de mercancía 19% IVA',we7:'Compras de mercancía 7% IVA',we0:'Compras de mercancía (sin IVA)',gehalt:'Sueldos',sozial:'Seguridad social',miete:'Alquiler',energie:'Gas, luz, agua',versich:'Seguros',beitraege:'Cuotas y tasas',kfzsteuer:'Impuesto de vehículos',kfz:'Gastos de vehículo / combustible',kfzrep:'Reparaciones de vehículo',werbung:'Publicidad',bewirt:'Gastos de atenciones',reise:'Gastos de viaje (titular)',afa:'Amortizaciones',gwgafa:'Amortización inmediata de activos menores',sonstAufw:'Otros gastos de explotación',porto:'Franqueo',tel:'Teléfono e internet',buero:'Material de oficina',beratung:'Asesoría jurídica',buchf:'Gastos de contabilidad',geld:'Comisiones bancarias',zinsaufw:'Gastos por intereses'},
+tr:{bueroAus:'Ofis mobilyası',laden:'Mağaza donanımı',gwg:'Düşük değerli varlıklar',masch:'Makineler',pkw:'Binek araçlar',kasse:'Kasa',bank:'Banka',transit:'Yoldaki para',ford:'Alıcılar (müşteri alacakları)',vst7:'İndirilecek KDV %7',vst19:'İndirilecek KDV %19',darlehen:'Banka kredileri',verb:'Satıcılar (tedarikçi borçları)',sverb:'Diğer borçlar',ust7:'Hesaplanan KDV %7',ust19:'Hesaplanan KDV %19',ustvz:'Vergi dairesine KDV ödemeleri',kapital:'Sermaye',eb:'Açılış bakiyeleri',privat:'Özel çekimler',einlage:'Özel yatırımlar',erl19:'Satışlar %19 KDV',erl7:'Satışlar %7 KDV',erl0:'Vergisiz satışlar',erligl:'AB içi vergisiz teslimler',erlklein:'Küçük işletme satışları (§19)',sonstErtrag:'Diğer gelirler',zinsertrag:'Faiz gelirleri',we19:'Mal alımı %19 KDV',we7:'Mal alımı %7 KDV',we0:'Mal alımı (KDV’siz)',gehalt:'Maaşlar',sozial:'Sosyal güvenlik giderleri',miete:'Kira',energie:'Gaz, elektrik, su',versich:'Sigortalar',beitraege:'Aidat ve harçlar',kfzsteuer:'Motorlu taşıt vergisi',kfz:'Araç işletme giderleri / yakıt',kfzrep:'Araç tamiri',werbung:'Reklam giderleri',bewirt:'Ağırlama giderleri',reise:'Seyahat giderleri (işletme sahibi)',afa:'Amortismanlar',gwgafa:'Düşük değerli varlıkların doğrudan giderleştirilmesi',sonstAufw:'Diğer işletme giderleri',porto:'Posta',tel:'Telefon ve internet',buero:'Kırtasiye',beratung:'Hukuk ve danışmanlık',buchf:'Muhasebe giderleri',geld:'Banka masrafları',zinsaufw:'Faiz giderleri'},
+fa:{bueroAus:'اثاثیه اداری',laden:'تجهیزات فروشگاه',gwg:'دارایی‌های کم‌ارزش',masch:'ماشین‌آلات',pkw:'خودروها',kasse:'صندوق',bank:'بانک',transit:'وجوه در راه',ford:'حساب‌های دریافتنی (مشتریان)',vst7:'مالیات خرید ۷٪',vst19:'مالیات خرید ۱۹٪',darlehen:'وام‌های بانکی',verb:'حساب‌های پرداختنی (تأمین‌کنندگان)',sverb:'سایر بدهی‌ها',ust7:'مالیات فروش ۷٪',ust19:'مالیات فروش ۱۹٪',ustvz:'پیش‌پرداخت مالیات به اداره مالیات',kapital:'سرمایه مالک',eb:'مانده‌های افتتاحیه',privat:'برداشت‌های شخصی',einlage:'آورده‌های شخصی',erl19:'فروش با مالیات ۱۹٪',erl7:'فروش با مالیات ۷٪',erl0:'فروش معاف از مالیات',erligl:'تحویل‌های معاف داخل اتحادیه اروپا',erlklein:'فروش کسب‌وکار کوچک (§19)',sonstErtrag:'سایر درآمدها',zinsertrag:'درآمد بهره',we19:'خرید کالا با مالیات ۱۹٪',we7:'خرید کالا با مالیات ۷٪',we0:'خرید کالا (بدون مالیات)',gehalt:'حقوق و دستمزد',sozial:'بیمه‌های اجتماعی',miete:'اجاره',energie:'گاز، برق، آب',versich:'بیمه‌ها',beitraege:'حق عضویت و عوارض',kfzsteuer:'مالیات خودرو',kfz:'هزینه‌های جاری خودرو / سوخت',kfzrep:'تعمیر خودرو',werbung:'تبلیغات',bewirt:'هزینه پذیرایی',reise:'هزینه سفر (مالک)',afa:'استهلاک',gwgafa:'استهلاک فوری دارایی‌های کم‌ارزش',sonstAufw:'سایر هزینه‌های عملیاتی',porto:'پست',tel:'تلفن و اینترنت',buero:'لوازم اداری',beratung:'هزینه حقوقی و مشاوره',buchf:'هزینه حسابداری',geld:'کارمزد بانکی',zinsaufw:'هزینه بهره'},
+ps:{bueroAus:'د دفتر فرنیچر',laden:'د دوکان تجهیزات',gwg:'کم ارزښته شتمنۍ',masch:'ماشینونه',pkw:'موټرونه',kasse:'صندوق',bank:'بانک',transit:'په لاره کې پیسې',ford:'د پېرودونکو پورونه (اخیستونکي)',vst7:'د پېرود مالیه ۷٪',vst19:'د پېرود مالیه ۱۹٪',darlehen:'بانکي پورونه',verb:'د عرضه کوونکو پورونه (ورکوونکي)',sverb:'نور پورونه',ust7:'د پلور مالیه ۷٪',ust19:'د پلور مالیه ۱۹٪',ustvz:'مالیې ادارې ته د مالیې مخکې ورکړې',kapital:'د مالک پانګه',eb:'پیل بیلانسونه',privat:'شخصي اخیستنې',einlage:'شخصي زیرمې',erl19:'پلور د ۱۹٪ مالیې سره',erl7:'پلور د ۷٪ مالیې سره',erl0:'له مالیې معاف پلور',erligl:'د اروپايي اتحادیې دننه معاف تحویلي',erlklein:'د کوچنۍ سوداګرۍ پلور (§19)',sonstErtrag:'نور عایدات',zinsertrag:'د ګټې (سود) عاید',we19:'د مال پېرود د ۱۹٪ مالیې سره',we7:'د مال پېرود د ۷٪ مالیې سره',we0:'د مال پېرود (بې مالیې)',gehalt:'معاشونه',sozial:'ټولنیز بیمې',miete:'کرایه',energie:'ګاز، برېښنا، اوبه',versich:'بیمې',beitraege:'غړیتوب او فیسونه',kfzsteuer:'د موټر مالیه',kfz:'د موټر جاري لګښت / تېل',kfzrep:'د موټر ترمیم',werbung:'اعلانات',bewirt:'د مېلمستیا لګښت',reise:'د سفر لګښت (مالک)',afa:'استهلاک',gwgafa:'د کم ارزښته شتمنیو سمدستي استهلاک',sonstAufw:'نور عملیاتي لګښتونه',porto:'پوسته',tel:'تلیفون او انټرنېټ',buero:'د دفتر توکي',beratung:'حقوقي او مشورتي لګښت',buchf:'د حساب ساتنې لګښت',geld:'بانکي فیسونه',zinsaufw:'د ګټې (سود) لګښت'},
+hi:{bueroAus:'कार्यालय फ़र्नीचर',laden:'दुकान की साज-सज्जा',gwg:'कम मूल्य की संपत्तियाँ',masch:'मशीनें',pkw:'कारें',kasse:'नकद (रोकड़)',bank:'बैंक',transit:'मार्गस्थ धन',ford:'देनदार (ग्राहकों से प्राप्य)',vst7:'इनपुट VAT 7%',vst19:'इनपुट VAT 19%',darlehen:'बैंक ऋण',verb:'लेनदार (आपूर्तिकर्ताओं को देय)',sverb:'अन्य देनदारियाँ',ust7:'बिक्री VAT 7%',ust19:'बिक्री VAT 19%',ustvz:'कर कार्यालय को VAT अग्रिम भुगतान',kapital:'मालिक की पूँजी',eb:'प्रारंभिक शेष',privat:'निजी निकासी',einlage:'निजी जमा',erl19:'बिक्री 19% VAT',erl7:'बिक्री 7% VAT',erl0:'कर-मुक्त बिक्री',erligl:'EU के भीतर कर-मुक्त आपूर्ति',erlklein:'लघु व्यवसाय बिक्री (§19)',sonstErtrag:'अन्य आय',zinsertrag:'ब्याज आय',we19:'माल खरीद 19% VAT',we7:'माल खरीद 7% VAT',we0:'माल खरीद (बिना VAT)',gehalt:'वेतन',sozial:'सामाजिक सुरक्षा अंशदान',miete:'किराया',energie:'गैस, बिजली, पानी',versich:'बीमा',beitraege:'सदस्यता शुल्क',kfzsteuer:'वाहन कर',kfz:'वाहन चलाने का खर्च / ईंधन',kfzrep:'वाहन मरम्मत',werbung:'विज्ञापन',bewirt:'आतिथ्य खर्च',reise:'यात्रा खर्च (मालिक)',afa:'मूल्यह्रास',gwgafa:'कम मूल्य संपत्तियों का तत्काल अपलेखन',sonstAufw:'अन्य परिचालन खर्च',porto:'डाक',tel:'फ़ोन और इंटरनेट',buero:'कार्यालय सामग्री',beratung:'कानूनी और परामर्श शुल्क',buchf:'लेखांकन खर्च',geld:'बैंक शुल्क',zinsaufw:'ब्याज खर्च'},
+vi:{bueroAus:'Nội thất văn phòng',laden:'Trang thiết bị cửa hàng',gwg:'Tài sản giá trị thấp',masch:'Máy móc',pkw:'Ô tô',kasse:'Tiền mặt',bank:'Ngân hàng',transit:'Tiền đang chuyển',ford:'Phải thu khách hàng',vst7:'Thuế GTGT đầu vào 7%',vst19:'Thuế GTGT đầu vào 19%',darlehen:'Vay ngân hàng',verb:'Phải trả nhà cung cấp',sverb:'Nợ phải trả khác',ust7:'Thuế GTGT đầu ra 7%',ust19:'Thuế GTGT đầu ra 19%',ustvz:'Thuế GTGT đã nộp trước',kapital:'Vốn chủ sở hữu',eb:'Số dư đầu kỳ',privat:'Rút vốn cá nhân',einlage:'Góp vốn cá nhân',erl19:'Doanh thu thuế 19%',erl7:'Doanh thu thuế 7%',erl0:'Doanh thu miễn thuế',erligl:'Giao hàng nội khối EU miễn thuế',erlklein:'Doanh thu doanh nghiệp nhỏ (§19)',sonstErtrag:'Thu nhập khác',zinsertrag:'Thu nhập lãi',we19:'Mua hàng thuế 19%',we7:'Mua hàng thuế 7%',we0:'Mua hàng (không thuế)',gehalt:'Lương',sozial:'Bảo hiểm xã hội',miete:'Tiền thuê',energie:'Ga, điện, nước',versich:'Bảo hiểm',beitraege:'Phí và hội phí',kfzsteuer:'Thuế xe',kfz:'Chi phí vận hành xe / nhiên liệu',kfzrep:'Sửa chữa xe',werbung:'Quảng cáo',bewirt:'Chi phí tiếp khách',reise:'Công tác phí (chủ)',afa:'Khấu hao',gwgafa:'Khấu hao ngay tài sản giá trị thấp',sonstAufw:'Chi phí hoạt động khác',porto:'Bưu phí',tel:'Điện thoại và internet',buero:'Văn phòng phẩm',beratung:'Phí pháp lý và tư vấn',buchf:'Chi phí kế toán',geld:'Phí ngân hàng',zinsaufw:'Chi phí lãi vay'}
+};
+const accName = a => LANG==='ar' ? a[4] : LANG==='de' ? a[3] : LANG==='en' ? (ACC_EN[a[0]]||a[3]) : ((ACC_TR[LANG]||{})[a[0]] || ACC_EN[a[0]] || a[3]);
+const accSub = a => (LANG==='ar'||LANG==='de') ? '' : (LANG==='en' ? a[3] : (ACC_EN[a[0]]||''));
+
+/* ============================== STATE ============================== */
+const KEY = 'sonne-buchhaltung-v1';
+const today = () => new Date().toISOString().slice(0,10);
+function blank(){ return {v:1, settings:{firm:'',owner:'',address:'',stnr:'',ustid:'',iban:'',bic:'',bankName:'',email:'',phone:'',skr:'03',klein:false,prefix:'RE',terms:14,year:String(new Date().getFullYear()),lockedUntil:'',license:'',lang:'ar'}, entries:[], invoices:[], customAccounts:[], audit:[], seq:1}; }
+let S = blank();
+try{ const raw = localStorage.getItem(KEY); if(raw){ const p = JSON.parse(raw); if(p && p.entries) S = Object.assign(blank(), p, {settings:Object.assign(blank().settings, p.settings)}); } }catch(e){}
+LANG = S.settings.lang || 'ar';
+if(!['ar','de','en','es','tr','fa','ps','hi','vi'].includes(LANG)) LANG='ar';
+let C = makeCore(S);
+function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} C = makeCore(S); }
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+/* ---- Lizenz & Testphase ---- */
+const SHOP = { polarOrg: '1f421f53-8933-4f0c-8958-b93486fba166', benefit: '9f87e205-b88a-4f99-9cfd-6ee502adf1d9', buyUrl: 'https://buy.polar.sh/polar_cl_HuHca84VCKWOuaP23vUcxU1o6bxjaQhA6vOP22p2mgO', wa: '4917631467103', trialDays: 7 };
+const TRIAL_KEY = 'sonne-buchhaltung-trial';
+function trialStart(){ let a=''; try{ a=localStorage.getItem(TRIAL_KEY)||''; }catch(e){}
+  const b=S.settings.trialStart||''; let d=[a,b].filter(Boolean).sort()[0];
+  if(!d){ d=new Date().toISOString(); }
+  if(S.settings.trialStart!==d){ S.settings.trialStart=d; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+  try{ localStorage.setItem(TRIAL_KEY,d); }catch(e){} return d; }
+function trialLeft(){ const ms=Date.now()-new Date(trialStart()).getTime(); return Math.max(0, SHOP.trialDays - Math.floor(ms/86400000)); }
+const licensed = () => !!(S.settings.act && S.settings.act.id) || licCheck(S.settings.license);
+const canWrite = () => licensed() || trialLeft() > 0;
+const buyHref = () => SHOP.buyUrl || ('https://wa.me/'+SHOP.wa+'?text='+encodeURIComponent('Sonne Buchhaltung – Lizenz kaufen / شراء الترخيص'));
+async function polarCall(path, body){
+  const r = await fetch('https://api.polar.sh/v1/customer-portal/license-keys/'+path, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  let j=null; try{ j=await r.json(); }catch(e){} return {status:r.status, ok:r.ok, data:j}; }
+async function activateCode(code){
+  code=String(code||'').trim(); if(!code) return t('actBad');
+  if(licCheck(code)){ S.settings.license=code.toUpperCase(); log('license',{text:'offline'}); persist(); return ''; }
+  if(!SHOP.polarOrg) return t('actOff');
+  let chk; try{ chk = await polarCall('validate', {key:code, organization_id:SHOP.polarOrg, benefit_id:SHOP.benefit}); }catch(e){ return t('actNet'); }
+  if(!chk.ok) return t('actBad');
+  if(chk.data && chk.data.status && chk.data.status!=='granted') return t('licRevoked');
+  let res; try{ res = await polarCall('activate', {key:code, organization_id:SHOP.polarOrg, label:('Sonne Buchhaltung '+(S.settings.firm||'')).trim().slice(0,100)}); }catch(e){ return t('actNet'); }
+  if(res.ok && res.data && res.data.id){ S.settings.act={key:code, id:res.data.id, at:new Date().toISOString()}; log('license',{text:'activated'}); persist(); return ''; }
+  if(res.status===403) return t('actUsed');
+  return t('actBad'); }
+async function recheckLicense(){
+  const a=S.settings.act; if(!a || !a.id || !SHOP.polarOrg || !navigator.onLine) return;
+  try{ const res = await polarCall('validate', {key:a.key, organization_id:SHOP.polarOrg, activation_id:a.id, benefit_id:SHOP.benefit});
+    if(res.status===404 || (res.ok && res.data && res.data.status && res.data.status!=='granted')){ S.settings.act=null; log('license',{text:'revoked'}); persist(); render(); toast(t('licRevoked')); }
+  }catch(e){} }
+function trialBanner(){ if(licensed()) return '';
+  const n=trialLeft();
+  const btns=`<div class="btns" style="margin-top:10px"><a class="btn p" href="${esc(buyHref())}" target="_blank" rel="noopener">${t('buyNow')}</a><button class="btn" onclick="view='settings';render();setTimeout(()=>{const el=document.getElementById('licIn'); if(el){el.scrollIntoView({block:'center'}); el.focus();}},50)">${t('enterCode')}</button></div>`;
+  return n>0 ? `<div class="note">${esc(t('licTrial').replace('{n}',n))}${btns}</div>` : `<div class="note" style="border-color:#c0392b;background:#fdecea">${esc(t('trialOver'))}${btns}</div>`; }
+const realCount = () => S.entries.filter(e=>!e.demo).length;
+function log(action, data){ S.audit.push({ts:new Date().toISOString(), action, data}); if(S.audit.length>3000) S.audit.shift(); }
+
+/* ============================== helpers ============================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = v => new Intl.NumberFormat('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}).format(v||0);
+const eur = v => `<span class="num">${fmt(v)} €</span>`;
+const sgn = v => `<span class="num ${v<0?'neg':''}">${fmt(v)} €</span>`;
+const dDe = d => d ? d.split('-').reverse().join('.') : '';
+const accLabel = k => { const a = C.acc(k); if(!a) return '?'; return `<span class="num">${C.no(k)}</span> ${esc(accName(a))}`; };
+const accOpts = (sel) => C.list.slice().sort((x,y)=>C.no(x[0]).localeCompare(C.no(y[0]))).map(a=>`<option value="${a[0]}" ${a[0]===sel?'selected':''}>${C.no(a[0])} – ${esc(LANG==='de'?a[3]:accName(a)+' · '+a[3])}</option>`).join('');
+const taxOpts = sel => `<option value="">${t('none')}</option>` + ['U19','U7','V19','V7'].map(k=>`<option value="${k}" ${k===sel?'selected':''}>${k[0]==='U'?(t('taxU')):(t('taxV'))} ${k.slice(1)}%</option>`).join('');
+function toast(m){ const el=$('#toast'); el.textContent=m; el.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>el.classList.remove('on'),2200); }
+function modal(html){ $('#modalBox').innerHTML = html; $('#modal').classList.add('on'); }
+function closeModal(){ $('#modal').classList.remove('on'); }
+$('#modal').addEventListener('click', e => { if(e.target.id==='modal') closeModal(); });
+const isLocked = d => S.settings.lockedUntil && d <= S.settings.lockedUntil;
+const inFrame = (()=>{ try{ return window.self !== window.top; }catch(e){ return true; } })();
+function deliver(name, text, mime){
+  if(!inFrame){ try{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:mime})); a.download=name; document.body.appendChild(a); a.click(); a.remove(); toast(t('saved')); return; }catch(e){} }
+  modal(`<h2>${t('exportTitle')}: <span class="mono">${esc(name)}</span></h2><textarea id="expTa" rows="14" class="mono" style="font-size:12px" readonly>${esc(text)}</textarea>
+  <div class="btns" style="margin-top:12px"><button class="btn p" id="cpBtn">${t('copy')}</button><button class="btn" onclick="closeModal()">${t('close')}</button></div>`);
+  $('#cpBtn').onclick = async () => { try{ await navigator.clipboard.writeText(text); toast(t('copied')); }catch(e){ $('#expTa').select(); } };
+}
+function doPrint(){ try{ window.print(); }catch(e){} }
+
+/* ============================== NAV ============================== */
+const ICONS = {
+ dash:'<path d="M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z"/>',
+ journal:'<path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/>',
+ invoices:'<path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h6M9 17h6"/>',
+ accounts:'<path d="M4 6h16M4 12h16M4 18h10"/>',
+ reports:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+ settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 15H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 3.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.3z"/>'
+};
+const VIEWS = ['dash','journal','invoices','reports','accounts','settings'];
+let view = (location.hash||'').slice(1); if(!VIEWS.includes(view)) view='dash';
+let rTab = 'tSalden';
+function renderNav(){
+  $('#nav').innerHTML = VIEWS.map(v=>`<button class="${v===view?'on':''}" data-v="${v}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[v]}</svg>${t(v)}</button>`).join('');
+  $('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{ view=b.dataset.v; try{ history.replaceState(null,'','#'+view); }catch(e){ location.hash=view; } render(); });
+  document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));
+  const ls=$('#langSel'); ls.innerHTML=LANGS.map(([c,n])=>`<option value="${c}" ${c===LANG?'selected':''}>${n}</option>`).join(''); ls.onchange=()=>{ LANG=S.settings.lang=ls.value; persist(); applyDir(); render(); };
+  $('#licState').innerHTML = licensed() ? `<span class="tag ok">${t('licOk')}</span>` : `<span class="tag sun">${esc(t('licTrial').replace('{n}',trialLeft()))}</span>`;
+}
+function applyDir(){ document.documentElement.lang = LANG; document.documentElement.dir = RTL.includes(LANG)?'rtl':'ltr'; }
+window.addEventListener('hashchange', ()=>{ const v=location.hash.slice(1); if(VIEWS.includes(v) && v!==view){ view=v; render(); } });
+
+function render(){
+  renderNav();
+  const Y = S.settings.year;
+  const head = (title, extra='') => `<div class="top"><div><h1>${title}</h1><div class="sub">${esc(S.settings.firm||'—')} · ${t('year')} <span class="num">${Y}</span> · SKR ${S.settings.skr}${S.settings.klein?' · §19':''}</div></div><div class="btns">${extra}</div></div>`;
+  const yearSel = `<select id="yearSel" style="width:auto">${yearsList().map(y=>`<option ${y===Y?'selected':''}>${y}</option>`).join('')}</select>`;
+  const m = $('#main');
+  if(view==='dash') m.innerHTML = head(t('dash'), yearSel) + vDash();
+  if(view==='journal') m.innerHTML = head(t('journal'), yearSel) + vJournal();
+  if(view==='invoices') m.innerHTML = head(t('invoices'), yearSel) + vInvoices();
+  if(view==='reports') m.innerHTML = head(t('reports'), yearSel) + vReports();
+  if(view==='accounts') m.innerHTML = head(t('accounts')) + vAccounts();
+  if(view==='settings') m.innerHTML = head(t('settings')) + vSettings();
+  if(view!=='settings') m.insertAdjacentHTML('afterbegin', trialBanner());
+  const ys = $('#yearSel'); if(ys) ys.onchange = () => { S.settings.year = ys.value; persist(); render(); };
+  bind[view] && bind[view]();
+}
+function yearsList(){ const s = new Set([String(new Date().getFullYear()), S.settings.year]); S.entries.forEach(e=>s.add(e.date.slice(0,4))); return [...s].sort().reverse(); }
+
+/* ============================== DASHBOARD ============================== */
+function vDash(){
+  const Y = S.settings.year, end = Y+'-12-31';
+  const g = C.guv(Y), all = C.balances(C.upTo(end));
+  const vat = r2(-C.saldo(all,'ust19') - C.saldo(all,'ust7') - C.saldo(all,'vst19') - C.saldo(all,'vst7') - C.saldo(all,'ustvz'));
+  const months = Array.from({length:12},(_,i)=>{ const mm=String(i+1).padStart(2,'0'); const b=C.balances(e=>e.date.slice(0,7)===Y+'-'+mm); let R=0,X=0; C.list.forEach(a=>{ if(a[5]==='R') R-=C.saldo(b,a[0]); if(a[5]==='X') X+=C.saldo(b,a[0]); }); return [R,X]; });
+  const mx = Math.max(1, ...months.flat());
+  const cash = C.saldo(all,'kasse');
+  const mn = LANG==='de' ? ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'] : ['1','2','3','4','5','6','7','8','9','10','11','12'];
+  return `
+  ${!S.settings.firm?`<div class="note">${t('startNote')}</div>`:''}
+  ${cash<0?`<div class="note bad">${t('cashNeg')}</div>`:''}
+  <div class="grid g4">
+    <div class="card kpi"><div class="l">${t('revenue')}</div><div class="v">${eur(g.R)}</div></div>
+    <div class="card kpi"><div class="l">${t('expenses')}</div><div class="v">${eur(g.X)}</div></div>
+    <div class="card kpi sun"><div class="l">${t('profit')}</div><div class="v ${g.profit<0?'neg':''}">${eur(g.profit)}</div></div>
+    <div class="card kpi"><div class="l">${t('vatDue')}</div><div class="v">${sgn(vat)}</div></div>
+    <div class="card kpi"><div class="l">${t('bank')}</div><div class="v">${sgn(C.saldo(all,'bank'))}</div></div>
+    <div class="card kpi"><div class="l">${t('cash')}</div><div class="v">${sgn(cash)}</div></div>
+    <div class="card kpi"><div class="l">${t('openRec')}</div><div class="v">${eur(C.saldo(all,'ford'))}</div></div>
+    <div class="card kpi"><div class="l">${t('entriesN')}</div><div class="v num">${S.entries.filter(C.inYear(Y)).length}</div></div>
+  </div>
+  <div class="card"><div class="top" style="margin:0"><h2 style="margin:0">${t('monthly')}</h2><div class="legend"><span><i style="background:var(--sun)"></i>${t('revenue')}</span><span><i style="background:var(--navy)"></i>${t('expenses')}</span></div></div>
+    <div class="bars" dir="ltr">${months.map((v,i)=>`<div class="m"><div class="pair"><div class="b" title="${fmt(v[0])} €" style="height:${v[0]/mx*140}px;background:var(--sun)"></div><div class="b" title="${fmt(v[1])} €" style="height:${v[1]/mx*140}px;background:var(--navy)"></div></div><small>${mn[i]}</small></div>`).join('')}</div>
+  </div>
+  <div class="card"><h2>${t('journal')}</h2>${journalTable(S.entries.filter(C.inYear(Y)).slice(-8).reverse(), false)}</div>`;
+}
+
+/* ============================== JOURNAL ============================== */
+const TPL = [
+ ['tplSaleCash19','kasse','erl19','U19'],['tplSaleCash7','kasse','erl7','U7'],['tplSaleBank19','bank','erl19','U19'],
+ ['tplBuy19','we19','bank','V19'],['tplBuy7','we7','bank','V7'],['tplBuyCash7','we7','kasse','V7'],
+ ['tplRent','miete','bank',''],['tplFuel','kfz','bank','V19'],['tplTel','tel','bank','V19'],['tplFee','geld','bank',''],
+ ['tplPriv','privat','kasse',''],['tplEinl','bank','einlage',''],['tplKB','bank','kasse',''],['tplUst','ustvz','bank',''],
+];
+let editId = null, jFilter = {m:'', q:''};
+function vJournal(){
+  const e = editId ? S.entries.find(x=>x.id===editId) : null;
+  const Y = S.settings.year;
+  let rows = S.entries.filter(C.inYear(Y));
+  if(jFilter.m) rows = rows.filter(x=>x.date.slice(5,7)===jFilter.m);
+  if(jFilter.q){ const q=jFilter.q.toLowerCase(); rows = rows.filter(x=>(x.text+' '+x.beleg+' '+C.no(x.soll)+' '+C.no(x.haben)+' '+x.amount).toLowerCase().includes(q)); }
+  rows = rows.slice().sort((a,b)=>b.date.localeCompare(a.date) || b.n-a.n);
+  return `
+  <div class="card">
+    <h2>${e?t('edit'):t('newEntry')}</h2>
+    <div class="tpl"><span class="sub" style="align-self:center">${t('quick')}</span>${TPL.map((x,i)=>`<button data-tpl="${i}">${t(x[0])}</button>`).join('')}</div>
+    <div class="row" style="grid-template-columns:130px 110px 1fr">
+      <div><label>${t('date')}</label><input type="date" id="fDate" value="${e?e.date:today()}"></div>
+      <div><label>${t('beleg')}</label><input id="fBeleg" value="${esc(e?e.beleg:'')}"></div>
+      <div><label>${t('text')}</label><input id="fText" value="${esc(e?e.text:'')}"></div>
+    </div>
+    <div class="row" style="grid-template-columns:1fr 1fr 150px 150px auto;margin-top:10px">
+      <div><label>${t('soll')}</label><select id="fSoll">${accOpts(e?e.soll:'kasse')}</select></div>
+      <div><label>${t('haben')}</label><select id="fHaben">${accOpts(e?e.haben:'erl19')}</select></div>
+      <div><label>${t('amount')}</label><input id="fAmt" inputmode="decimal" class="num" value="${e?String(e.amount).replace('.',','):''}" placeholder="0,00"></div>
+      <div><label>${t('tax')}</label><select id="fTax">${taxOpts(e?e.tax:'U19')}</select></div>
+      <div class="btns"><button class="btn p" id="fSave">${t('save')}</button>${e?`<button class="btn" id="fCancel">${t('cancel')}</button>`:''}</div>
+    </div>
+    <div class="preview" id="fPrev"></div>
+  </div>
+  <div class="card">
+    <div class="row" style="grid-template-columns:160px 1fr auto;margin-bottom:12px">
+      <select id="jM"><option value="">${t('month')}: ${t('all')}</option>${Array.from({length:12},(_,i)=>{const m=String(i+1).padStart(2,'0');return `<option ${jFilter.m===m?'selected':''}>${m}</option>`}).join('')}</select>
+      <input id="jQ" placeholder="${t('search')}" value="${esc(jFilter.q)}">
+      <button class="btn" id="jCsv">${t('csvSb')}</button>
+    </div>
+    ${journalTable(rows, true)}
+  </div>`;
+}
+function journalTable(rows, actions){
+  if(!rows.length) return `<div class="sub">${t('noData')}</div>`;
+  return `<div class="tw"><table><thead><tr><th>${t('date')}</th><th>${t('beleg')}</th><th>${t('text')}</th><th>${t('soll')}</th><th>${t('haben')}</th><th class="r">${t('amount')}</th><th>${t('tax')}</th>${actions?'<th></th>':''}</tr></thead><tbody>
+  ${rows.map(e=>`<tr><td class="num">${dDe(e.date)}</td><td class="mono">${esc(e.beleg)}</td><td>${esc(e.text)}${e.storno?` <span class="tag bad">${t('storno')}</span>`:''}</td><td>${accLabel(e.soll)}</td><td>${accLabel(e.haben)}</td><td class="r">${eur(e.amount)}</td><td>${e.tax?`<span class="tag">${e.tax}</span>`:''}</td>
+  ${actions?`<td style="white-space:nowrap">${isLocked(e.date)?`<span class="tag ok">🔒 ${t('locked')}</span> <button class="btn s" data-st="${e.id}">${t('storno')}</button>`:`<button class="btn s" data-ed="${e.id}">${t('edit')}</button> <button class="btn s d" data-dl="${e.id}">${t('del')}</button>`}</td>`:''}</tr>`).join('')}
+  </tbody></table></div>`;
+}
+function entryFromForm(){
+  return {date:$('#fDate').value, beleg:$('#fBeleg').value.trim(), text:$('#fText').value.trim(), soll:$('#fSoll').value, haben:$('#fHaben').value, amount:r2(parseNum($('#fAmt').value)), tax:$('#fTax').value};
+}
+function validate(e, isNew){
+  if(!e.date || !e.soll || !e.haben || !(e.amount>0)) return t('errBal');
+  if(e.soll===e.haben) return t('errSame');
+  if(isLocked(e.date)) return t('errLocked');
+  if(isNew && !canWrite()) return t('errTrial');
+  return '';
+}
+function addEntry(e){ e.id=uid(); e.n=S.seq++; e.created=new Date().toISOString(); S.entries.push(e); log('create', e); return e; }
+function cashCheck(){ const b=C.balances(); let run=0; const es=S.entries.filter(x=>x.soll==='kasse'||x.haben==='kasse').sort((a,b)=>a.date.localeCompare(b.date)||a.n-b.n);
+  for(const e of es){ for(const l of C.lines(e)) if(l.a==='kasse') run=r2(run+(l.s==='S'?l.v:-l.v)); if(run<0) return false; } return true; }
+const bind = {};
+bind.dash = () => { const d=$('#demoLink'); if(d) d.onclick=(ev)=>{ev.preventDefault(); loadDemo();}; };
+bind.journal = () => {
+  const prev = () => { const e = entryFromForm(); if(!(e.amount>0) || e.soll===e.haben){ $('#fPrev').textContent=''; return; }
+    $('#fPrev').innerHTML = `<b>${t('bookPrev')}</b> ` + C.lines(e).map(l=>`${l.s==='S'?(t('bookS')):(t('bookH'))} ${accLabel(l.a)} ${eur(l.v)}`).join(' &nbsp;|&nbsp; '); };
+  ['#fAmt','#fTax','#fSoll','#fHaben'].forEach(s=>$(s).addEventListener('input',prev));
+  const auto = () => { const s=C.acc($('#fSoll').value), h=C.acc($('#fHaben').value); const a=(h&&h[6])||(s&&s[6])||''; $('#fTax').value = S.settings.klein && a[0]==='U' ? '' : (S.settings.klein && a[0]==='V' ? '' : a); prev(); };
+  $('#fSoll').addEventListener('change',auto); $('#fHaben').addEventListener('change',auto);
+  document.querySelectorAll('[data-tpl]').forEach(b=>b.onclick=()=>{ const x=TPL[+b.dataset.tpl]; $('#fSoll').value=x[1]; $('#fHaben').value=x[2]; $('#fTax').value=S.settings.klein?'':x[3]; if(!$('#fText').value) $('#fText').value=t(x[0]); $('#fAmt').focus(); prev(); });
+  if(S.settings.klein && !editId) $('#fTax').value='';
+  prev();
+  $('#fSave').onclick = () => {
+    const e = entryFromForm(); const err = validate(e, !editId); if(err) return toast(err);
+    if(editId){ const old=S.entries.find(x=>x.id===editId); if(isLocked(old.date)) return toast(t('errLocked')); log('update',{before:{...old},after:e}); Object.assign(old,e); editId=null; }
+    else addEntry(e);
+    persist(); if(!cashCheck()) toast(t('cashNeg')); else toast(t('saved'));
+    render(); setTimeout(()=>{ const f=$('#fAmt'); f&&f.focus(); },50);
+  };
+  const c=$('#fCancel'); if(c) c.onclick=()=>{ editId=null; render(); };
+  $('#jM').onchange = ev => { jFilter.m=ev.target.value; render(); };
+  $('#jQ').onchange = ev => { jFilter.q=ev.target.value; render(); };
+  $('#jCsv').onclick = exportCsv;
+  bindRowActions();
+};
+function bindRowActions(){
+  document.querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>{ editId=b.dataset.ed; view='journal'; render(); window.scrollTo(0,0); });
+  document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>{ const e=S.entries.find(x=>x.id===b.dataset.dl); if(!e||isLocked(e.date)) return;
+    confirmBox(`${t('del')}: ${esc(e.text)} (${fmt(e.amount)} €)?`, ()=>{ log('delete',{...e}); S.entries=S.entries.filter(x=>x.id!==e.id); persist(); toast(t('deleted')); render(); }); });
+  document.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{ const e=S.entries.find(x=>x.id===b.dataset.st); if(!e) return;
+    confirmBox(`${t('storno')}: ${esc(e.text)} (${fmt(e.amount)} €)?`, ()=>{ stornoEntry(e); persist(); render(); }); });
+}
+function stornoEntry(e){
+  let d = today(); if(isLocked(d)) { const x=new Date(S.settings.lockedUntil); x.setDate(x.getDate()+1); d=x.toISOString().slice(0,10); }
+  addEntry({date:d, beleg:e.beleg, text:'Storno: '+e.text, soll:e.haben, haben:e.soll, amount:e.amount, tax:e.tax, storno:e.id});
+}
+function confirmBox(msg, fn){
+  modal(`<h2>${t('confirm')}</h2><p>${msg}</p><div class="btns"><button class="btn p" id="okB">${t('confirm')}</button><button class="btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+  $('#okB').onclick = () => { closeModal(); fn(); };
+}
+function exportCsv(){
+  const Y=S.settings.year; const rows=[['Umsatz','Soll/Haben-Kennzeichen','Konto','Gegenkonto','BU-Schlüssel','Belegdatum','Belegfeld 1','Buchungstext'].join(';')];
+  S.entries.filter(C.inYear(Y)).sort((a,b)=>a.date.localeCompare(b.date)||a.n-b.n).forEach(e=>{
+    rows.push([fmt(e.amount).replace(/\./g,''),'S',C.no(e.soll),C.no(e.haben),e.tax?BU[e.tax]:'',e.date.slice(8,10)+e.date.slice(5,7),e.beleg,'"'+String(e.text).replace(/"/g,'""')+'"'].join(';')); });
+  deliver(`Buchungen_${Y}_SKR${S.settings.skr}.csv`, '﻿'+rows.join('\r\n'), 'text/csv');
+}
+
+/* ============================== INVOICES ============================== */
+let invDraft = null;
+function nextInvNo(){ const Y=S.settings.year; const n=S.invoices.filter(i=>i.no.includes('-'+Y+'-')).length+1; return `${S.settings.prefix||'RE'}-${Y}-${String(n).padStart(4,'0')}`; }
+function invTotals(inv){ const g={}; let net=0;
+  inv.items.forEach(it=>{ const n=r2(it.q*it.p); net=r2(net+n); g[it.r]=r2((g[it.r]||0)+n); });
+  const taxes = Object.entries(g).map(([r,n])=>[+r,n,r2(n*r/100)]); const tax=taxes.reduce((s,x)=>r2(s+x[2]),0);
+  return {net, taxes, tax, gross:r2(net+tax)}; }
+function invStatus(i){ return i.cancelled?`<span class="tag bad">${t('cancelled')}</span>`:(i.paid?`<span class="tag ok">${t('paid')}</span>`:`<span class="tag sun">${t('open')}</span>`); }
+function vInvoices(){
+  const Y=S.settings.year; const list=S.invoices.filter(i=>i.date.slice(0,4)===Y).slice().reverse();
+  const missing = !S.settings.firm || !S.settings.address || !(S.settings.stnr||S.settings.ustid);
+  return `
+  ${missing?`<div class="note">${t('invMissing')}</div>`:''}
+  ${invDraft?invForm():`<div class="btns" style="margin-bottom:14px"><button class="btn p" id="newInv">${t('newInv')}</button></div>`}
+  <div class="card">${!list.length?`<div class="sub">${t('noData')}</div>`:`<div class="tw"><table><thead><tr><th>${t('invNo')}</th><th>${t('date')}</th><th>${t('customer')}</th><th class="r">${t('net')}</th><th class="r">${t('gross')}</th><th>${t('status')}</th><th></th></tr></thead><tbody>
+  ${list.map(i=>{const tt=invTotals(i); return `<tr><td class="mono">${esc(i.no)}</td><td class="num">${dDe(i.date)}</td><td>${esc(i.customer)}</td><td class="r">${eur(tt.net)}</td><td class="r">${eur(tt.gross)}</td><td>${invStatus(i)}</td>
+  <td style="white-space:nowrap"><button class="btn s" data-iv="${i.id}">${t('view')}</button> ${!i.paid&&!i.cancelled?`<button class="btn s" data-ip="${i.id}">${t('pay')}</button> <button class="btn s d" data-ic="${i.id}">${t('storno')}</button>`:''}</td></tr>`}).join('')}
+  </tbody></table></div>`}</div>`;
+}
+const invTotLine = tt => `${t('net')}: ${eur(tt.net)} · ${t('taxAmt')}: ${eur(tt.tax)} · <b>${t('gross')}: ${eur(tt.gross)}</b>`;
+function invForm(){
+  const d=invDraft; const tt=invTotals(d); const kl=S.settings.klein;
+  return `<div class="card"><h2>${t('newInv')} · <span class="mono">${esc(d.no)}</span></h2>
+  <div class="row" style="grid-template-columns:1fr 1fr">
+    <div><label>${t('customer')}</label><input id="iCust" value="${esc(d.customer)}"></div>
+    <div><label>${t('custUstid')}</label><input id="iUst" value="${esc(d.custUstid)}"></div>
+  </div>
+  <div class="row" style="grid-template-columns:2fr 1fr 1fr;margin-top:10px">
+    <div><label>${t('custAddr')}</label><input id="iAddr" value="${esc(d.addr)}" placeholder="Straße Nr., PLZ Ort"></div>
+    <div><label>${t('invDate')}</label><input type="date" id="iDate" value="${d.date}"></div>
+    <div><label>${t('lDate')}</label><input type="date" id="iLDate" value="${d.ldate}"></div>
+  </div>
+  <h2 style="margin-top:16px">${t('items')}</h2>
+  <div id="iItems">${d.items.map((it,k)=>`<div class="row" style="grid-template-columns:3fr 90px 140px 110px 36px;margin-bottom:6px">
+    <input data-k="${k}" data-f="d" value="${esc(it.d)}" placeholder="${t('desc')}">
+    <input data-k="${k}" data-f="q" class="num" value="${String(it.q).replace('.',',')}" placeholder="${t('qty')}">
+    <input data-k="${k}" data-f="p" class="num" value="${String(it.p).replace('.',',')}" placeholder="${t('price')}">
+    <select data-k="${k}" data-f="r" ${kl?'disabled':''}>${[19,7,0].map(r=>`<option value="${r}" ${+it.r===r?'selected':''}>${r} %</option>`).join('')}</select>
+    <button class="btn s d" data-rm="${k}">×</button></div>`).join('')}</div>
+  <div class="sub" style="display:flex;gap:10px;font-size:11.5px;margin:-2px 0 8px"><span style="flex:3">${t('desc')}</span><span style="width:90px">${t('qty')}</span><span style="width:140px">${t('price')}</span><span style="width:146px">${t('rate')}</span></div>
+  <div class="btns" style="justify-content:space-between;align-items:center">
+    <button class="btn s" id="iAdd">${t('addItem')}</button>
+    <div id="iTot">${invTotLine(tt)}</div>
+  </div>
+  <div class="btns" style="margin-top:14px"><button class="btn p" id="iSave">${t('save')}</button><button class="btn" id="iCancel">${t('cancel')}</button></div></div>`;
+}
+bind.invoices = () => {
+  const n=$('#newInv'); if(n) n.onclick=()=>{ const dd=new Date(); invDraft={id:uid(),no:nextInvNo(),date:today(),ldate:today(),customer:'',addr:'',custUstid:'',items:[{d:'',q:1,p:0,r:S.settings.klein?0:19}]}; render(); };
+  if(invDraft){
+    const sync=()=>{ invDraft.customer=$('#iCust').value; invDraft.addr=$('#iAddr').value; invDraft.custUstid=$('#iUst').value; invDraft.date=$('#iDate').value; invDraft.ldate=$('#iLDate').value;
+      document.querySelectorAll('#iItems [data-f]').forEach(el=>{ const it=invDraft.items[+el.dataset.k], f=el.dataset.f; it[f] = f==='d'?el.value:(f==='r'?+el.value:(isNaN(parseNum(el.value))?0:parseNum(el.value))); }); };
+    document.querySelectorAll('#iItems [data-f]').forEach(el=>{ el.addEventListener('input',()=>{ sync(); $('#iTot').innerHTML=invTotLine(invTotals(invDraft)); }); el.addEventListener('change',()=>{ sync(); $('#iTot').innerHTML=invTotLine(invTotals(invDraft)); }); });
+    ['#iCust','#iAddr','#iUst','#iDate','#iLDate'].forEach(s=>$(s).addEventListener('input',sync));
+    document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ sync(); if(invDraft.items.length>1) invDraft.items.splice(+b.dataset.rm,1); render(); });
+    $('#iAdd').onclick=()=>{ sync(); invDraft.items.push({d:'',q:1,p:0,r:S.settings.klein?0:19}); render(); };
+    $('#iCancel').onclick=()=>{ invDraft=null; render(); };
+    $('#iSave').onclick=()=>{ sync(); const d=invDraft; const tt=invTotals(d);
+      if(!d.customer || !(tt.net>0) || d.items.some(i=>!i.d)) return toast(t('errInv'));
+      if(isLocked(d.date)) return toast(t('errLocked'));
+      if(!canWrite()) return toast(t('errTrial'));
+      d.entryIds=[];
+      for(const [r,netv,taxv] of tt.taxes){
+        const haben = S.settings.klein ? 'erlklein' : (r===19?'erl19':r===7?'erl7':'erl0');
+        const e = addEntry({date:d.date, beleg:d.no, text:`${d.no} ${d.customer}`, soll:'ford', haben, amount:r2(netv+taxv), tax:S.settings.klein?'':(r===19?'U19':r===7?'U7':''), inv:d.id});
+        d.entryIds.push(e.id);
+      }
+      S.invoices.push(d); log('invoice',{no:d.no}); invDraft=null; persist(); toast(t('saved')); render(); showInvoice(d.id); };
+  }
+  document.querySelectorAll('[data-iv]').forEach(b=>b.onclick=()=>showInvoice(b.dataset.iv));
+  document.querySelectorAll('[data-ip]').forEach(b=>b.onclick=()=>{ const inv=S.invoices.find(i=>i.id===b.dataset.ip); const tt=invTotals(inv);
+    modal(`<h2>${t('pay')} · <span class="mono">${esc(inv.no)}</span></h2><div class="row" style="grid-template-columns:1fr 1fr 1fr"><div><label>${t('date')}</label><input type="date" id="pD" value="${today()}"></div><div><label>${t('payVia')}</label><select id="pA"><option value="bank">${accLabel('bank').replace(/<[^>]+>/g,'')}</option><option value="kasse">${accLabel('kasse').replace(/<[^>]+>/g,'')}</option></select></div><div><label>${t('amount')}</label><input id="pV" class="num" value="${fmt(tt.gross)}"></div></div>
+    <div class="btns" style="margin-top:14px"><button class="btn p" id="pOk">${t('save')}</button><button class="btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+    $('#pOk').onclick=()=>{ const e={date:$('#pD').value,beleg:inv.no,text:`Zahlung ${inv.no} ${inv.customer}`,soll:$('#pA').value,haben:'ford',amount:r2(parseNum($('#pV').value)),tax:''}; const err=validate(e,true); if(err) return toast(err);
+      addEntry(e); inv.paid=e.date; persist(); closeModal(); toast(t('saved')); render(); }; });
+  document.querySelectorAll('[data-ic]').forEach(b=>b.onclick=()=>{ const inv=S.invoices.find(i=>i.id===b.dataset.ic);
+    confirmBox(`${t('storno')} ${esc(inv.no)}?`, ()=>{ (inv.entryIds||[]).forEach(id=>{ const e=S.entries.find(x=>x.id===id); if(e) stornoEntry(e); }); inv.cancelled=today(); log('invoice-cancel',{no:inv.no}); persist(); render(); }); });
+};
+function showInvoice(id){
+  const i=S.invoices.find(x=>x.id===id); const s=S.settings; const tt=invTotals(i);
+  const due = new Date(i.date); due.setDate(due.getDate()+(+s.terms||14));
+  modal(`<div class="btns" style="justify-content:flex-end;margin-bottom:10px"><button class="btn p" onclick="doPrint()">${t('print')}</button><button class="btn" onclick="closeModal()">${t('close')}</button></div>
+  ${inFrame?`<div class="note" style="font-size:12px">${t('printNote')}</div>`:''}
+  <div id="printArea"><div class="inv">
+    <div class="hd"><div><div class="snd">${esc(s.firm)} · ${esc(s.address.replace(/\n/g,' · '))}</div><div><b>${esc(i.customer)}</b><br>${esc(i.addr).replace(/,\s*/g,'<br>')}${i.custUstid?`<br>USt-IdNr.: ${esc(i.custUstid)}`:''}</div></div>
+    <div style="text-align:right"><b style="font-size:16px">${esc(s.firm)}</b><br>${s.owner?esc(s.owner)+'<br>':''}${esc(s.address).replace(/\n/g,'<br>')}${s.phone?'<br>Tel. '+esc(s.phone):''}${s.email?'<br>'+esc(s.email):''}</div></div>
+    <h3>${i.cancelled?'Stornierte ':''}Rechnung</h3>
+    <table style="width:auto;margin-bottom:14px"><tr><td>Rechnungs-Nr.</td><td><b>${esc(i.no)}</b></td></tr><tr><td>Rechnungsdatum</td><td>${dDe(i.date)}</td></tr><tr><td>Leistungsdatum</td><td>${dDe(i.ldate)}</td></tr></table>
+    <table><thead><tr><th>Pos.</th><th>Beschreibung</th><th style="text-align:right">Menge</th><th style="text-align:right">Einzelpreis</th>${s.klein?'':'<th style="text-align:right">USt</th>'}<th style="text-align:right">Gesamt netto</th></tr></thead><tbody>
+    ${i.items.map((it,k)=>`<tr><td>${k+1}</td><td>${esc(it.d)}</td><td style="text-align:right">${fmt(it.q).replace(',00','')}</td><td style="text-align:right">${fmt(it.p)} €</td>${s.klein?'':`<td style="text-align:right">${it.r} %</td>`}<td style="text-align:right">${fmt(r2(it.q*it.p))} €</td></tr>`).join('')}
+    <tr><td colspan="${s.klein?4:5}" style="text-align:right">Summe netto</td><td style="text-align:right">${fmt(tt.net)} €</td></tr>
+    ${s.klein?'':tt.taxes.map(([r,n,x])=>`<tr><td colspan="5" style="text-align:right">zzgl. ${r} % USt auf ${fmt(n)} €</td><td style="text-align:right">${fmt(x)} €</td></tr>`).join('')}
+    <tr><td colspan="${s.klein?4:5}" style="text-align:right"><b>Rechnungsbetrag</b></td><td style="text-align:right"><b>${fmt(tt.gross)} €</b></td></tr></tbody></table>
+    ${s.klein?'<p>Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</p>':''}
+    ${tt.taxes.some(x=>x[0]===0)&&!s.klein&&i.custUstid?'<p>Steuerfreie innergemeinschaftliche Lieferung bzw. Steuerschuldnerschaft des Leistungsempfängers – bitte Steuerbefreiungsgrund prüfen.</p>':''}
+    <p>Bitte überweisen Sie den Rechnungsbetrag bis zum <b>${dDe(due.toISOString().slice(0,10))}</b> unter Angabe der Rechnungsnummer.</p>
+    <div class="ft"><div>${esc(s.firm)}${s.owner?'<br>Inhaber: '+esc(s.owner):''}</div><div>${s.stnr?'Steuernummer: '+esc(s.stnr)+'<br>':''}${s.ustid?'USt-IdNr.: '+esc(s.ustid):''}</div><div>${s.bankName?esc(s.bankName)+'<br>':''}${s.iban?'IBAN: '+esc(s.iban)+'<br>':''}${s.bic?'BIC: '+esc(s.bic):''}</div></div>
+  </div></div>`);
+}
+
+/* ============================== REPORTS ============================== */
+let ustP = 'Q'+Math.ceil((new Date().getMonth()+1)/3);
+function vReports(){
+  const tabs=['tSalden','tGuv','tBilanz','tEuer','tUst','tKasse'];
+  return `<div class="tabs">${tabs.map(x=>`<button class="${x===rTab?'on':''}" data-rt="${x}">${t(x)}</button>`).join('')}</div><div class="card">${rep[rTab]()}</div>`;
+}
+const rep = {};
+rep.tSalden = () => { const Y=S.settings.year; const bY=C.balances(C.inYear(Y)), bAll=C.balances(C.upTo(Y+'-12-31')); let tS=0,tH=0;
+  const rows=C.list.slice().sort((a,b)=>C.no(a[0]).localeCompare(C.no(b[0]))).filter(a=>{ const pl=a[5]==='R'||a[5]==='X'; const b=(pl?bY:bAll)[a[0]]; return b&&(b.S||b.H); }).map(a=>{ const pl=a[5]==='R'||a[5]==='X'; const b=(pl?bY:bAll)[a[0]]; tS=r2(tS+b.S); tH=r2(tH+b.H); const sd=r2(b.S-b.H);
+    return `<tr><td>${accLabel(a[0])}</td><td><span class="tag">${t('type'+a[5])}</span></td><td class="r">${eur(b.S)}</td><td class="r">${eur(b.H)}</td><td class="r">${eur(Math.abs(sd))} ${sd>=0?'S':'H'}</td></tr>`; }).join('');
+  return rows?`<div class="tw"><table><thead><tr><th>${t('account')}</th><th>${t('type')}</th><th class="r">Soll</th><th class="r">Haben</th><th class="r">${t('balance')}</th></tr></thead><tbody>${rows}<tr class="tot"><td colspan="2">${t('sum')}</td><td class="r">${eur(tS)}</td><td class="r">${eur(tH)}</td><td class="r">${Math.abs(tS-tH)<0.005?'<span class="tag ok">✓</span>':''}</td></tr></tbody></table></div>`:`<div class="sub">${t('noData')}</div>`; };
+rep.tGuv = () => { const g=C.guv(S.settings.year);
+  return `<table><tbody><tr class="sec"><td colspan="2">${t('typeR')}</td></tr>${g.rev.map(([k,v])=>`<tr><td>${accLabel(k)}</td><td class="r">${eur(v)}</td></tr>`).join('')}<tr class="tot"><td>${t('sum')}</td><td class="r">${eur(g.R)}</td></tr>
+  <tr class="sec"><td colspan="2">${t('typeX')}</td></tr>${g.exp.map(([k,v])=>`<tr><td>${accLabel(k)}</td><td class="r">${eur(v)}</td></tr>`).join('')}<tr class="tot"><td>${t('sum')}</td><td class="r">${eur(g.X)}</td></tr>
+  <tr class="tot"><td>${t('profit')}</td><td class="r">${sgn(g.profit)}</td></tr></tbody></table>`; };
+rep.tBilanz = () => { const b=C.bilanz(S.settings.year);
+  const side=(arr)=>arr.map(([k,v])=>`<tr><td>${accLabel(k)}</td><td class="r">${sgn(v)}</td></tr>`).join('');
+  return `<div class="note ${b.ok?'ok':'bad'}">${b.ok?t('bilOk'):t('bilBad')}</div><div class="grid g2">
+  <div><h2>${t('aktiva')}</h2><table><tbody>${side(b.akt)}<tr class="tot"><td>${t('sum')}</td><td class="r">${sgn(b.A)}</td></tr></tbody></table></div>
+  <div><h2>${t('passiva')}</h2><table><tbody><tr class="sec"><td colspan="2">${t('ek')}</td></tr>${side(b.ekLines)}${b.vor?`<tr><td>${t('vortrag')}</td><td class="r">${sgn(b.vor)}</td></tr>`:''}${b.privY?`<tr><td>${t('privY')}</td><td class="r">${sgn(b.privY)}</td></tr>`:''}<tr><td>${t('profit')}</td><td class="r">${sgn(b.profit)}</td></tr><tr><td><b>${t('ek')}</b></td><td class="r"><b>${sgn(b.EK)}</b></td></tr>
+  <tr class="sec"><td colspan="2">${t('typeL')}</td></tr>${side(b.pas)}<tr class="tot"><td>${t('sum')}</td><td class="r">${sgn(b.P)}</td></tr></tbody></table></div></div>`; };
+rep.tEuer = () => { const e=C.euer(S.settings.year); const G={we:'gWe',pers:'gPers',raum:'gRaum',afa:'gAfa',kfz:'gKfz',sonst:'gSonst'};
+  return `<div class="note">${t('euerNote')}</div><table><tbody>
+  <tr class="sec"><td colspan="2">${t('ein')}</td></tr><tr><td>${t('revenue')}</td><td class="r">${eur(e.erl)}</td></tr><tr><td>${t('ustIn')}</td><td class="r">${eur(e.ust)}</td></tr><tr class="tot"><td>${t('sum')}</td><td class="r">${eur(e.ein)}</td></tr>
+  <tr class="sec"><td colspan="2">${t('aus')}</td></tr>${Object.entries(e.groups).map(([k,v])=>`<tr><td>${t(G[k])}</td><td class="r">${eur(v)}</td></tr>`).join('')}<tr><td>${t('vstOut')}</td><td class="r">${eur(e.vst)}</td></tr><tr><td>${t('ustPaidL')}</td><td class="r">${eur(e.ustPaid)}</td></tr><tr class="tot"><td>${t('sum')}</td><td class="r">${eur(e.aus)}</td></tr>
+  <tr class="tot"><td>${t('profit')}</td><td class="r">${sgn(e.gewinn)}</td></tr></tbody></table>`; };
+rep.tUst = () => { const Y=S.settings.year; let from,to;
+  if(ustP[0]==='Q'){ const q=+ustP[1]; from=`${Y}-${String(q*3-2).padStart(2,'0')}-01`; to=`${Y}-${String(q*3).padStart(2,'0')}-31`; }
+  else if(ustP==='Y'){ from=Y+'-01-01'; to=Y+'-12-31'; } else { from=`${Y}-${ustP}-01`; to=`${Y}-${ustP}-31`; }
+  const u=C.ustva(from,to);
+  const opts=['Q1','Q2','Q3','Q4',...Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0')),'Y'];
+  return `<div class="row" style="grid-template-columns:200px;margin-bottom:12px"><div><label>${t('period')}</label><select id="ustSel">${opts.map(o=>`<option value="${o}" ${o===ustP?'selected':''}>${o[0]==='Q'?t('q')+' '+o[1]:o==='Y'?t('year'):t('month')+' '+o}</option>`).join('')}</select></div></div>
+  ${S.settings.klein?`<div class="note">${t('ustKlein')}</div>`:''}
+  <table><thead><tr><th></th><th class="r">${t('base')}</th><th class="r">${t('taxAmt')}</th></tr></thead><tbody>
+  <tr><td>${t('kz81')}</td><td class="r">${eur(Math.trunc(u.kz81))}</td><td class="r">${eur(u.t19)}</td></tr>
+  <tr><td>${t('kz86')}</td><td class="r">${eur(Math.trunc(u.kz86))}</td><td class="r">${eur(u.t7)}</td></tr>
+  <tr><td>${t('kz41')}</td><td class="r">${eur(Math.trunc(u.kz41))}</td><td></td></tr>
+  <tr><td>${t('kz48')}</td><td class="r">${eur(Math.trunc(u.kz48))}</td><td></td></tr>
+  <tr><td>${t('kz66')}</td><td></td><td class="r">${eur(u.kz66)}</td></tr>
+  <tr class="tot"><td>${t('kz83')}</td><td></td><td class="r">${sgn(u.kz83)}</td></tr></tbody></table>
+  <p class="sub">${t('ustNote')} ${t('ustCent')}</p>`; };
+rep.tKasse = () => { const Y=S.settings.year; const start=Y+'-01-01';
+  let run = C.saldo(C.balances(e=>e.date<start),'kasse'); const open=run; let neg=false;
+  const es=S.entries.filter(e=>(e.soll==='kasse'||e.haben==='kasse') && e.date.slice(0,4)===Y).sort((a,b)=>a.date.localeCompare(b.date)||a.n-b.n);
+  const rows=es.map(e=>{ let v=0; C.lines(e).forEach(l=>{ if(l.a==='kasse') v=r2(v+(l.s==='S'?l.v:-l.v)); }); run=r2(run+v); if(run<0) neg=true;
+    return `<tr><td class="num">${dDe(e.date)}</td><td class="mono">${esc(e.beleg)}</td><td>${esc(e.text)}</td><td class="r">${v>0?eur(v):''}</td><td class="r">${v<0?eur(-v):''}</td><td class="r">${sgn(run)}</td></tr>`; }).join('');
+  return `${neg?`<div class="note bad">${t('cashNeg')}</div>`:''}<div class="tw"><table><thead><tr><th>${t('date')}</th><th>${t('beleg')}</th><th>${t('text')}</th><th class="r">${t('in')}</th><th class="r">${t('out')}</th><th class="r">${t('balance')}</th></tr></thead><tbody>
+  <tr class="sec"><td colspan="5">${t('opening')}</td><td class="r">${sgn(open)}</td></tr>${rows}</tbody></table></div>
+  <p class="sub">${t('tseNote')}</p>`; };
+bind.reports = () => {
+  document.querySelectorAll('[data-rt]').forEach(b=>b.onclick=()=>{ rTab=b.dataset.rt; render(); });
+  const u=$('#ustSel'); if(u) u.onchange=()=>{ ustP=u.value; render(); };
+};
+
+/* ============================== ACCOUNTS ============================== */
+function vAccounts(){
+  const all=C.balances();
+  return `<div class="note">${t('accNote').replace('{skr}',S.settings.skr)}</div>
+  <div class="card"><h2>${t('addAcc')}</h2><div class="row" style="grid-template-columns:110px 1fr 1fr 140px 140px auto">
+    <div><label>${t('number')}</label><input id="aNo" class="num"></div><div><label>Deutsch</label><input id="aDe"></div><div><label>عربي</label><input id="aAr"></div>
+    <div><label>${t('type')}</label><select id="aType">${['A','L','E','P','R','X'].map(x=>`<option value="${x}">${t('type'+x)}</option>`).join('')}</select></div>
+    <div><label>${t('tax')}</label><select id="aTax">${taxOpts('')}</select></div><button class="btn p" id="aSave">${t('save')}</button></div></div>
+  <div class="card"><div class="tw"><table><thead><tr><th>${t('number')}</th><th>${t('name')}</th><th>${t('type')}</th><th>${t('tax')}</th><th class="r">${t('balance')}</th></tr></thead><tbody>
+  ${C.list.slice().sort((a,b)=>C.no(a[0]).localeCompare(C.no(b[0]))).map(a=>`<tr><td class="mono">${C.no(a[0])}</td><td>${esc(LANG==='de'?a[3]:accName(a))}<div class="sub">${esc(LANG==='de'?a[4]:a[3])}</div></td><td><span class="tag">${t('type'+a[5])}</span></td><td>${a[6]?`<span class="tag sun">${a[6]}</span>`:''}</td><td class="r">${all[a[0]]?sgn(C.saldo(all,a[0])):''}</td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+bind.accounts = () => { $('#aSave').onclick=()=>{ const no=$('#aNo').value.trim(), de=$('#aDe').value.trim(); if(!/^\d{4,5}$/.test(no)||!de) return toast(t('errAccNo'));
+  if(C.list.some(a=>C.no(a[0])===no)) return toast(t('errAccDup'));
+  S.customAccounts.push({no,de,ar:$('#aAr').value.trim(),type:$('#aType').value,tax:$('#aTax').value}); persist(); toast(t('saved')); render(); }; };
+
+/* ============================== SETTINGS ============================== */
+function vSettings(){
+  const s=S.settings; const f=(k,type='text')=>`<div><label>${t(k)}</label><input data-s="${k}" type="${type}" value="${esc(s[k])}"></div>`;
+  return `<div class="note">${t('storageNote')}</div>
+  <div class="card"><h2>${t('firm')}</h2><div class="grid g3">${f('firm')}${f('owner')}<div><label>${t('address')}</label><textarea data-s="address" rows="2">${esc(s.address)}</textarea></div>
+  ${f('stnr')}${f('ustid')}${f('phone')}${f('email')}${f('bankName')}${f('iban')}${f('bic')}${f('prefix')}${f('terms','number')}
+  <div><label>${t('skr')}</label><select data-s="skr"><option value="03" ${s.skr==='03'?'selected':''}>SKR 03</option><option value="04" ${s.skr==='04'?'selected':''}>SKR 04</option></select></div>
+  <div><label>${t('klein')}</label><select data-s="klein"><option value="0" ${!s.klein?'selected':''}>${t('kleinNo')}</option><option value="1" ${s.klein?'selected':''}>${t('kleinYes')}</option></select></div>
+  </div><div class="btns" style="margin-top:14px"><button class="btn p" id="sSave">${t('save')}</button></div></div>
+  <div class="card"><h2>${t('lockTitle')}</h2><p class="sub">${t('lockInfo')}</p><div class="lockbar">${s.lockedUntil?`<span class="tag ok">🔒 ${t('lockedUntil')} <span class="num">${dDe(s.lockedUntil)}</span></span>`:''}
+  <input type="date" id="lDate" style="width:auto" value="${s.lockedUntil||''}"><button class="btn" id="lBtn">${t('lockBtn')}</button></div></div>
+  <div class="card"><h2>${t('backup')}</h2><div class="btns"><button class="btn p" id="bExp">${t('backup')} (JSON)</button><label class="btn" style="margin:0;color:var(--ink)">${t('restore')}<input type="file" id="bImp" accept=".json,application/json" style="display:none"></label><button class="btn" id="bDemo">${t('demo')}</button><button class="btn d" id="bReset">${t('reset')}</button></div></div>
+  <div class="card" id="licCard"><h2>${t('license')}</h2>
+  ${licensed()?`<p style="margin:0"><span class="tag ok">${t('licOk')}</span>${s.act&&s.act.key?` <span class="mono sub">${esc(s.act.key.slice(0,8))}…</span>`:''}</p>`:`${trialBanner()}<p class="sub">${t('codeInfo')}</p>
+  <div class="row" style="grid-template-columns:1fr auto"><input id="licIn" class="mono" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" autocomplete="off"><button class="btn p" id="licBtn">${t('activate')}</button></div>`}</div>
+  <div class="card"><h2>${t('help')}</h2><ol style="margin:0;padding-inline-start:20px">${[1,2,3,4,5,6].map(n=>t('help'+n)).map(x=>`<li>${x}</li>`).join('')}</ol></div>
+  <div class="card"><h2>${t('about')}</h2><p style="margin:0"><b>Sonne Buchhaltung</b> <span class="mono">v1.3</span><br>${t('devBy')}: <b>Rabie Al Mehtar</b> · Sonne Markt · <a href="https://sonnemarket.shop">sonnemarket.shop</a><br><span class="sub">© 2026 Rabie Al Mehtar. ${t('rights')}</span></p></div>
+  <div class="card"><h2>${t('legal')}</h2><p class="sub" style="margin:0">${t('legalText')}</p></div>
+  <div class="card"><h2>${t('audit')}</h2><div class="tw" style="max-height:260px"><table><tbody>${S.audit.slice(-60).reverse().map(a=>`<tr><td class="num">${a.ts.slice(0,16).replace('T',' ')}</td><td><span class="tag">${a.action}</span></td><td class="sub">${esc(a.data.text||a.data.no||(a.data.after&&a.data.after.text)||'')}</td></tr>`).join('')||`<tr><td class="sub">${t('noData')}</td></tr>`}</tbody></table></div></div>`;
+}
+bind.settings = () => {
+  $('#sSave').onclick=()=>{ document.querySelectorAll('[data-s]').forEach(el=>{ const k=el.dataset.s; S.settings[k] = k==='klein' ? el.value==='1' : el.value; }); log('settings',{}); persist(); toast(t('saved')); render(); };
+  $('#lBtn').onclick=()=>{ const d=$('#lDate').value; if(!d) return; if(S.settings.lockedUntil && d<S.settings.lockedUntil) return toast(t('errUnlock'));
+    confirmBox(`${t('lockBtn')}: ${dDe(d)}?<br><span class="sub">${t('lockInfo')}</span>`, ()=>{ S.settings.lockedUntil=d; log('lock',{text:d}); persist(); render(); }); };
+  $('#bExp').onclick=()=>deliver(`sonne-buchhaltung-backup-${today()}.json`, JSON.stringify(S,null,1), 'application/json');
+  $('#bImp').onchange=ev=>{ const file=ev.target.files[0]; if(!file) return; const rd=new FileReader(); rd.onload=()=>{ try{ const p=JSON.parse(rd.result); if(!p.entries||!p.settings) throw 0; const keep={license:S.settings.license, act:S.settings.act, trialStart:S.settings.trialStart}; S=Object.assign(blank(),p,{settings:Object.assign(blank().settings,p.settings,keep)}); persist(); toast(t('importOk')); render(); }catch(e){ toast(t('importBad')); } }; rd.readAsText(file); };
+  $('#bDemo').onclick=()=>loadDemo();
+  $('#bReset').onclick=()=>confirmBox(t('resetQ'), ()=>{ const lic=S.settings.license, act=S.settings.act, ts=S.settings.trialStart, lang=S.settings.lang; S=blank(); S.settings.license=lic; S.settings.act=act; S.settings.trialStart=ts; S.settings.lang=lang; persist(); render(); });
+  const lb=$('#licBtn'); if(lb) lb.onclick=async()=>{ lb.disabled=true; const err=await activateCode($('#licIn').value); lb.disabled=false; if(err) return toast(err); toast(t('actOk')); render(); };
+};
+
+/* ============================== DEMO ============================== */
+function loadDemo(){
+  const Y=S.settings.year, d=(m,dd)=>`${Y}-${String(m).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
+  const lic=S.settings.license, act=S.settings.act, ts=S.settings.trialStart, lang=S.settings.lang;
+  S=blank(); Object.assign(S.settings,{act, trialStart:ts, firm:'Muster Großhandel',owner:'Max Muster',address:'Musterstraße 1\n10115 Berlin',stnr:'37/123/45678',ustid:'DE123456789',iban:'DE00 1001 0010 0000 0000 00',bankName:'Musterbank',email:'info@muster.de',phone:'030 1234567',year:Y,license:lic,lang});
+  const E=(date,beleg,text,soll,haben,amount,tax='')=>addEntry({date,beleg,text,soll,haben,amount,tax,demo:true});
+  E(d(1,2),'EB1','Eröffnung Bank','bank','eb',8000); E(d(1,2),'EB2','Eröffnung Kasse','kasse','eb',500); E(d(1,2),'EB3','Eröffnung Kapital','eb','kapital',8500);
+  for(let m=1;m<=11;m++){
+    E(d(m,3),'M'+m,'Miete Lager','miete','bank',950);
+    E(d(m,5),'ER'+m,'Wareneinkauf Lebensmittel','we7','bank',3200+m*110,'V7');
+    E(d(m,8),'ER'+m+'b','Wareneinkauf Getränke','we19','bank',1400+m*60,'V19');
+    E(d(m,12),'K'+m,'Barverkauf Lebensmittel','kasse','erl7',4600+m*120,'U7');
+    E(d(m,15),'B'+m,'Verkauf Getränke Überweisung','bank','erl19',3800+m*150,'U19');
+    E(d(m,18),'T'+m,'Tanken Sprinter','kfz','bank',180,'V19');
+    E(d(m,20),'KB'+m,'Kasse an Bank','bank','kasse',4000);
+    E(d(m,25),'P'+m,'Privatentnahme','privat','bank',600);
+    E(d(m,28),'G'+m,'Kontoführung','geld','bank',12.9);
+  }
+  persist(); toast(t('demoLoaded')); view='dash'; render();
+}
+
+applyDir(); trialStart(); render(); setTimeout(recheckLicense, 1500);
+</script>
+</body>
+</html>
