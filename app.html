@@ -111,6 +111,7 @@ tr.sec td{background:#faf8f3;font-weight:600}
   .modal{background:none;padding:0;position:absolute}
   .modal .box{box-shadow:none;padding:0}
 }
+.fab{position:fixed;bottom:18px;inset-inline-start:18px;z-index:50;background:#1f8a5b;color:#fff;border:0;border-radius:40px;padding:12px 16px;font:inherit;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer}@media print{.fab{display:none}}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#1f2a44">
@@ -137,6 +138,7 @@ tr.sec td{background:#faf8f3;font-weight:600}
 </div>
 <div class="modal" id="modal"><div class="box" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
+<button class="fab" id="fab" onclick="supportBox()">💬 <span data-t="supT"></span></button>
 
 <script>
 /* ============================== CORE (pure logic) ============================== */
@@ -395,6 +397,28 @@ const T = {
  errUnlock:["لا يمكن إلغاء الإقفال", "Festschreibung kann nicht zurückgenommen werden"],
  errKey:["مفتاح غير صحيح", "Ungültiger Schlüssel"],
  demoLoaded:["تم تحميل البيانات التجريبية", "Demodaten geladen"],
+ supT:["خدمة العملاء", "Kundenservice"],
+ supTxt:["نحن هنا لمساعدتك. اختر طريقة التواصل:", "Wir helfen gern. Wie möchten Sie uns erreichen?"],
+ supWa:["مراسلة على واتساب", "Per WhatsApp schreiben"],
+ supMail:["إرسال بريد إلكتروني", "E-Mail senden"],
+ supGuide:["دليل الاستخدام", "Kurzanleitung"],
+ supIdea:["اقترح ميزة جديدة", "Funktion vorschlagen"],
+ smartT:["مساعدك الذكي", "Ihr smarter Assistent"],
+ smOverdue:["{n} فاتورة متأخرة الدفع بمجموع {a}", "{n} überfällige Rechnung(en), zusammen {a}"],
+ smUst:["الموعد القادم لإقرار UStVA: {d} (بعد {n} يوم) — إذا كنت تقدّم شهرياً", "Nächste UStVA-Frist: {d} (in {n} Tagen) – bei monatlicher Abgabe"],
+ smBackup:["آخر نسخة احتياطية قبل {n} يوم. خذ نسخة الآن.", "Letzte Datensicherung vor {n} Tagen. Jetzt sichern."],
+ smBackupNever:["لم تأخذ أي نسخة احتياطية بعد. بياناتك موجودة في هذا المتصفح فقط.", "Noch keine Datensicherung. Ihre Daten liegen nur in diesem Browser."],
+ smBackupBtn:["نسخة احتياطية الآن", "Jetzt sichern"],
+ smOk:["كل شيء تمام ✓", "Alles in Ordnung ✓"],
+ impBank:["استيراد كشف بنكي (CSV)", "Kontoauszug importieren (CSV)"],
+ impTitle:["مراجعة الحركات البنكية", "Bankumsätze prüfen"],
+ impInfo:["اختر الحساب المقابل لكل حركة. الحركات بدون حساب لن تُسجَّل. المبالغ إجمالية والضريبة تُفصل تلقائياً.", "Wählen Sie je Umsatz das Gegenkonto. Umsätze ohne Konto werden übersprungen. Beträge sind brutto; die Steuer wird automatisch herausgerechnet."],
+ impBook:["تسجيل الحركات المحددة", "Ausgewählte buchen"],
+ impDone:["تم تسجيل {n} حركة", "{n} Buchungen erstellt"],
+ impNone:["لم أجد حركات في هذا الملف. تأكد أنه ملف CSV من البنك.", "Keine Umsätze gefunden. Bitte CSV-Export der Bank verwenden."],
+ impDup:["مسجّلة سابقاً", "bereits gebucht"],
+ counter:["الحساب المقابل", "Gegenkonto"],
+ invCsv:["تصدير الفواتير (Excel)", "Rechnungen exportieren (Excel)"],
  trialOver:["انتهت التجربة المجانية (7 أيام). بياناتك محفوظة، ويمكنك عرضها وتصديرها. لمتابعة الإدخال اشترِ الترخيص وأدخل الكود.", "Die 7-tägige Testphase ist beendet. Ihre Daten bleiben erhalten und können angesehen und exportiert werden. Zum Weiterbuchen Lizenz kaufen und Code eingeben."],
  buyNow:["اشترِ الترخيص الآن", "Lizenz jetzt kaufen"],
  enterCode:["أدخل كود التفعيل", "Aktivierungscode eingeben"],
@@ -454,7 +478,8 @@ tseNote:'Note: an electronic cash register legally needs a TSE security module; 
 errAccNo:'Enter a 4-digit number and a name',errAccDup:'Number already in use',kleinNo:'No — I charge VAT',kleinYes:'Yes — §19 UStG',
 legalText:'This program is a bookkeeping aid, not officially certified software, and does not send data to ELSTER. The user is responsible for correct entries and GoBD compliance (8–10 year retention, locking, process documentation). Consulting a tax advisor is recommended.',
 errUnlock:'Locking cannot be undone',errKey:'Invalid key',demoLoaded:'Demo data loaded',
-trialOver:"Your 7-day free trial has ended. Your data is kept and you can still view and export it. To keep entering data, buy a license and enter your code.",buyNow:"Buy license now",enterCode:"Enter activation code",codeInfo:"After payment you receive your activation code by e-mail right away. The code can be activated only once, on one device.",activate:"Activate",actOk:"Activated successfully ✓ Thank you!",actUsed:"This code has already been used on another device.",actBad:"Invalid code. Please check it and try again.",actNet:"Activation needs an internet connection. Please try again.",actOff:"Automatic activation is not available yet. Please contact us on WhatsApp.",licRevoked:"This license has been deactivated. Please contact us on WhatsApp."
+trialOver:"Your 7-day free trial has ended. Your data is kept and you can still view and export it. To keep entering data, buy a license and enter your code.",buyNow:"Buy license now",enterCode:"Enter activation code",codeInfo:"After payment you receive your activation code by e-mail right away. The code can be activated only once, on one device.",activate:"Activate",actOk:"Activated successfully ✓ Thank you!",actUsed:"This code has already been used on another device.",actBad:"Invalid code. Please check it and try again.",actNet:"Activation needs an internet connection. Please try again.",actOff:"Automatic activation is not available yet. Please contact us on WhatsApp.",licRevoked:"This license has been deactivated. Please contact us on WhatsApp.",
+supT:"Customer service",supTxt:"We are here to help. How would you like to reach us?",supWa:"Message on WhatsApp",supMail:"Send an e-mail",supGuide:"Quick guide",supIdea:"Suggest a feature",smartT:"Your smart assistant",smOverdue:"{n} overdue invoice(s), total {a}",smUst:"Next VAT return deadline: {d} (in {n} days) – if you file monthly",smBackup:"Last backup {n} days ago. Back up now.",smBackupNever:"No backup yet. Your data lives only in this browser.",smBackupBtn:"Back up now",smOk:"All good ✓",impBank:"Import bank statement (CSV)",impTitle:"Review bank transactions",impInfo:"Choose the counter account for each line. Lines without an account are skipped. Amounts are gross; tax is split out automatically.",impBook:"Post selected",impDone:"{n} entries posted",impNone:"No transactions found. Please use your bank’s CSV export.",impDup:"already posted",counter:"Counter account",invCsv:"Export invoices (Excel)"
 };
 TR.es = {
 tagline:'Contabilidad alemana para comerciantes',dash:'Panel',journal:'Asientos',invoices:'Facturas',accounts:'Plan de cuentas',reports:'Informes',settings:'Ajustes',
@@ -501,7 +526,8 @@ tseNote:'Nota: una caja registradora electrónica necesita por ley un módulo de
 errAccNo:'Introduzca un número de 4 cifras y un nombre',errAccDup:'Número ya utilizado',kleinNo:'No — cobro IVA',kleinYes:'Sí — §19 UStG',
 legalText:'Este programa es una ayuda para la contabilidad, no un software certificado oficialmente, y no envía datos a ELSTER. El usuario es responsable de la exactitud de los asientos y del cumplimiento de GoBD (conservación 8–10 años, cierre, documentación de procedimientos). Se recomienda consultar a un asesor fiscal.',
 errUnlock:'El cierre no se puede deshacer',errKey:'Clave no válida',demoLoaded:'Datos de demostración cargados',
-trialOver:"La prueba gratuita de 7 días ha terminado. Tus datos se conservan y puedes verlos y exportarlos. Para seguir registrando, compra la licencia e introduce el código.",buyNow:"Comprar licencia",enterCode:"Introducir código",codeInfo:"Tras el pago recibes el código por correo al instante. El código solo se puede activar una vez, en un dispositivo.",activate:"Activar",actOk:"Activado correctamente ✓ ¡Gracias!",actUsed:"Este código ya se usó en otro dispositivo.",actBad:"Código no válido. Revísalo e inténtalo de nuevo.",actNet:"La activación necesita conexión a internet.",actOff:"La activación automática aún no está disponible. Escríbenos por WhatsApp.",licRevoked:"Esta licencia fue desactivada. Escríbenos por WhatsApp."
+trialOver:"La prueba gratuita de 7 días ha terminado. Tus datos se conservan y puedes verlos y exportarlos. Para seguir registrando, compra la licencia e introduce el código.",buyNow:"Comprar licencia",enterCode:"Introducir código",codeInfo:"Tras el pago recibes el código por correo al instante. El código solo se puede activar una vez, en un dispositivo.",activate:"Activar",actOk:"Activado correctamente ✓ ¡Gracias!",actUsed:"Este código ya se usó en otro dispositivo.",actBad:"Código no válido. Revísalo e inténtalo de nuevo.",actNet:"La activación necesita conexión a internet.",actOff:"La activación automática aún no está disponible. Escríbenos por WhatsApp.",licRevoked:"Esta licencia fue desactivada. Escríbenos por WhatsApp.",
+supT:"Atención al cliente",supTxt:"Estamos para ayudarte. ¿Cómo quieres contactarnos?",supWa:"Escribir por WhatsApp",supMail:"Enviar correo",supGuide:"Guía rápida",supIdea:"Sugerir una función",smartT:"Tu asistente inteligente",smOverdue:"{n} factura(s) vencida(s), total {a}",smUst:"Próximo plazo UStVA: {d} (en {n} días), si declaras mensualmente",smBackup:"Última copia hace {n} días. Haz una ahora.",smBackupNever:"Aún no hay copia. Tus datos solo están en este navegador.",smBackupBtn:"Copia ahora",smOk:"Todo en orden ✓",impBank:"Importar extracto (CSV)",impTitle:"Revisar movimientos",impInfo:"Elige la cuenta para cada movimiento. Los que no tengan cuenta se omiten. Importes brutos; el IVA se separa solo.",impBook:"Registrar seleccionados",impDone:"{n} asientos registrados",impNone:"No se encontraron movimientos. Usa la exportación CSV del banco.",impDup:"ya registrado",counter:"Contrapartida",invCsv:"Exportar facturas (Excel)"
 };
 TR.tr = {
 tagline:'Tüccarlar için Alman muhasebesi',dash:'Genel bakış',journal:'Yevmiye kayıtları',invoices:'Faturalar',accounts:'Hesap planı',reports:'Raporlar',settings:'Ayarlar',
@@ -548,7 +574,8 @@ tseNote:'Not: elektronik yazar kasa yasal olarak TSE güvenlik modülü gerektir
 errAccNo:'4 haneli bir numara ve ad girin',errAccDup:'Numara zaten kullanılıyor',kleinNo:'Hayır — KDV hesaplıyorum',kleinYes:'Evet — §19 UStG',
 legalText:'Bu program bir muhasebe yardımcısıdır; resmî olarak onaylı bir yazılım değildir ve ELSTER’e veri göndermez. Kayıtların doğruluğu ve GoBD kurallarına uyum (8–10 yıl saklama, kilitleme, süreç belgelemesi) kullanıcının sorumluluğundadır. Mali müşavire danışılması önerilir.',
 errUnlock:'Kilitleme geri alınamaz',errKey:'Geçersiz anahtar',demoLoaded:'Örnek veriler yüklendi',
-trialOver:"7 günlük ücretsiz deneme sona erdi. Verileriniz korunur; görüntüleyebilir ve dışa aktarabilirsiniz. Kayda devam etmek için lisans alın ve kodu girin.",buyNow:"Lisansı şimdi satın al",enterCode:"Aktivasyon kodunu gir",codeInfo:"Ödemeden hemen sonra aktivasyon kodu e-postanıza gelir. Kod yalnızca bir kez, tek cihazda etkinleştirilebilir.",activate:"Etkinleştir",actOk:"Başarıyla etkinleştirildi ✓ Teşekkürler!",actUsed:"Bu kod başka bir cihazda zaten kullanıldı.",actBad:"Geçersiz kod. Kontrol edip tekrar deneyin.",actNet:"Etkinleştirme için internet bağlantısı gerekir.",actOff:"Otomatik etkinleştirme henüz yok. Lütfen WhatsApp’tan yazın.",licRevoked:"Bu lisans devre dışı bırakıldı. WhatsApp’tan yazın."
+trialOver:"7 günlük ücretsiz deneme sona erdi. Verileriniz korunur; görüntüleyebilir ve dışa aktarabilirsiniz. Kayda devam etmek için lisans alın ve kodu girin.",buyNow:"Lisansı şimdi satın al",enterCode:"Aktivasyon kodunu gir",codeInfo:"Ödemeden hemen sonra aktivasyon kodu e-postanıza gelir. Kod yalnızca bir kez, tek cihazda etkinleştirilebilir.",activate:"Etkinleştir",actOk:"Başarıyla etkinleştirildi ✓ Teşekkürler!",actUsed:"Bu kod başka bir cihazda zaten kullanıldı.",actBad:"Geçersiz kod. Kontrol edip tekrar deneyin.",actNet:"Etkinleştirme için internet bağlantısı gerekir.",actOff:"Otomatik etkinleştirme henüz yok. Lütfen WhatsApp’tan yazın.",licRevoked:"Bu lisans devre dışı bırakıldı. WhatsApp’tan yazın.",
+supT:"Müşteri hizmetleri",supTxt:"Yardım için buradayız. Nasıl ulaşmak istersiniz?",supWa:"WhatsApp’tan yaz",supMail:"E-posta gönder",supGuide:"Hızlı kılavuz",supIdea:"Özellik öner",smartT:"Akıllı asistanınız",smOverdue:"{n} vadesi geçmiş fatura, toplam {a}",smUst:"Sonraki UStVA tarihi: {d} ({n} gün sonra) – aylık beyanda",smBackup:"Son yedek {n} gün önce. Şimdi yedekleyin.",smBackupNever:"Henüz yedek yok. Verileriniz yalnızca bu tarayıcıda.",smBackupBtn:"Şimdi yedekle",smOk:"Her şey yolunda ✓",impBank:"Banka ekstresi içe aktar (CSV)",impTitle:"Banka hareketlerini kontrol et",impInfo:"Her satır için karşı hesabı seçin. Hesapsız satırlar atlanır. Tutarlar brüttür; KDV otomatik ayrılır.",impBook:"Seçilenleri kaydet",impDone:"{n} kayıt oluşturuldu",impNone:"Hareket bulunamadı. Bankanın CSV dışa aktarımını kullanın.",impDup:"zaten kayıtlı",counter:"Karşı hesap",invCsv:"Faturaları dışa aktar (Excel)"
 };
 TR.fa = {
 tagline:'حسابداری آلمانی برای بازرگانان',dash:'داشبورد',journal:'ثبت اسناد',invoices:'فاکتورها',accounts:'سرفصل حساب‌ها',reports:'گزارش‌ها',settings:'تنظیمات',
@@ -595,7 +622,8 @@ tseNote:'توجه: صندوق فروش الکترونیکی طبق قانون ب
 errAccNo:'یک شماره ۴ رقمی و نام وارد کنید',errAccDup:'این شماره قبلاً استفاده شده',kleinNo:'خیر — مالیات حساب می‌کنم',kleinYes:'بله — §19 UStG',
 legalText:'این برنامه ابزار کمکی دفترداری است، نرم‌افزار رسماً تأییدشده نیست و داده‌ای به ELSTER ارسال نمی‌کند. مسئولیت درستی اسناد و رعایت GoBD (نگهداری ۸ تا ۱۰ ساله، قفل کردن، مستندسازی روش‌ها) با کاربر است. مشورت با مشاور مالیاتی توصیه می‌شود.',
 errUnlock:'قفل قابل بازگشت نیست',errKey:'کلید نامعتبر',demoLoaded:'داده نمونه بارگذاری شد',
-trialOver:"آزمایش رایگان ۷ روزه تمام شد. داده‌های شما حفظ می‌شود و می‌توانید آن‌ها را ببینید و خروجی بگیرید. برای ادامه ثبت، مجوز بخرید و کد را وارد کنید.",buyNow:"همین حالا مجوز بخرید",enterCode:"وارد کردن کد فعال‌سازی",codeInfo:"پس از پرداخت، کد فعال‌سازی فوراً به ایمیل شما می‌رسد. کد فقط یک بار و برای یک دستگاه فعال می‌شود.",activate:"فعال‌سازی",actOk:"با موفقیت فعال شد ✓ سپاس!",actUsed:"این کد قبلاً روی دستگاه دیگری استفاده شده است.",actBad:"کد نامعتبر است. بررسی کنید و دوباره تلاش کنید.",actNet:"فعال‌سازی به اینترنت نیاز دارد.",actOff:"فعال‌سازی خودکار هنوز فعال نیست. در واتس‌اپ پیام دهید.",licRevoked:"این مجوز غیرفعال شده است. در واتس‌اپ پیام دهید."
+trialOver:"آزمایش رایگان ۷ روزه تمام شد. داده‌های شما حفظ می‌شود و می‌توانید آن‌ها را ببینید و خروجی بگیرید. برای ادامه ثبت، مجوز بخرید و کد را وارد کنید.",buyNow:"همین حالا مجوز بخرید",enterCode:"وارد کردن کد فعال‌سازی",codeInfo:"پس از پرداخت، کد فعال‌سازی فوراً به ایمیل شما می‌رسد. کد فقط یک بار و برای یک دستگاه فعال می‌شود.",activate:"فعال‌سازی",actOk:"با موفقیت فعال شد ✓ سپاس!",actUsed:"این کد قبلاً روی دستگاه دیگری استفاده شده است.",actBad:"کد نامعتبر است. بررسی کنید و دوباره تلاش کنید.",actNet:"فعال‌سازی به اینترنت نیاز دارد.",actOff:"فعال‌سازی خودکار هنوز فعال نیست. در واتس‌اپ پیام دهید.",licRevoked:"این مجوز غیرفعال شده است. در واتس‌اپ پیام دهید.",
+supT:"خدمات مشتریان",supTxt:"ما اینجا هستیم تا کمک کنیم. راه تماس را انتخاب کنید:",supWa:"پیام در واتس‌اپ",supMail:"ارسال ایمیل",supGuide:"راهنمای سریع",supIdea:"پیشنهاد ویژگی جدید",smartT:"دستیار هوشمند شما",smOverdue:"{n} فاکتور سررسیدگذشته، جمعاً {a}",smUst:"موعد بعدی UStVA: {d} ({n} روز دیگر) — در صورت اظهار ماهانه",smBackup:"آخرین پشتیبان {n} روز پیش. اکنون پشتیبان بگیرید.",smBackupNever:"هنوز پشتیبانی نگرفته‌اید. داده‌ها فقط در این مرورگر است.",smBackupBtn:"پشتیبان‌گیری اکنون",smOk:"همه‌چیز مرتب است ✓",impBank:"وارد کردن صورت‌حساب بانکی (CSV)",impTitle:"بررسی تراکنش‌های بانکی",impInfo:"برای هر تراکنش حساب مقابل را انتخاب کنید. بدون حساب ثبت نمی‌شود. مبالغ ناخالص است و مالیات خودکار جدا می‌شود.",impBook:"ثبت موارد انتخاب‌شده",impDone:"{n} سند ثبت شد",impNone:"تراکنشی پیدا نشد. فایل CSV بانک را استفاده کنید.",impDup:"قبلاً ثبت شده",counter:"حساب مقابل",invCsv:"خروجی فاکتورها (Excel)"
 };
 TR.ps = {
 tagline:'د سوداګرو لپاره الماني محاسبه',dash:'ډشبورډ',journal:'ورځني ثبتونه',invoices:'بلونه',accounts:'د حسابونو لړلیک',reports:'راپورونه',settings:'تنظیمات',
@@ -642,7 +670,8 @@ tseNote:'یادونه: برېښنايي کاشیر ماشین په قانوني 
 errAccNo:'۴ رقمي شمېره او نوم ولیکئ',errAccDup:'دا شمېره دمخه کارول شوې',kleinNo:'نه — مالیه حسابوم',kleinYes:'هو — §19 UStG',
 legalText:'دا پروګرام د حساب ساتنې مرستندویه وسیله ده، رسمي تایید شوی سافټویر نه دی او ELSTER ته معلومات نه لېږي. د ثبتونو سموالی او د GoBD مقرراتو رعایت (۸–۱۰ کاله ساتنه، قفلول، د کړنلارې اسناد) د کاروونکي مسؤلیت دی. له مالیاتي مشاور سره مشوره سپارښتنه کېږي.',
 errUnlock:'قفل بېرته نشي خلاصېدای',errKey:'ناسمه کیلي',demoLoaded:'آزمایښتي معلومات پورته شول',
-trialOver:"۷ ورځنۍ وړیا ازموینه پای ته ورسېده. ستاسو معلومات خوندي دي او لیدلی او ایستلی یې شئ. د ثبت د دوام لپاره جواز واخلئ او کوډ ولیکئ.",buyNow:"اوس جواز واخلئ",enterCode:"د فعالولو کوډ ولیکئ",codeInfo:"له تادیې وروسته د فعالولو کوډ سمدستي ستاسو برېښنالیک ته درځي. کوډ یوازې یو ځل او په یوه وسیله فعالېږي.",activate:"فعالول",actOk:"په بریالیتوب فعال شو ✓ مننه!",actUsed:"دا کوډ مخکې په بله وسیله کارول شوی.",actBad:"کوډ ناسم دی. وګورئ او بیا هڅه وکړئ.",actNet:"فعالول انټرنېټ ته اړتیا لري.",actOff:"اتومات فعالول لا نشته. په واټس اپ کې پیغام راکړئ.",licRevoked:"دا جواز غیرفعال شو. په واټس اپ کې پیغام راکړئ."
+trialOver:"۷ ورځنۍ وړیا ازموینه پای ته ورسېده. ستاسو معلومات خوندي دي او لیدلی او ایستلی یې شئ. د ثبت د دوام لپاره جواز واخلئ او کوډ ولیکئ.",buyNow:"اوس جواز واخلئ",enterCode:"د فعالولو کوډ ولیکئ",codeInfo:"له تادیې وروسته د فعالولو کوډ سمدستي ستاسو برېښنالیک ته درځي. کوډ یوازې یو ځل او په یوه وسیله فعالېږي.",activate:"فعالول",actOk:"په بریالیتوب فعال شو ✓ مننه!",actUsed:"دا کوډ مخکې په بله وسیله کارول شوی.",actBad:"کوډ ناسم دی. وګورئ او بیا هڅه وکړئ.",actNet:"فعالول انټرنېټ ته اړتیا لري.",actOff:"اتومات فعالول لا نشته. په واټس اپ کې پیغام راکړئ.",licRevoked:"دا جواز غیرفعال شو. په واټس اپ کې پیغام راکړئ.",
+supT:"د پیرودونکو خدمت",supTxt:"موږ د مرستې لپاره دلته یو. د اړیکې لاره وټاکئ:",supWa:"په واټس اپ کې پیغام",supMail:"برېښنالیک لېږل",supGuide:"لنډ لارښود",supIdea:"نوې ځانګړتیا وړاندیز کړئ",smartT:"ستاسو هوښیار مرستیال",smOverdue:"{n} ځنډېدلي بلونه، ټول {a}",smUst:"د UStVA راتلونکې نېټه: {d} ({n} ورځې وروسته) — که میاشتنی یې ورکوئ",smBackup:"وروستی بیک اپ {n} ورځې مخکې. اوس یې واخلئ.",smBackupNever:"تر اوسه بیک اپ نشته. معلومات یوازې په دې براوزر کې دي.",smBackupBtn:"اوس بیک اپ",smOk:"هر څه سم دي ✓",impBank:"د بانک بیان راوړل (CSV)",impTitle:"بانکي حرکتونه وګورئ",impInfo:"د هر حرکت لپاره مقابل حساب وټاکئ. بې حسابه نه ثبتېږي. مبلغونه ناخالص دي؛ مالیه پخپله جلا کېږي.",impBook:"ټاکل شوي ثبت کړئ",impDone:"{n} ثبتونه وشول",impNone:"هېڅ حرکت ونه موندل شو. د بانک CSV وکاروئ.",impDup:"مخکې ثبت شوی",counter:"مقابل حساب",invCsv:"بلونه صادرول (Excel)"
 };
 TR.hi = {
 tagline:'व्यापारियों के लिए जर्मन लेखांकन',dash:'डैशबोर्ड',journal:'जर्नल प्रविष्टियाँ',invoices:'बिल',accounts:'खातों की सूची',reports:'रिपोर्ट',settings:'सेटिंग्स',
@@ -689,7 +718,8 @@ tseNote:'ध्यान दें: इलेक्ट्रॉनिक कै�
 errAccNo:'4 अंकों की संख्या और नाम डालें',errAccDup:'संख्या पहले से उपयोग में है',kleinNo:'नहीं — मैं VAT लेता हूँ',kleinYes:'हाँ — §19 UStG',
 legalText:'यह प्रोग्राम बहीखाता सहायक उपकरण है, आधिकारिक रूप से प्रमाणित सॉफ़्टवेयर नहीं है और ELSTER को डेटा नहीं भेजता। प्रविष्टियों की शुद्धता और GoBD नियमों (8–10 वर्ष संग्रह, लॉक करना, प्रक्रिया दस्तावेज़) का पालन उपयोगकर्ता की ज़िम्मेदारी है। कर सलाहकार से परामर्श की सलाह दी जाती है।',
 errUnlock:'लॉक वापस नहीं हटाया जा सकता',errKey:'अमान्य कुंजी',demoLoaded:'डेमो डेटा लोड हुआ',
-trialOver:"7 दिन का मुफ़्त ट्रायल खत्म हो गया। आपका डेटा सुरक्षित है, आप उसे देख और एक्सपोर्ट कर सकते हैं। आगे प्रविष्टि के लिए लाइसेंस खरीदें और कोड डालें।",buyNow:"अभी लाइसेंस खरीदें",enterCode:"एक्टिवेशन कोड डालें",codeInfo:"भुगतान के तुरंत बाद एक्टिवेशन कोड ई-मेल से मिलता है। कोड केवल एक बार, एक डिवाइस पर सक्रिय होता है।",activate:"सक्रिय करें",actOk:"सफलतापूर्वक सक्रिय ✓ धन्यवाद!",actUsed:"यह कोड पहले ही किसी दूसरे डिवाइस पर इस्तेमाल हो चुका है।",actBad:"कोड गलत है। जाँचें और फिर से कोशिश करें।",actNet:"एक्टिवेशन के लिए इंटरनेट चाहिए।",actOff:"स्वचालित एक्टिवेशन अभी उपलब्ध नहीं। WhatsApp पर संपर्क करें।",licRevoked:"यह लाइसेंस निष्क्रिय कर दिया गया है। WhatsApp पर संपर्क करें।"
+trialOver:"7 दिन का मुफ़्त ट्रायल खत्म हो गया। आपका डेटा सुरक्षित है, आप उसे देख और एक्सपोर्ट कर सकते हैं। आगे प्रविष्टि के लिए लाइसेंस खरीदें और कोड डालें।",buyNow:"अभी लाइसेंस खरीदें",enterCode:"एक्टिवेशन कोड डालें",codeInfo:"भुगतान के तुरंत बाद एक्टिवेशन कोड ई-मेल से मिलता है। कोड केवल एक बार, एक डिवाइस पर सक्रिय होता है।",activate:"सक्रिय करें",actOk:"सफलतापूर्वक सक्रिय ✓ धन्यवाद!",actUsed:"यह कोड पहले ही किसी दूसरे डिवाइस पर इस्तेमाल हो चुका है।",actBad:"कोड गलत है। जाँचें और फिर से कोशिश करें।",actNet:"एक्टिवेशन के लिए इंटरनेट चाहिए।",actOff:"स्वचालित एक्टिवेशन अभी उपलब्ध नहीं। WhatsApp पर संपर्क करें।",licRevoked:"यह लाइसेंस निष्क्रिय कर दिया गया है। WhatsApp पर संपर्क करें।",
+supT:"ग्राहक सेवा",supTxt:"हम मदद के लिए यहाँ हैं। संपर्क का तरीका चुनें:",supWa:"WhatsApp पर संदेश",supMail:"ई-मेल भेजें",supGuide:"त्वरित गाइड",supIdea:"नई सुविधा सुझाएँ",smartT:"आपका स्मार्ट सहायक",smOverdue:"{n} बकाया बिल, कुल {a}",smUst:"अगली UStVA समय-सीमा: {d} ({n} दिन बाद) – मासिक दाखिल करने पर",smBackup:"आखिरी बैकअप {n} दिन पहले। अभी बैकअप लें।",smBackupNever:"अभी तक कोई बैकअप नहीं। आपका डेटा केवल इसी ब्राउज़र में है।",smBackupBtn:"अभी बैकअप",smOk:"सब ठीक है ✓",impBank:"बैंक स्टेटमेंट आयात (CSV)",impTitle:"बैंक लेनदेन जाँचें",impInfo:"हर लेनदेन के लिए विपरीत खाता चुनें। बिना खाते वाली पंक्तियाँ छोड़ दी जाएँगी। राशि सकल है; कर अपने आप अलग होगा।",impBook:"चयनित दर्ज करें",impDone:"{n} प्रविष्टियाँ दर्ज",impNone:"कोई लेनदेन नहीं मिला। बैंक का CSV निर्यात उपयोग करें।",impDup:"पहले से दर्ज",counter:"विपरीत खाता",invCsv:"बिल निर्यात (Excel)"
 };
 TR.vi = {
 tagline:'Kế toán Đức cho thương nhân',dash:'Tổng quan',journal:'Bút toán',invoices:'Hóa đơn',accounts:'Hệ thống tài khoản',reports:'Báo cáo',settings:'Cài đặt',
@@ -736,7 +766,8 @@ tseNote:'Lưu ý: máy tính tiền điện tử bắt buộc phải có mô-đu
 errAccNo:'Nhập số gồm 4 chữ số và tên',errAccDup:'Số đã được dùng',kleinNo:'Không — tôi tính thuế GTGT',kleinYes:'Có — §19 UStG',
 legalText:'Chương trình này là công cụ hỗ trợ ghi sổ, không phải phần mềm được chứng nhận chính thức và không gửi dữ liệu tới ELSTER. Người dùng chịu trách nhiệm về tính đúng đắn của bút toán và tuân thủ GoBD (lưu trữ 8–10 năm, khóa sổ, tài liệu quy trình). Nên tham khảo cố vấn thuế.',
 errUnlock:'Không thể mở khóa',errKey:'Mã không hợp lệ',demoLoaded:'Đã tải dữ liệu mẫu',
-trialOver:"Thời gian dùng thử 7 ngày đã hết. Dữ liệu của bạn vẫn được giữ, bạn vẫn xem và xuất được. Để tiếp tục ghi sổ, hãy mua bản quyền và nhập mã.",buyNow:"Mua bản quyền ngay",enterCode:"Nhập mã kích hoạt",codeInfo:"Sau khi thanh toán, mã kích hoạt được gửi ngay qua e-mail. Mã chỉ kích hoạt được một lần, trên một thiết bị.",activate:"Kích hoạt",actOk:"Kích hoạt thành công ✓ Cảm ơn bạn!",actUsed:"Mã này đã được dùng trên thiết bị khác.",actBad:"Mã không hợp lệ. Vui lòng kiểm tra và thử lại.",actNet:"Kích hoạt cần kết nối internet.",actOff:"Kích hoạt tự động chưa sẵn sàng. Hãy nhắn WhatsApp cho chúng tôi.",licRevoked:"Bản quyền này đã bị vô hiệu. Hãy nhắn WhatsApp cho chúng tôi."
+trialOver:"Thời gian dùng thử 7 ngày đã hết. Dữ liệu của bạn vẫn được giữ, bạn vẫn xem và xuất được. Để tiếp tục ghi sổ, hãy mua bản quyền và nhập mã.",buyNow:"Mua bản quyền ngay",enterCode:"Nhập mã kích hoạt",codeInfo:"Sau khi thanh toán, mã kích hoạt được gửi ngay qua e-mail. Mã chỉ kích hoạt được một lần, trên một thiết bị.",activate:"Kích hoạt",actOk:"Kích hoạt thành công ✓ Cảm ơn bạn!",actUsed:"Mã này đã được dùng trên thiết bị khác.",actBad:"Mã không hợp lệ. Vui lòng kiểm tra và thử lại.",actNet:"Kích hoạt cần kết nối internet.",actOff:"Kích hoạt tự động chưa sẵn sàng. Hãy nhắn WhatsApp cho chúng tôi.",licRevoked:"Bản quyền này đã bị vô hiệu. Hãy nhắn WhatsApp cho chúng tôi.",
+supT:"Hỗ trợ khách hàng",supTxt:"Chúng tôi luôn sẵn sàng hỗ trợ. Bạn muốn liên hệ thế nào?",supWa:"Nhắn qua WhatsApp",supMail:"Gửi e-mail",supGuide:"Hướng dẫn nhanh",supIdea:"Đề xuất tính năng",smartT:"Trợ lý thông minh của bạn",smOverdue:"{n} hóa đơn quá hạn, tổng {a}",smUst:"Hạn UStVA tiếp theo: {d} (còn {n} ngày) – nếu khai hằng tháng",smBackup:"Sao lưu gần nhất {n} ngày trước. Hãy sao lưu ngay.",smBackupNever:"Chưa có bản sao lưu. Dữ liệu chỉ nằm trong trình duyệt này.",smBackupBtn:"Sao lưu ngay",smOk:"Mọi thứ ổn ✓",impBank:"Nhập sao kê ngân hàng (CSV)",impTitle:"Xem lại giao dịch ngân hàng",impInfo:"Chọn tài khoản đối ứng cho từng dòng. Dòng không chọn sẽ bị bỏ qua. Số tiền gồm thuế; thuế được tách tự động.",impBook:"Ghi sổ các dòng đã chọn",impDone:"Đã ghi {n} bút toán",impNone:"Không tìm thấy giao dịch. Hãy dùng tệp CSV xuất từ ngân hàng.",impDup:"đã ghi",counter:"Tài khoản đối ứng",invCsv:"Xuất hóa đơn (Excel)"
 };
 
 Object.assign(TR.en,{"devBy": "Developed & © by", "about": "About", "rights": "All rights reserved. Copying or reselling this program without the developer’s permission is prohibited."});
@@ -887,6 +918,7 @@ function vDash(){
   return `
   ${!S.settings.firm?`<div class="note">${t('startNote')}</div>`:''}
   ${cash<0?`<div class="note bad">${t('cashNeg')}</div>`:''}
+  ${smartCard()}
   <div class="grid g4">
     <div class="card kpi"><div class="l">${t('revenue')}</div><div class="v">${eur(g.R)}</div></div>
     <div class="card kpi"><div class="l">${t('expenses')}</div><div class="v">${eur(g.X)}</div></div>
@@ -937,11 +969,12 @@ function vJournal(){
     <div class="preview" id="fPrev"></div>
   </div>
   <div class="card">
-    <div class="row" style="grid-template-columns:160px 1fr auto;margin-bottom:12px">
+    <div class="row" style="grid-template-columns:160px 1fr auto;margin-bottom:8px">
       <select id="jM"><option value="">${t('month')}: ${t('all')}</option>${Array.from({length:12},(_,i)=>{const m=String(i+1).padStart(2,'0');return `<option ${jFilter.m===m?'selected':''}>${m}</option>`}).join('')}</select>
       <input id="jQ" placeholder="${t('search')}" value="${esc(jFilter.q)}">
       <button class="btn" id="jCsv">${t('csvSb')}</button>
     </div>
+    <div class="btns" style="margin-bottom:12px"><label class="btn" style="margin:0;color:var(--ink)">⬆️ ${t('impBank')}<input type="file" id="jImp" accept=".csv,.txt,text/csv" hidden></label></div>
     ${journalTable(rows, true)}
   </div>`;
 }
@@ -966,8 +999,9 @@ function addEntry(e){ e.id=uid(); e.n=S.seq++; e.created=new Date().toISOString(
 function cashCheck(){ const b=C.balances(); let run=0; const es=S.entries.filter(x=>x.soll==='kasse'||x.haben==='kasse').sort((a,b)=>a.date.localeCompare(b.date)||a.n-b.n);
   for(const e of es){ for(const l of C.lines(e)) if(l.a==='kasse') run=r2(run+(l.s==='S'?l.v:-l.v)); if(run<0) return false; } return true; }
 const bind = {};
-bind.dash = () => { const d=$('#demoLink'); if(d) d.onclick=(ev)=>{ev.preventDefault(); loadDemo();}; };
+bind.dash = () => { const d=$('#demoLink'); if(d) d.onclick=(ev)=>{ev.preventDefault(); loadDemo();}; const b=$('#smBk'); if(b) b.onclick=doBackup; };
 bind.journal = () => {
+  const ji=$('#jImp'); if(ji) ji.onchange=ev=>{ const f=ev.target.files[0]; if(f) importBank(f); ev.target.value=''; };
   const prev = () => { const e = entryFromForm(); if(!(e.amount>0) || e.soll===e.haben){ $('#fPrev').textContent=''; return; }
     $('#fPrev').innerHTML = `<b>${t('bookPrev')}</b> ` + C.lines(e).map(l=>`${l.s==='S'?(t('bookS')):(t('bookH'))} ${accLabel(l.a)} ${eur(l.v)}`).join(' &nbsp;|&nbsp; '); };
   ['#fAmt','#fTax','#fSoll','#fHaben'].forEach(s=>$(s).addEventListener('input',prev));
@@ -1024,7 +1058,7 @@ function vInvoices(){
   const missing = !S.settings.firm || !S.settings.address || !(S.settings.stnr||S.settings.ustid);
   return `
   ${missing?`<div class="note">${t('invMissing')}</div>`:''}
-  ${invDraft?invForm():`<div class="btns" style="margin-bottom:14px"><button class="btn p" id="newInv">${t('newInv')}</button></div>`}
+  ${invDraft?invForm():`<div class="btns" style="margin-bottom:14px"><button class="btn p" id="newInv">${t('newInv')}</button><button class="btn" id="invCsv">${t('invCsv')}</button></div>`}
   <div class="card">${!list.length?`<div class="sub">${t('noData')}</div>`:`<div class="tw"><table><thead><tr><th>${t('invNo')}</th><th>${t('date')}</th><th>${t('customer')}</th><th class="r">${t('net')}</th><th class="r">${t('gross')}</th><th>${t('status')}</th><th></th></tr></thead><tbody>
   ${list.map(i=>{const tt=invTotals(i); return `<tr><td class="mono">${esc(i.no)}</td><td class="num">${dDe(i.date)}</td><td>${esc(i.customer)}</td><td class="r">${eur(tt.net)}</td><td class="r">${eur(tt.gross)}</td><td>${invStatus(i)}</td>
   <td style="white-space:nowrap"><button class="btn s" data-iv="${i.id}">${t('view')}</button> ${!i.paid&&!i.cancelled?`<button class="btn s" data-ip="${i.id}">${t('pay')}</button> <button class="btn s d" data-ic="${i.id}">${t('storno')}</button>`:''}</td></tr>`}).join('')}
@@ -1058,6 +1092,7 @@ function invForm(){
   <div class="btns" style="margin-top:14px"><button class="btn p" id="iSave">${t('save')}</button><button class="btn" id="iCancel">${t('cancel')}</button></div></div>`;
 }
 bind.invoices = () => {
+  const ic=$('#invCsv'); if(ic) ic.onclick=exportInvCsv;
   const n=$('#newInv'); if(n) n.onclick=()=>{ const dd=new Date(); invDraft={id:uid(),no:nextInvNo(),date:today(),ldate:today(),customer:'',addr:'',custUstid:'',items:[{d:'',q:1,p:0,r:S.settings.klein?0:19}]}; render(); };
   if(invDraft){
     const sync=()=>{ invDraft.customer=$('#iCust').value; invDraft.addr=$('#iAddr').value; invDraft.custUstid=$('#iUst').value; invDraft.date=$('#iDate').value; invDraft.ldate=$('#iLDate').value;
@@ -1196,7 +1231,7 @@ function vSettings(){
   ${licensed()?`<p style="margin:0"><span class="tag ok">${t('licOk')}</span>${s.act&&s.act.key?` <span class="mono sub">${esc(s.act.key.slice(0,8))}…</span>`:''}</p>`:`${trialBanner()}<p class="sub">${t('codeInfo')}</p>
   <div class="row" style="grid-template-columns:1fr auto"><input id="licIn" class="mono" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" autocomplete="off"><button class="btn p" id="licBtn">${t('activate')}</button></div>`}</div>
   <div class="card"><h2>${t('help')}</h2><ol style="margin:0;padding-inline-start:20px">${[1,2,3,4,5,6].map(n=>t('help'+n)).map(x=>`<li>${x}</li>`).join('')}</ol></div>
-  <div class="card"><h2>${t('about')}</h2><p style="margin:0"><b>Sonne Buchhaltung</b> <span class="mono">v1.3</span><br>${t('devBy')}: <b>Rabie Al Mehtar</b> · Sonne Markt · <a href="https://sonnemarket.shop">sonnemarket.shop</a><br><span class="sub">© 2026 Rabie Al Mehtar. ${t('rights')}</span></p></div>
+  <div class="card"><h2>${t('about')}</h2><p style="margin:0"><b>Sonne Buchhaltung</b> <span class="mono">v1.4</span><br>${t('devBy')}: <b>Rabie Al Mehtar</b> · Sonne Markt · <a href="https://sonnemarket.shop">sonnemarket.shop</a><br><span class="sub">© 2026 Rabie Al Mehtar. ${t('rights')}</span></p></div>
   <div class="card"><h2>${t('legal')}</h2><p class="sub" style="margin:0">${t('legalText')}</p></div>
   <div class="card"><h2>${t('audit')}</h2><div class="tw" style="max-height:260px"><table><tbody>${S.audit.slice(-60).reverse().map(a=>`<tr><td class="num">${a.ts.slice(0,16).replace('T',' ')}</td><td><span class="tag">${a.action}</span></td><td class="sub">${esc(a.data.text||a.data.no||(a.data.after&&a.data.after.text)||'')}</td></tr>`).join('')||`<tr><td class="sub">${t('noData')}</td></tr>`}</tbody></table></div></div>`;
 }
@@ -1204,13 +1239,81 @@ bind.settings = () => {
   $('#sSave').onclick=()=>{ document.querySelectorAll('[data-s]').forEach(el=>{ const k=el.dataset.s; S.settings[k] = k==='klein' ? el.value==='1' : el.value; }); log('settings',{}); persist(); toast(t('saved')); render(); };
   $('#lBtn').onclick=()=>{ const d=$('#lDate').value; if(!d) return; if(S.settings.lockedUntil && d<S.settings.lockedUntil) return toast(t('errUnlock'));
     confirmBox(`${t('lockBtn')}: ${dDe(d)}?<br><span class="sub">${t('lockInfo')}</span>`, ()=>{ S.settings.lockedUntil=d; log('lock',{text:d}); persist(); render(); }); };
-  $('#bExp').onclick=()=>deliver(`sonne-buchhaltung-backup-${today()}.json`, JSON.stringify(S,null,1), 'application/json');
+  $('#bExp').onclick=doBackup;
   $('#bImp').onchange=ev=>{ const file=ev.target.files[0]; if(!file) return; const rd=new FileReader(); rd.onload=()=>{ try{ const p=JSON.parse(rd.result); if(!p.entries||!p.settings) throw 0; const keep={license:S.settings.license, act:S.settings.act, trialStart:S.settings.trialStart}; S=Object.assign(blank(),p,{settings:Object.assign(blank().settings,p.settings,keep)}); persist(); toast(t('importOk')); render(); }catch(e){ toast(t('importBad')); } }; rd.readAsText(file); };
   $('#bDemo').onclick=()=>loadDemo();
   $('#bReset').onclick=()=>confirmBox(t('resetQ'), ()=>{ const lic=S.settings.license, act=S.settings.act, ts=S.settings.trialStart, lang=S.settings.lang; S=blank(); S.settings.license=lic; S.settings.act=act; S.settings.trialStart=ts; S.settings.lang=lang; persist(); render(); });
   const lb=$('#licBtn'); if(lb) lb.onclick=async()=>{ lb.disabled=true; const err=await activateCode($('#licIn').value); lb.disabled=false; if(err) return toast(err); toast(t('actOk')); render(); };
 };
 
+
+/* ---- Kundenservice, Assistent, Import ---- */
+function supportBox(){
+  const wa='https://wa.me/'+SHOP.wa+'?text='+encodeURIComponent('Sonne Buchhaltung – ');
+  modal(`<h2>${t('supT')}</h2><p class="sub">${t('supTxt')}</p><div class="btns" style="flex-direction:column;align-items:stretch">
+  <a class="btn p" href="${esc(wa)}" target="_blank" rel="noopener">💬 ${t('supWa')}</a>
+  <a class="btn" href="mailto:rabihalmehtar33@gmail.com?subject=Sonne%20Buchhaltung">✉️ ${t('supMail')}</a>
+  <button class="btn" id="supG">📘 ${t('supGuide')}</button>
+  <a class="btn" href="${esc('https://wa.me/'+SHOP.wa+'?text='+encodeURIComponent('Sonne Buchhaltung – Idee: '))}" target="_blank" rel="noopener">💡 ${t('supIdea')}</a>
+  <button class="btn" onclick="closeModal()">${t('close')}</button></div>`);
+  $('#supG').onclick=()=>{ closeModal(); view='settings'; render(); setTimeout(()=>{ const c=[...document.querySelectorAll('#main .card h2')].find(h=>h.textContent===t('help')); if(c) c.scrollIntoView({block:'start'}); },60); };
+}
+function nextUst(){ const d=new Date(); let y=d.getFullYear(), m=d.getMonth()+1; if(d.getDate()>10){ m++; if(m>12){m=1;y++;} }
+  const iso=`${y}-${String(m).padStart(2,'0')}-10`; const n=Math.ceil((new Date(iso+'T23:59:59')-d)/86400000); return {iso,n}; }
+function invDue(i){ const d=new Date(i.date+'T12:00:00'); d.setDate(d.getDate()+(+(i.terms ?? S.settings.terms)||14)); return d.toISOString().slice(0,10); }
+function smartCard(){
+  const items=[];
+  const od=S.invoices.filter(i=>!i.paid&&!i.cancelled&&invDue(i)<today());
+  if(od.length){ const sum=od.reduce((a,i)=>r2(a+invTotals(i).gross),0); items.push(`<div class="note bad">🔔 ${esc(t('smOverdue').replace('{n}',od.length).replace('{a}',fmt(sum)+' €'))} <a href="#invoices" onclick="view='invoices';render();return false">→</a></div>`); }
+  if(!S.settings.klein){ const u=nextUst(); if(u.n<=12) items.push(`<div class="note">📅 ${esc(t('smUst').replace('{d}',dDe(u.iso)).replace('{n}',u.n))}</div>`); }
+  const lb=S.settings.lastBackup; const days=lb?Math.floor((Date.now()-new Date(lb).getTime())/86400000):null;
+  if(S.entries.some(e=>!e.demo) && (lb===undefined||lb===''||days>=14)) items.push(`<div class="note">💾 ${esc(lb?t('smBackup').replace('{n}',days):t('smBackupNever'))} <button class="btn s" id="smBk">${t('smBackupBtn')}</button></div>`);
+  return `<div class="card"><h2>✨ ${t('smartT')}</h2>${items.length?items.join(''):`<div class="sub">${t('smOk')}</div>`}</div>`;
+}
+function doBackup(){ S.settings.lastBackup=new Date().toISOString(); persist(); deliver(`sonne-buchhaltung-backup-${today()}.json`, JSON.stringify(S,null,1), 'application/json'); }
+function parseCsvText(txt){
+  txt=txt.replace(/^﻿/,''); const lines=txt.split(/\r?\n/).filter(l=>l.trim());
+  const first=lines.slice(0,15).join('\n'); const delim=[';','\t',','].sort((a,b)=>(first.split(b).length)-(first.split(a).length))[0];
+  const split=l=>{ const out=[]; let cur='',q=false; for(let i=0;i<l.length;i++){ const c=l[i]; if(c==='"'){ if(q&&l[i+1]==='"'){cur+='"';i++;} else q=!q; } else if(c===delim&&!q){ out.push(cur); cur=''; } else cur+=c; } out.push(cur); return out.map(x=>x.trim()); };
+  return lines.map(split);
+}
+function parseDateAny(v){ v=String(v||'').trim(); let m=v.match(/^(\d{1,2})\.(\d{1,2})\.(\d{2,4})$/); if(m){ let y=m[3].length===2?'20'+m[3]:m[3]; return `${y}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`; }
+  m=v.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m) return `${m[1]}-${m[2]}-${m[3]}`; m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if(m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`; return ''; }
+function parseAmt(v){ v=String(v||'').replace(/[€\s]/g,''); if(!v) return NaN; if(/,\d{1,2}$/.test(v)) v=v.replace(/\./g,'').replace(',','.'); else v=v.replace(/,/g,''); return parseFloat(v); }
+function bankRows(txt){
+  const rows=parseCsvText(txt); let hi=-1, cD=-1, cA=-1, cT=[];
+  for(let i=0;i<Math.min(rows.length,30);i++){ const h=rows[i].map(x=>x.toLowerCase());
+    const d=h.findIndex(x=>/buchungstag|buchungsdatum|^datum|^date|booking date/.test(x)); const a=h.findIndex(x=>/^betrag|betrag \(|^amount|umsatz/.test(x));
+    if(d>=0&&a>=0){ hi=i; cD=d; cA=a; cT=h.map((x,j)=>/verwendungszweck|buchungstext|beschreibung|empfänger|auftraggeber|zahlungsempf|name|description|purpose|text/.test(x)?j:-1).filter(j=>j>=0); break; } }
+  const out=[];
+  rows.forEach((r,i)=>{ if(i<=hi) return; let d,a,tx;
+    if(hi>=0){ d=parseDateAny(r[cD]); a=parseAmt(r[cA]); tx=cT.map(j=>r[j]).filter(Boolean).join(' · '); }
+    else { d=parseDateAny(r.find(x=>parseDateAny(x))); const am=[...r].reverse().find(x=>/^-?[\d.]+,\d{2}$|^-?\d+\.\d{2}$/.test(String(x).replace(/[€\s]/g,''))); a=parseAmt(am); tx=r.filter(x=>x&&!parseDateAny(x)&&x!==am).slice(0,2).join(' · '); }
+    if(d && isFinite(a) && a!==0) out.push({date:d, amount:r2(a), text:(tx||'Bank').slice(0,140)}); });
+  return out;
+}
+let impRows=[];
+function importBank(file){
+  const rd=new FileReader(); rd.onload=()=>{ let txt=rd.result; if(/Ã|�/.test(txt.slice(0,2000))){ const r2b=new FileReader(); r2b.onload=()=>showImport(bankRows(r2b.result)); r2b.readAsText(file,'ISO-8859-1'); return; } showImport(bankRows(txt)); }; rd.readAsText(file,'UTF-8'); }
+function showImport(rows){
+  if(!rows.length) return toast(t('impNone'));
+  impRows=rows.map(r=>({...r, dup:S.entries.some(e=>e.date===r.date&&Math.abs(e.amount-Math.abs(r.amount))<0.005&&(e.soll==='bank'||e.haben==='bank'))}));
+  modal(`<h2>${t('impTitle')} (${impRows.length})</h2><p class="sub">${t('impInfo')}</p><div class="tw" style="max-height:55vh"><table><thead><tr><th>${t('date')}</th><th>${t('text')}</th><th class="r">${t('amount')}</th><th>${t('counter')}</th><th>${t('tax')}</th></tr></thead><tbody>
+  ${impRows.map((r,k)=>`<tr><td class="num">${dDe(r.date)}</td><td style="max-width:260px">${esc(r.text)}${r.dup?` <span class="tag">${t('impDup')}</span>`:''}</td><td class="r">${sgn(r.amount)}</td>
+  <td><select data-ia="${k}" style="min-width:180px"><option value="">—</option>${accOpts('')}</select></td><td><select data-it="${k}">${taxOpts('')}</select></td></tr>`).join('')}
+  </tbody></table></div><div class="btns" style="margin-top:12px"><button class="btn p" id="impGo">${t('impBook')}</button><button class="btn" onclick="closeModal()">${t('cancel')}</button></div>`);
+  $('#impGo').onclick=()=>{ if(!canWrite()) return toast(t('errTrial')); let n=0;
+    impRows.forEach((r,k)=>{ const acc=document.querySelector(`[data-ia="${k}"]`).value; if(!acc) return; const tax=document.querySelector(`[data-it="${k}"]`).value;
+      const e={date:r.date, beleg:'BANK', text:r.text, soll:r.amount>0?'bank':acc, haben:r.amount>0?acc:'bank', amount:Math.abs(r.amount), tax};
+      if(validate(e,true)) return; addEntry(e); n++; });
+    persist(); closeModal(); toast(t('impDone').replace('{n}',n)); render(); };
+}
+function exportInvCsv(){
+  const rows=[['Rechnungsnr.','Datum','Kunde','USt-IdNr.','Netto','USt','Brutto','Status','Fällig'].join(';')];
+  S.invoices.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(i=>{ const tt=invTotals(i);
+    rows.push([i.no,dDe(i.date),'"'+String(i.customer).replace(/"/g,'""')+'"',i.custUstid||'',fmt(tt.net),fmt(tt.tax),fmt(tt.gross),i.cancelled?'storniert':i.paid?'bezahlt':'offen',dDe(invDue(i))].join(';')); });
+  deliver(`Rechnungen_${today()}.csv`, '﻿'+rows.join('\r\n'), 'text/csv');
+}
 /* ============================== DEMO ============================== */
 function loadDemo(){
   const Y=S.settings.year, d=(m,dd)=>`${Y}-${String(m).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
